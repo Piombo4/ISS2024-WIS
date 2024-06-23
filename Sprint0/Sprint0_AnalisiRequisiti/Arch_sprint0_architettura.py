@@ -41,5 +41,5 @@ with Diagram('sprint0_architetturaArch', show=False, outformat='png', graph_attr
      with Cluster('ctx_basicrobot', graph_attr=nodeattr):
           basicrobot=Custom('basicrobot','./qakicons/symActorSmall.png')
      with Cluster('ctx_oprobot', graph_attr=nodeattr):
-          oprobot=Custom('oprobot','./qakicons/symActorSmall.png')
+          oprobot=Custom('oprobot(ext)','./qakicons/externalQActor.png')
 diag

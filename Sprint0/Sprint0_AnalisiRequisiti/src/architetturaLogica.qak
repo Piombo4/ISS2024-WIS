@@ -10,7 +10,7 @@ Context ctx_basicrobot  ip  [host="localhost" port=8020]
 Context ctx_oprobot  ip  [host="localhost" port=8020] 
 
    
- 
+ExternalQActor oprobot context ctx_oprobot
 QActor wis context ctx_wis { 
 	State s0 initial{
 		delay 500   
@@ -22,16 +22,7 @@ QActor wis context ctx_wis {
 	}
 }
 
-QActor oprobot context ctx_oprobot { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
+
 
 QActor ssgui context ctx_gui { 
 	State s0 initial{

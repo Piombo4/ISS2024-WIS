@@ -10,10 +10,9 @@ context(ctx_incinerator, "localhost",  "TCP", "8018").
 context(ctx_monitoringdevice, "localhost",  "TCP", "8019").
 context(ctx_basicrobot, "localhost",  "TCP", "8020").
 context(ctx_oprobot, "localhost",  "TCP", "8020").
- qactor( wis, ctx_wis, "it.unibo.wis.Wis").
+ qactor( oprobot, ctx_oprobot, "external").
+  qactor( wis, ctx_wis, "it.unibo.wis.Wis").
  static(wis).
-  qactor( oprobot, ctx_oprobot, "it.unibo.oprobot.Oprobot").
- static(oprobot).
   qactor( ssgui, ctx_gui, "it.unibo.ssgui.Ssgui").
  static(ssgui).
   qactor( wastestorage, ctx_wastestorage, "it.unibo.wastestorage.Wastestorage").
