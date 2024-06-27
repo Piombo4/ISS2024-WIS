@@ -9,8 +9,7 @@ Context ctx_monitoringdevice  ip  [host="localhost" port=8019]
 Context ctx_basicrobot  ip  [host="localhost" port=8020]
 Context ctx_oprobot  ip  [host="localhost" port=8020] 
 	
-   
-ExternalQActor oprobot context ctx_oprobot
+
 QActor wis context ctx_wis { 
 	State s0 initial{
 		delay 500   
@@ -22,39 +21,6 @@ QActor wis context ctx_wis {
 	}
 }
 
-
-
-QActor ssgui context ctx_gui { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
-
-QActor wastestorage context ctx_wastestorage { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
-QActor ashstorage context ctx_ashstorage { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
 QActor incinerator context ctx_incinerator { 
 	State s0 initial{
 		delay 500   
