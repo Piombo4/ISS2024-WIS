@@ -16,19 +16,26 @@
 	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/navbar.css">
 	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/table.css">
 	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/code.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+		rel="stylesheet">
+
 	<!-- <script type="text/javascript" src="./commons/resources/scripts/myScripts.js"></script> -->
 	<style type="text/css">
 		body {
 			margin: auto;
 			max-width: 1300px;
-			
+			font-family: "Open Sans", sans-serif;
+			font-optical-sizing: auto;
 		}
+
+
 
 		;
 
 		P {
-			font-family: Tahoma;
-			font-size: 10pt;
 		}
 
 		;
@@ -285,7 +292,7 @@
 		<h2>Requisiti</h2>
 		<h2>Analisi dei requisiti</h2>
 		<h3>Perchè QAK</h3>
-		<p>Abbiamo osservato che il sistema si compone di un insieme di componenti attivi (attori) all’interno di un
+		<p>Si è osservato che il sistema si compone di un insieme di componenti attivi (attori) all’interno di un
 			sistema distribuito, che comunicano per portare a termine un obiettivo scambiandosi messaggi.<br>
 			<a href="../resources/QakActors24.html">QAK</a> è un linguaggio che ci offre un livello di astrazione tale
 			da permettere di specificare le entità come degli <a href="../resources/QakActors24.html">attori</a>
@@ -313,7 +320,7 @@
 		requsiti per definirla.
 		<br>
 		Lo stesso discorso si può fare per i segnali che riceve da <b>Scale</b>, <b>Sonar</b> e <b>Incinerator</b>.
-		Infatti, l'informazione trasmessa potrebbe essere modellata come un messaggio ma non abbiamo abbastanza
+		Infatti, l'informazione trasmessa potrebbe essere modellata come un messaggio ma non si hanno abbastanza
 		requisiti per poterlo affermare.
 		<h3>Incinerator</h3>
 		<div>
@@ -356,7 +363,8 @@
 		<h3><a href="../resources/BasicRobot24.html">BasicRobot</a></h3>
 		Software fornito direttamente dal cliente che utilizzeremo per muovere il robot, per mappare e muoversi da un
 		punto all’altro della struttura tramite il costruttore di mappe e il pianificatore integrato all’interno del
-		sw.
+		sw. Questo componente è un attore che girerà su un nodo computazionale separato, questo perchè è stato creato in
+		questo modo.
 
 		<h3>Mappa</h3>
 		L'area di servizio è una superfice euclidea piatta di forma rettangolare, di lati L1 ed L2.
@@ -369,7 +377,7 @@
 		<center><img width="1000px" src="../resources/Mappa.png"></center>
 
 		<h2>Architettura Logica</h2>
-		<center><img width="1000px" src="../sprint0_architettura_with_msgarch.png"></center>
+		<center><img width="400px" src="../sprint0_architetturaarch.png"></center>
 
 		<h2>Test plans</h2>
 		Come piano di testing si è deciso di vuole simulare il comportamento del robot.
@@ -381,8 +389,22 @@
 		le ceneri aumenteranno di una quantità pari ad un RP.
 
 		<h2>Divisione funzionalità</h2>
-		
-
+		Si è deciso di suddividere il progetto in 3 sprint, secondo un ordine di priorità delle funzionalità:
+		<div>
+			<ol>
+				<li>
+					Core Business: Si andrà a realizzare un modello eseguibile che realizza le funzionalità fondamentali
+					del sistema. In particolare si andranno a realizzare le interazioni tra
+					WIS-OpRobot-WasteStorage-Incinerator-AshStorage.
+				</li>
+				<li>
+					Monitoring Device: Si realizzerà un'altra parte del sistema, che non è considerata prioritaria come quella preced
+				</li>
+				<li>
+					GUI: Si realizzerà l'interfaccia grafica per mostrare lo stato del sistema
+				</li>
+			</ol>
+		</div>
 	</div>
 
 	<!-- USEFUL
