@@ -252,7 +252,7 @@
 
 
 
-<title>Sprint 0</title>
+<title>Sprint 1</title>
 </head>
 
 <!--
@@ -282,142 +282,46 @@
 
 <body background="">
 	<div id="top">
-		<h1>Waste Incinerator Service - ISS 2024 <font size="5"></font>
-		</h1>
+		<h1>Waste Incinerator Service - ISS 2024 <font size="5"></font></h1>	
 	</div>
 
 	<div class="body">
-		<h2>Introduzione</h2>
-		<h2>Requisiti</h2>
-		<h2>Analisi dei requisiti</h2>
-		<h3>Perchè QAK</h3>
-		<p>Si è osservato che il sistema si compone di un insieme di componenti attivi (attori) all’interno di un
-			sistema distribuito, che comunicano per portare a termine un obiettivo scambiandosi messaggi.<br>
-			<a href="../resources/QakActors24.html">QAK</a> è un linguaggio che ci offre un livello di astrazione tale
-			da permettere di specificare le entità come degli <a href="../resources/QakActors24.html">attori</a>
-			(reattivi e proattivi) che comunicano scambiandosi messaggi senza doverci preoccupare dell'implementazione
-			di
-			quest’ultimi a basso livello, lasciando quindi al programmatore l’onere di specificare solamente gli
-			attori
-			e i messaggi che si scambiano.
-		</p>
-
-		<h3>WIS</h3>
-		Il <b>WIS</b> è un attore che svolge i seguenti compiti:
-
-		<div class>
-			<ol class="simple">
-				<li>
-					Riceve informazioni da una <b>Scale</b> e da un <b>Sonar</b>.
-				</li>
-				<li>
-					Riceve un segnale dall'<b>Inceneritore</b> per comunicare la fine della burning phase.
-				</li>
-			</ol>
-		</div>
-		Il <b>WIS</b> interagisce con una <b>GUI</b>, di cui però, in questa fase, non sono speficicati abbastanza
-		requsiti per definirla.
+		<h2>Analisi del problema</h2>
+		<h3>Rappresentazione dell'area di servizio</h3>
+		La mappa della stanza può essere rappresentata tramite un piano cartesiano. In questo modo possiamo formalizzare il concetto di posizione, intesa come una coppia di coordinate cartesiane. 
 		<br>
-		Lo stesso discorso si può fare per i segnali che riceve da <b>Scale</b>, <b>Sonar</b> e <b>Incinerator</b>.
-		Infatti, l'informazione trasmessa potrebbe essere modellata come un messaggio ma non si hanno abbastanza
-		requisiti per poterlo affermare.
-		<h3>Incinerator</h3>
-		<div>
-			L'<b>inceneritore</b> è descritto da un attore dato che è una entità dislocata rispetto alle altre e che
-			invia dei messaggi ad altre parti del sistema.<br>
-			Ha il seguente comportamento:
-			<div class>
-				<ol class="simple">
-					<li>
-						<b>Riceve</b> un segnale di accensione da un'<b>entità esterna</b> tramite wifi o bluetooth
-					</li>
-					<li>
-						<b>Permette</b> al <b>robot</b> di inserire un RP da bruciare, il tempo di bruciatura (in
-						secondi) è descritto da una variabile <b>BTIME</b>.
-					</li>
-					<li>
-						Alla fine della bruciatura invia un segnale che deve essere recepito dal <b>OpRobot</b> e dal
-						<b>WIS</b>,
-						la struttura di questo segnale non è stata specificata dal commitente, quindi verrà decisa
-						nelle fasi successive di analisi.
-					</li>
-				</ol>
-			</div>
-		</div>
-
-		<h3>Waste Storage</h3>
-		Il <b>waste storage</b> contiene una bilancia che deve aggiornare il WIS della quantità di RP all'interno dello
-		storage.<br>
-		La bilancia potrebbe essere modellata come POJO ma i requisiti non ci forniscono abbastanza informazioni in
-		merito quindi la sua
-		implementazione sarà affrontata successivamente.
-
-		<h3>Monitoring Device</h3>
-		È un nodo computazionale separato, dato che da requisiti viene specificato che deve essere fisicamente
-		rappresentato da un Raspberry Py.
-		Inoltre il RaspPy in questione ha due componenti: <b>Led</b> e <b>Sonar</b>. Essi sono due dispositivi fisici
-		che operano su un RaspPy PI e di cui non si può ancora dire nulla sulla loro natura
-		(se POJO o attori).
-
-		<h3><a href="../resources/BasicRobot24.html">BasicRobot</a></h3>
-		Software fornito direttamente dal cliente che utilizzeremo per muovere il robot, per mappare e muoversi da un
-		punto all’altro della struttura tramite il costruttore di mappe e il pianificatore integrato all’interno del
-		sw. Questo componente è un attore che girerà su un nodo computazionale separato, questo perchè è stato creato in
-		questo modo.
-
-		<h3>Mappa</h3>
-		L'area di servizio è una superfice euclidea piatta di forma rettangolare, di lati L1 ed L2.
+		Per semplicità, <b>HOME</b> è l'origine.<br>
+		La stanza viene quindi suddivisa in una griglia, dove ciascuna cella è un quadrato di lato D, ovvero il diametro dell'<b>OpRobot</b>.
+		Nella stanza sono presenti diverse posizioni rilevanti:
 		<ul>
-			<li>La zona <b>HOME</b> è una area quadrata di lato D, dove D è il diametro del OpRobot</li>
-			<li>Le porte <b>WASTEIN</b>, <b>BURNIN</b>, <b>BURNOUT</b>, <b>ASHOUT</b> potrebbero essere rappresentate
-				come aree in un piano cartesiano. La risoluzione di questo problema verrà analizzato alla prossima fase.
+			<li>
+				<b>HOME</b>
+			</li>
+			<li>
+				<b>WASTEIN</b>
+			</li>
+			<li>
+				<b>BURNIN</b>
+			</li>
+			<li>
+				<b>BURNOUT</b>
+			</li>
+			<li>
+				<b>ASHOUT</b>
 			</li>
 		</ul>
-		<center><img width="1000px" src="../resources/Mappa.png"></center>
+		@TODO: inserire immagine<br>
+		Ciascuna di esse sarà rappresentata da una o più celle all'interno della mappa, che decideremo dopo aver creato la configurazione della mappa.<br>
+		Per creare la mappa, utilizzeremo un software fornito dal cliente: MapBuilder24 (da mettere link) che andrà a generare un file di configurazione
+		che rappresenterà la stanza e i suoi ostacoli<br>
+		
+		<h3>Movimento del robot</h3>
+		Differenza tra DDR Robot e OpRobot.
+		Parliamo delle cose di cui non potevamo parlare prima: se sia un attore o meno, contesto, interazioni, stati del robot
 
-		<h2>Architettura Logica</h2>
-		<center><img width="400px" src="../sprint0_architetturaarch.png"></center>
+		Per spostare il robot da una posizione a un'altra utilizzeremo il BasicRobot24 e il suo planner integrato, messi a disposizione dal cliente.
 
-		<h2>Test plans</h2>
-		Come piano di testing si è deciso di vuole simulare il comportamento del robot.
-		<br>
-		In particolare, un attore esterno andrà ad inserire un RP all'interno del waste storage e darà il segnale di
-		avvio all'incineritore, il test quindi consiste nell'osservare se
-		il robot andrà a prelevare l'RP depositato nel <b>Waste Storage</b>, e completerà l'intera sequenza di
-		bruciatura e smaltimento del RP, quindi si osserverà se nell'<b>Ash Storage</b> dopo un periodo di tempo
-		le ceneri aumenteranno di una quantità pari ad un RP.
 
-		<h2>Divisione funzionalità</h2>
-		Si è deciso di suddividere il progetto in 3 sprint, secondo un ordine di priorità delle funzionalità:
-		<div>
-			<ol>
-				<li>
-					Core Business: Si andrà a realizzare un modello eseguibile che realizza le funzionalità fondamentali
-					del sistema. In particolare si andranno a realizzare le interazioni tra
-					WIS-OpRobot-WasteStorage-Incinerator-AshStorage.
-				</li>
-				<li>
-					Monitoring Device: Si realizzerà un'altra parte del sistema, che non è considerata prioritaria come
-					quella precedente.
-				</li>
-				<li>
-					GUI: Si realizzerà l'interfaccia grafica per mostrare lo stato del sistema.
-				</li>
-			</ol>
-		</div>
-	</div>
-
-	<!-- USEFUL
-<table style="width:100%" border="1">
-<tr>
-<td style="width:50%">
-</td>
-<td></td>
-</tr>
-</table>
--->
-
-	<br /><br />
 	</div>
 
 	<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
