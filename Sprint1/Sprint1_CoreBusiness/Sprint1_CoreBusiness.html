@@ -22,6 +22,11 @@
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
 		rel="stylesheet">
 
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+		rel="stylesheet">
+
 	<!-- <script type="text/javascript" src="./commons/resources/scripts/myScripts.js"></script> -->
 	<style type="text/css">
 		body {
@@ -31,9 +36,10 @@
 			font-optical-sizing: auto;
 		}
 
-
-
-		;
+		body {
+			font-family: "Rubik" !important;
+			font-optical-sizing: auto;
+		}
 
 		P {}
 
@@ -118,6 +124,15 @@
 			font-weight: bold;
 			color: #008000;
 			font-size: 90%;
+		}
+
+		todo {
+			background-color: #FFFF00 !important
+		}
+
+		todo:before {
+			content: "TODO:";
+			font-weight: bold;
 		}
 
 		pre {
@@ -282,16 +297,19 @@
 
 <body background="">
 	<div id="top">
-		<h1>Waste Incinerator Service - ISS 2024 <font size="5"></font></h1>	
+		<h1>Waste Incinerator Service - ISS 2024 <font size="5"></font>
+		</h1>
 	</div>
 
 	<div class="body">
 		<h2>Analisi del problema</h2>
 		<h3>Rappresentazione dell'area di servizio</h3>
-		La mappa della stanza può essere rappresentata tramite un piano cartesiano. In questo modo possiamo formalizzare il concetto di posizione, intesa come una coppia di coordinate cartesiane. 
+		La mappa della stanza può essere rappresentata tramite un piano cartesiano. In questo modo possiamo formalizzare
+		il concetto di posizione, intesa come una coppia di coordinate cartesiane.
 		<br>
-		Per semplicità, <b>HOME</b> è l'origine.<br>
-		La stanza viene quindi suddivisa in una griglia, dove ciascuna cella è un quadrato di lato D, ovvero il diametro dell'<b>OpRobot</b>.
+		Per semplicità, <b>HOME</b> è l'origine(0,0).<br>
+		La stanza viene quindi suddivisa in una griglia, dove ciascuna cella è un quadrato di lato D, ovvero il diametro
+		dell'<b>OpRobot</b>.
 		Nella stanza sono presenti diverse posizioni rilevanti:
 		<ul>
 			<li>
@@ -310,18 +328,107 @@
 				<b>ASHOUT</b>
 			</li>
 		</ul>
-		@TODO: inserire immagine<br>
-		Ciascuna di esse sarà rappresentata da una o più celle all'interno della mappa, che decideremo dopo aver creato la configurazione della mappa.<br>
-		Per creare la mappa, utilizzeremo un software fornito dal cliente: MapBuilder24 (da mettere link) che andrà a generare un file di configurazione
-		che rappresenterà la stanza e i suoi ostacoli<br>
-		
-		<h3>Movimento del robot</h3>
-		Differenza tra DDR Robot e OpRobot.
-		Parliamo delle cose di cui non potevamo parlare prima: se sia un attore o meno, contesto, interazioni, stati del robot
 
-		Per spostare il robot da una posizione a un'altra utilizzeremo il BasicRobot24 e il suo planner integrato, messi a disposizione dal cliente.
+		<todo> inserire immagine</todo><br>
+		Ciascuna di esse sarà rappresentata da una o più celle all'interno della mappa, che decideremo dopo aver creato
+		la configurazione della mappa.<br>
+		Per creare la mappa, utilizzeremo un software fornito dal cliente: <b>MapBuilder24</b> (da mettere link) che
+		andrà a generare un file di configurazione che rappresenterà la stanza e i suoi ostacoli.<br><br>
+		<todo> inserire code block mappa: Map.text</todo><br>
+		Per rappresentare le <b>posizioni rilevanti</b> sulla mappa, verrà utilizzata una <b>base di conoscenza
+			prolog</b> contenente
+		un insieme di triple: <b>(x,y,NOME_POSIZIONE)</b>.<br>
+		Questo va ad aggiungere un nuovo requisito, ovvero una nuova funzionalità che dato il nome di una posizione ne
+		restituisca le coordinate.<br>
 
+		In questo modo si va ad evitare di assegnare ad un solo attore tutta l'informazione relativa alle posizioni,
+		dando la possibilità
+		a tutti i componenti di accedervi (sia il <b>WIS</b> che <b>OpRobot</b> necessitano di queste
+		informazioni).
+		<br>
+		<h3>WIS</h3>
+		<h3>OpRobot</h3>
+		Il cliente mette a disposizione un <b>DDR Robot</b>, l'attuatore fisico del comportamento dell'<b>OpRobot</b>
+		che è un entità astratta che incapsula la logica del robot, e il suo sw di controllo (<b>BasicRobot</b>).
+		<br><br>
 
+		L'<b>OpRobot</b> sarà rappresentato da un attore, poichè il sw fornito dal cliente, che controlla il DDR,
+		comunica solamente tramite scambio di messaggi. Di conseguenza è necessario modellare <b>OpRobot</b> affinché
+		sia in grado di utilizzare <b>l'interfaccia</b> offerta da <b>BasicRobot</b> per comandare il robot fisico.
+		<br>
+		In particolare, essa verrà utilizzata per spostare il robot da una posizione rilevante ad un'altra (
+		informazione ottenuta tramite la base di conoscenza ).
+		Il componente di cui si farà uso è il <b>Planner24</b> (mettere link), che permette di costruire dinamicamente
+		una
+		sequenza di mosse attraverso le quali il robot può muoversi dalla posizione corrente ad un’altra posizione sulla
+		mappa della stanza costruita in precedenza.
+		<br>
+		<hr>
+		Per rappresentare lo spostamento di 1 RP da una parte all'altra dell'area di servizio, <b>OpRobot</b> mantiene
+		tramite una variabile l'informazione relativa al possedimento o meno di un pacchetto in un determinato momento.
+		<br>
+		<br>
+		Inoltre, deve comunicare al WIS due informazioni: la sua <b>posizione attuale</b> ed il <b>lavoro</b>
+		che sta svolgendo. La prima tramite coordinate cartesiane, mentre la seconda viene rappresentata da vari stati
+		in cui il robot può trovarsi:
+		<ul>
+			<li>
+				<b>WAITING</b>: il robot è nella home aspettando che il WIS gli dia il via
+
+			</li>
+			<li>
+				<b>MOVE_TO_WS</b>
+
+			</li>
+			<li>
+				<b>WITHDRAW_RP_FROM_WS</b>
+
+			</li>
+			<li>
+				<b>MOVE_TO_INCINERATOR</b>
+
+			</li>
+			<li>
+				<b>DEPOSIT_RP_INTO_INCINERATOR</b>
+
+			</li>
+			<li>
+				<b>MOVING_TO_HOME</b>
+
+			</li>
+			<li>
+				<b>WAITING_FOR_BURN</b>
+
+			</li>
+			<li>
+				<b>WITHDRAW_ASHES_FROM_INCINERATOR</b>
+
+			</li>
+			<li>
+				<b>MOVING_TO_AS</b>
+
+			</li>
+			<li>
+				<b>DEPOSIT_ASHES_INTO_AS</b>
+
+			</li>
+			<li>
+				<b>BACK_HOME</b>
+
+			</li>
+		</ul>
+
+		<todo>TODO</todo>
+		<h3>Waste Storage</h3>
+		<h3>Ash Storage</h3>
+		<h3>Monitoring Device</h3>
+		<h3>Incinerator</h3>
+		<h3>Contesti</h3>
+		<h3>Interazioni/Messaggi</h3>
+		<h3>Architettura Logica</h3>
+		<h3>Test Plans</h3>
+		<todo>Parliamo delle cose di cui non potevamo parlare prima: contesto, interazioni</todo>
+		<br>
 	</div>
 
 	<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
