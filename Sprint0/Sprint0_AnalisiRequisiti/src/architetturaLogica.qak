@@ -21,7 +21,7 @@ QActor wis context ctx_wis {
 	}
 }
 
-QActor incinerator context ctx_incinerator { 
+QActor incinerator context ctx_wis { 
 	State s0 initial{
 		delay 500   
 		println("$name STARTS") color green 

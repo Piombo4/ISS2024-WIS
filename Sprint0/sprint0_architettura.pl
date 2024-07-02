@@ -12,7 +12,7 @@ context(ctx_basicrobot, "localhost",  "TCP", "8020").
 context(ctx_oprobot, "localhost",  "TCP", "8020").
  qactor( wis, ctx_wis, "it.unibo.wis.Wis").
  static(wis).
-  qactor( incinerator, ctx_wis, "it.unibo.incinerator.Incinerator").
+  qactor( incinerator, ctx_incinerator, "it.unibo.incinerator.Incinerator").
  static(incinerator).
   qactor( led, ctx_monitoringdevice, "it.unibo.led.Led").
  static(led).

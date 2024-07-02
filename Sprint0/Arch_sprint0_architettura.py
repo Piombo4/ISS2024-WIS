@@ -27,6 +27,7 @@ with Diagram('sprint0_architetturaArch', show=False, outformat='png', graph_attr
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
      with Cluster('ctx_wis', graph_attr=nodeattr):
           wis=Custom('wis','./qakicons/symActorSmall.png')
+     with Cluster('ctx_incinerator', graph_attr=nodeattr):
           incinerator=Custom('incinerator','./qakicons/symActorSmall.png')
      with Cluster('ctx_monitoringdevice', graph_attr=nodeattr):
           led=Custom('led','./qakicons/symActorSmall.png')

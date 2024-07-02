@@ -26,12 +26,12 @@ class Wastestorage ( name: String, scope: CoroutineScope, isconfined: Boolean=fa
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
+						forward("waste_qty", "waste_qty(X)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
 				}	 
 				state("idle") { //this:State
 					action { //it:State
