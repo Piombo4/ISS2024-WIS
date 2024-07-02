@@ -135,6 +135,11 @@
 			font-weight: bold;
 		}
 
+		red {
+			color: #fa2929;
+			font-weight: bold;
+		}
+
 		pre {
 			font-family: "Consolas";
 			font-size: 85%;
@@ -212,6 +217,15 @@
 		td {
 			border: 1px solid black;
 			border-collapse: collapse;
+		}
+
+		td[colspan=4] {
+			padding-bottom: 20px !important;
+		}
+
+		disp {
+			color: #0000CD;
+			content: disp;
 		}
 
 		ol,
@@ -336,8 +350,7 @@
 		andrà a generare un file di configurazione che rappresenterà la stanza e i suoi ostacoli.<br><br>
 		<todo> inserire code block mappa: Map.text</todo><br>
 		Per rappresentare le <b>posizioni rilevanti</b> sulla mappa, verrà utilizzata una <b>base di conoscenza
-			prolog</b> contenente
-		un insieme di triple: <b>(x,y,NOME_POSIZIONE)</b>.<br>
+			prolog</b> contenente un insieme di triple: <b>(x,y,NOME_POSIZIONE)</b>.<br>
 		Questo va ad aggiungere un nuovo requisito, ovvero una nuova funzionalità che dato il nome di una posizione ne
 		restituisca le coordinate.<br>
 
@@ -347,6 +360,16 @@
 		informazioni).
 		<br>
 		<h3>WIS</h3>
+		Il <b>WIS</b> è gia stato identificato come attore nella fase precedente e assume il ruolo di
+		"controllore/gestore" del sistema che fa da coordinatore delle comunicazioni.
+
+		<h4>GUI</h4>
+		La GUI viene modellata come una Facade, dato che abbiamo bisogno di un'interfaccia grafica che mostri all'utente
+		le informazioni aggiornate relative allo stato del sistema.<br>
+		Si è deciso di utilizzare una Facade perchè il linguaggio QAK (da noi scelto per questo progetto) possiede le
+		capacità espressive per dichiarare e comunicare con Facade ad alto livello
+		senza preocupparci del livello di implemetazione sottostante.
+
 		<h3>OpRobot</h3>
 		Il cliente mette a disposizione un <b>DDR Robot</b>, l'attuatore fisico del comportamento dell'<b>OpRobot</b>
 		che è un entità astratta che incapsula la logica del robot, e il suo sw di controllo (<b>BasicRobot</b>).
@@ -417,17 +440,234 @@
 
 			</li>
 		</ul>
-
-		<todo>TODO</todo>
 		<h3>Waste Storage</h3>
+		Il <b>Waste Storage</b> viene modellato come un attore perchè è un'entità che deve essere sempre attiva per
+		poter ricevere messaggi e rispondere di conseguenza.
+		Al suo interno contiene una <b>Scale</b> modellata come un POJO (una variabile), il cui compito è quello tenere
+		traccia del peso degli RP nel <b>Waste Storage</b>.
+		Interagisce sia con l'entità esterna sia con l'OpRobot che rispettivamente depositano e prevelevano un RP alla
+		volta.
+		<br>
+
 		<h3>Ash Storage</h3>
+		L'<b>Ash Storage</b> viene modellato come attore poihcè è un'entità che scambia messaggi con il robot e con
+		l'entità esterna quando si richiede il prelievo delle ceneri. <br>
+		Deve mantenere al suo interno l'informazione relativa al livello di ceneri depositate (informazione che sarà
+		necessaria al Sonar), viene utilizzata una variabile intera a questo scopo.
+
 		<h3>Monitoring Device</h3>
-		<h3>Incinerator</h3>
+		Come accennato nella fase precedente, il monitoring device, essendo fisicamente su un Raspberry PI, gira in un
+		nodo (contesto) separato ed è formato da due componenti:
+		<h4>Led</h4>
+		Il Led è un attore che può trovarsi in uno di 3 stati (in base alle informazioni ricevute dal WIS)
+		<ul>
+			<li>
+				<b>ON</b>: quando l’Incinerator sta bruciando un RP
+
+			</li>
+			<li>
+				<b>OFF</b>: quando l’Incinerator non è in funzione
+
+			</li>
+			<li>
+				<b>Blink</b>: quando l’Ash Storage è pieno o vuoto
+
+			</li>
+		</ul>
+
+
+		<h4>Sonar</h4>
+		Il Sonar è un attore il cui unico compito è misurare il livello delle ceneri nell'<b>Ash Storage</b> e
+		comunicare quanto rilvevato al <b>WIS</b>. <br>
+
 		<h3>Contesti</h3>
+		I 3 nuovi attori identificati nell'analisi del problema sono stati inseriti in <b>ctx_wis</b> poichè non sono
+		stati trovati motivi per metterli in contesti separati.
+		La gui essendo una facade, per definizione è assegnata ad un contesto separato.
+		<ul>
+			<li>
+				<b>ctx_wis</b>: <b>WIS</b> + <b>Incinerator</b> + <red>OpRobot</red> + <red>Waste Storage</red> + <red>
+					Ash Storage</red>
+			</li>
+			<li>
+				<b>ctx_basic_robot</b>: il <b>Basic Robot</b> per sua definizione è già presente in un contesto separato
+			</li>
+			<li>
+				<b>ctx_monitoringdevice</b>: <b>Led</b> + <b>Sonar</b>
+			</li>
+			<red>
+				<li>
+					<b>ctx_gui</b>: contesto in cui sarà eseguita il facade.
+				</li>
+			</red>
+
+		</ul>
+		In <red>rosso</red> gli attori e contesti aggiunti in questa fase.
 		<h3>Interazioni/Messaggi</h3>
+
+		<table>
+			<tr>
+				<th>Nome</th>
+				<th>Tipo</th>
+				<th>Mittente</th>
+				<th>Destinatario</th>
+			</tr>
+
+			<tr>
+				<td>START_ROBOT</td>
+				<td><disp>Dispatch</disp></td>
+				<td>WIS</td>
+				<td>OpRobot</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>UPDATE_GUI</td>
+				<td>Dispatch</td>
+				<td>WIS</td>
+				<td>SSGUI</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>ROBOT_STATUS</td>
+				<td>Dispatch</td>
+				<td>OpRobot</td>
+				<td>WIS</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>WASTE_QTY</td>
+				<td>Dispatch</td>
+				<td>Waste Storage</td>
+				<td>WIS</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>ASH_QTY</td>
+				<td>Dispatch</td>
+				<td>Ash Storage</td>
+				<td>WIS</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>BURNING</td>
+				<td>Dispatch</td>
+				<td>Incinerator</td>
+				<td>WIS</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>BURN_OUT</td>
+				<td>Dispatch</td>
+				<td>Incinerator</td>
+				<td>WIS</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>WASTE_IN</td>
+				<td>Dispatch</td>
+				<td>Entità esterna</td>
+				<td>Waste Storage</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>GET_WASTE</td>
+				<td>Dispatch</td>
+				<td>Entità esterna</td>
+				<td>Waste Storage</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>TURN_ON </td>
+				<td>Dispatch</td>
+				<td>Entità esterna</td>
+				<td>Incinerator</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>BURN_IN </td>
+				<td>Dispatch</td>
+				<td>OpRobot</td>
+				<td>Incinerator</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>ASH_OUT  </td>
+				<td>Dispatch</td>
+				<td>OpRobot</td>
+				<td>Ash Storage</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				
+			</tr>
+			<tr>
+				<td>GET_ASH  </td>
+				<td>Dispatch</td>
+				<td>Entità esterna</td>
+				<td>Ash Storage</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>LED_ON  </td>
+				<td>Dispatch</td>
+				<td>WIS</td>
+				<td>LED</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>LED_OFF  </td>
+				<td>Dispatch</td>
+				<td>WIS</td>
+				<td>LED</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+			<tr>
+				<td>BLINK</td>
+				<td>Dispatch</td>
+				<td>WIS</td>
+				<td>LED</td>
+			</tr>
+			<tr>
+				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+			</tr>
+		</table>
+
 		<h3>Architettura Logica</h3>
 		<h3>Test Plans</h3>
-		<todo>Parliamo delle cose di cui non potevamo parlare prima: contesto, interazioni</todo>
 		<br>
 	</div>
 
