@@ -466,7 +466,8 @@
 		l'entità esterna quando si richiede il prelievo delle ceneri. <br>
 		Deve mantenere al suo interno l'informazione relativa al livello di ceneri depositate (informazione che sarà
 		necessaria al Sonar), viene utilizzata una variabile intera a questo scopo.<br>
-		Una entità esterna in istanti di tempo non precisati può prelevare tutta la cenere dall'ash storage svuotandolo completamente.
+		Una entità esterna in istanti di tempo non precisati può prelevare tutta la cenere dall'ash storage svuotandolo
+		completamente.
 
 
 
@@ -629,7 +630,7 @@
 			</tr>
 			<tr>
 				<td>BURN_IN </td>
-				<td class="disp">Dispatch</td>
+				<td c lass="disp">Dispatch</td>
 				<td>OpRobot</td>
 				<td>Incinerator</td>
 			</tr>
@@ -658,7 +659,8 @@
 				<td>Ash Storage</td>
 			</tr>
 			<tr>
-				<td colspan="4">Si verifica quando l'entità esterna rimuove la cenere dall'Ash Storage. Provoca l'aggiornamento del valore misurato dal sonar. </td>
+				<td colspan="4">Si verifica quando l'entità esterna rimuove la cenere dall'Ash Storage. Provoca
+					l'aggiornamento del valore misurato dal sonar. </td>
 			</tr>
 			<tr>
 				<td>LED_ON </td>
@@ -667,7 +669,8 @@
 				<td>LED</td>
 			</tr>
 			<tr>
-				<td colspan="4">Inviato per indicare che l'Incinerator sta bruciando 1 RP, ovvero è in burning phase.</td>
+				<td colspan="4">Inviato per indicare che l'Incinerator sta bruciando 1 RP, ovvero è in burning phase.
+				</td>
 			</tr>
 			<tr>
 				<td>LED_OFF </td>
@@ -685,12 +688,46 @@
 				<td>LED</td>
 			</tr>
 			<tr>
-				<td colspan="4">Inviato per indicare che l'Ash Storage è pieno (quando il valore misurato dal sonar è minore di DLIMIT) oppure quando è vuoto (il valore misurato dal sonar è uguale DMAX)</td>
+				<td colspan="4">Inviato per indicare che l'Ash Storage è pieno (quando il valore misurato dal sonar è
+					minore di DLIMIT) oppure è vuoto (in questo caso, quando il
+					valore misurato dal sonar è uguale ad un valore DMAX allora l'Ash Storage è vuoto).</td>
 			</tr>
 		</table>
 
 		<h3>Architettura Logica</h3>
+		<img src="../sprint0_architettura_with_msgarch.png" alt="">
 		<h3>Test Plans</h3>
+		<table>
+			<tr>
+				<th>
+					Test
+				</th>
+				<th>
+					Attori
+				</th>
+				<th>
+					Descrizione
+				</th>
+				<th>
+					File
+				</th>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					a
+				</td>
+				<td>
+					a
+				</td>
+				<td>
+					a
+				</td>
+
+			</tr>
+		</table>
 		<br>
 	</div>
 
