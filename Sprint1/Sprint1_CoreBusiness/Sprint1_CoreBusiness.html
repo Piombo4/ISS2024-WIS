@@ -217,15 +217,22 @@
 		td {
 			border: 1px solid black;
 			border-collapse: collapse;
+			text-align: center;
 		}
 
-		td[colspan=4] {
-			padding-bottom: 20px !important;
+		td.disp {
+			background-color: #7b7bff;
+			color: white;
 		}
 
-		disp {
-			color: #0000CD;
-			content: disp;
+		td.update {
+			background-color: rgb(151, 113, 254);
+			color: white;
+		}
+
+		td.event {
+			background-color: rgb(47, 255, 106);
+			color: #242424;
 		}
 
 		ol,
@@ -241,6 +248,10 @@
 		th,
 		td {
 			border: 1px solid black;
+		}
+
+		table {
+			table-layout: auto !important;
 		}
 
 		img {
@@ -388,7 +399,8 @@
 		<br>
 		<hr>
 		Per rappresentare lo spostamento di 1 RP da una parte all'altra dell'area di servizio, <b>OpRobot</b> mantiene
-		tramite una variabile l'informazione relativa al possedimento o meno di un pacchetto in un determinato momento.
+		tramite una variabile l'informazione relativa al possedimento o meno di un pacchetto in un determinato momento
+		(un variabile booleana).
 		<br>
 		<br>
 		Inoltre, deve comunicare al WIS due informazioni: la sua <b>posizione attuale</b> ed il <b>lavoro</b>
@@ -450,10 +462,13 @@
 		<br>
 
 		<h3>Ash Storage</h3>
-		L'<b>Ash Storage</b> viene modellato come attore poihcè è un'entità che scambia messaggi con il robot e con
+		L'<b>Ash Storage</b> viene modellato come attore poichè è un'entità che scambia messaggi con il robot e con
 		l'entità esterna quando si richiede il prelievo delle ceneri. <br>
 		Deve mantenere al suo interno l'informazione relativa al livello di ceneri depositate (informazione che sarà
-		necessaria al Sonar), viene utilizzata una variabile intera a questo scopo.
+		necessaria al Sonar), viene utilizzata una variabile intera a questo scopo.<br>
+		Una entità esterna in istanti di tempo non precisati può prelevare tutta la cenere dall'ash storage svuotandolo completamente.
+
+
 
 		<h3>Monitoring Device</h3>
 		Come accennato nella fase precedente, il monitoring device, essendo fisicamente su un Raspberry PI, gira in un
@@ -483,7 +498,7 @@
 		<h3>Contesti</h3>
 		I 3 nuovi attori identificati nell'analisi del problema sono stati inseriti in <b>ctx_wis</b> poichè non sono
 		stati trovati motivi per metterli in contesti separati.
-		La gui essendo una facade, per definizione è assegnata ad un contesto separato.
+		La gui essendo una facade, è per definizione assegnata ad un contesto separato.
 		<ul>
 			<li>
 				<b>ctx_wis</b>: <b>WIS</b> + <b>Incinerator</b> + <red>OpRobot</red> + <red>Waste Storage</red> + <red>
@@ -515,154 +530,162 @@
 
 			<tr>
 				<td>START_ROBOT</td>
-				<td><disp>Dispatch</disp></td>
+				<td class="disp">Dispatch</td>
 				<td>WIS</td>
 				<td>OpRobot</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato quando il robot è in stato WAITING. Indica che esso può iniziare a muoversi
+					verso WASTEIN (il WIS ha verificato che il Waste Storage non è vuoto, l’Ash Storage non è pieno e
+					l’Incinerator non è in burning phase).</td>
 			</tr>
 			<tr>
 				<td>UPDATE_GUI</td>
-				<td>Dispatch</td>
+				<td class="disp">Dispatch</td>
 				<td>WIS</td>
 				<td>SSGUI</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato ogni volta che la GUI deve essere aggiornata. Contiene diverse informazioni:
+					(NRP_WS, QTY_ASH, ISBURNING, ROBOT_STATUS) </td>
 			</tr>
 			<tr>
 				<td>ROBOT_STATUS</td>
-				<td>Dispatch</td>
+				<td class="update">UpdateResource</td>
 				<td>OpRobot</td>
 				<td>WIS</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato ogni volta che il robot cambia posizione e lavoro (informazione che deve essere
+					mantenuta all'interno dell'OpRobot), formato dai seguenti campi: (x,y,JOB)</td>
 			</tr>
 			<tr>
 				<td>WASTE_QTY</td>
-				<td>Dispatch</td>
+				<td class="update">UpdateResource</td>
 				<td>Waste Storage</td>
 				<td>WIS</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Indica il peso in KG degli RP contenuti nel Waste Storage.</td>
 			</tr>
 			<tr>
 				<td>ASH_QTY</td>
-				<td>Dispatch</td>
+				<td class="update">UpdateResource</td>
 				<td>Ash Storage</td>
 				<td>WIS</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Indica il livello di ceneri nell'Ash Storage. Tale valore viene misurato dal sonar del
+					monitoring device.</td>
 			</tr>
 			<tr>
 				<td>BURNING</td>
-				<td>Dispatch</td>
+				<td class="disp">Dispatch</td>
 				<td>Incinerator</td>
 				<td>WIS</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
-			</tr>
-			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Indica al WIS che l'Incinerator è in burning phase. </td>
 			</tr>
 			<tr>
 				<td>BURN_OUT</td>
-				<td>Dispatch</td>
+				<td class="disp">Dispatch</td>
 				<td>Incinerator</td>
-				<td>WIS</td>
+				<td>WIS + OpRobot</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
-			</tr>
-			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Indica che l'Incinerator ha finito di bruciare 1 RP, ovvero è passato BTIME
+					dall'inserimento del pacchetto ed è quindi finita la burning phase.</td>
 			</tr>
 			<tr>
 				<td>WASTE_IN</td>
-				<td>Dispatch</td>
+				<td class="event">Evento</td>
 				<td>Entità esterna</td>
 				<td>Waste Storage</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Si verifica quando l'entità esterna vuole depositare 1 RP all'interno del Waste Storage.
+					Provoca l'incremento di 1 RP della capacità di quest'ultimo (+50 KG sulla Scale).</td>
 			</tr>
 			<tr>
 				<td>GET_WASTE</td>
-				<td>Dispatch</td>
-				<td>Entità esterna</td>
+				<td class="disp">Dispatch</td>
+				<td>OpRobot</td>
 				<td>Waste Storage</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato per rappresentare il prelievo di 1 RP dal Waste Storage quando il robot è
+					posizionato sulla porta WASTE_IN. Provoca il decremento di 1 RP della capacità di quest'ultimo (-50
+					KG sulla Scale). La variabile booleana dentro il robot viene messa a true. </td>
 			</tr>
 			<tr>
 				<td>TURN_ON </td>
-				<td>Dispatch</td>
+				<td class="event">Evento</td>
 				<td>Entità esterna</td>
 				<td>Incinerator</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Indica l'accensione dell'Incinerator. </td>
 			</tr>
 			<tr>
 				<td>BURN_IN </td>
-				<td>Dispatch</td>
+				<td class="disp">Dispatch</td>
 				<td>OpRobot</td>
 				<td>Incinerator</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato per rappresentare il deposito di 1 RP nell'Incinerator quando il robot si trova
+					in BURNIN. Alla ricezione del messaggio, l’Incinerator entra in burning phase (e manda il messaggio
+					BURNING al WIS). </td>
 			</tr>
 			<tr>
-				<td>ASH_OUT  </td>
-				<td>Dispatch</td>
+				<td>ASH_OUT </td>
+				<td class="disp">Dispatch</td>
 				<td>OpRobot</td>
 				<td>Ash Storage</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
-				
+				<td colspan="4"> Inviato per rappresentare il deposito della cenere corrispondente ad 1 RP
+					nell'AshStorage. Il robot si trova in posizione ASHOUT (il sonar si aggiornerà di conseguenza). La
+					variabile booleana dentro il robot viene messa a false.
+				</td>
+
 			</tr>
 			<tr>
-				<td>GET_ASH  </td>
-				<td>Dispatch</td>
+				<td>GET_ASH </td>
+				<td class="event">Evento</td>
 				<td>Entità esterna</td>
 				<td>Ash Storage</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Si verifica quando l'entità esterna rimuove la cenere dall'Ash Storage. Provoca l'aggiornamento del valore misurato dal sonar. </td>
 			</tr>
 			<tr>
-				<td>LED_ON  </td>
-				<td>Dispatch</td>
+				<td>LED_ON </td>
+				<td class="disp">Dispatch</td>
 				<td>WIS</td>
 				<td>LED</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato per indicare che l'Incinerator sta bruciando 1 RP, ovvero è in burning phase.</td>
 			</tr>
 			<tr>
-				<td>LED_OFF  </td>
-				<td>Dispatch</td>
+				<td>LED_OFF </td>
+				<td class="disp">Dispatch</td>
 				<td>WIS</td>
 				<td>LED</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato per indicare che l'Incinerator non è in un burning phase.</td>
 			</tr>
 			<tr>
 				<td>BLINK</td>
-				<td>Dispatch</td>
+				<td class="disp">Dispatch</td>
 				<td>WIS</td>
 				<td>LED</td>
 			</tr>
 			<tr>
-				<td colspan="4">Indica che il robot può iniziare a muoversi (il Waste Storage non è vuoto, l’Ash Storage non è pieno e l’Incinerator non è in burning phase).</td>
+				<td colspan="4">Inviato per indicare che l'Ash Storage è pieno (quando il valore misurato dal sonar è minore di DLIMIT) oppure quando è vuoto (il valore misurato dal sonar è uguale DMAX)</td>
 			</tr>
 		</table>
 
