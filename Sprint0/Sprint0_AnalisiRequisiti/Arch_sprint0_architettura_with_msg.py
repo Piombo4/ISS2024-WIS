@@ -26,33 +26,30 @@ with Diagram('sprint0_architettura_with_msgArch', show=False, outformat='png', g
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
      with Cluster('ctx_wis', graph_attr=nodeattr):
+          oprobot=Custom('oprobot','./qakicons/symActorSmall.png')
           wis=Custom('wis','./qakicons/symActorSmall.png')
+          wastestorage=Custom('wastestorage','./qakicons/symActorSmall.png')
+          ashstorage=Custom('ashstorage','./qakicons/symActorSmall.png')
+          incinerator=Custom('incinerator','./qakicons/symActorSmall.png')
      with Cluster('ctx_gui', graph_attr=nodeattr):
           ssgui=Custom('ssgui','./qakicons/symActorSmall.png')
-     with Cluster('ctx_wastestorage', graph_attr=nodeattr):
-          wastestorage=Custom('wastestorage','./qakicons/symActorSmall.png')
-     with Cluster('ctx_ashstorage', graph_attr=nodeattr):
-          ashstorage=Custom('ashstorage','./qakicons/symActorSmall.png')
-     with Cluster('ctx_incinerator', graph_attr=nodeattr):
-          incinerator=Custom('incinerator','./qakicons/symActorSmall.png')
      with Cluster('ctx_monitoringdevice', graph_attr=nodeattr):
           led=Custom('led','./qakicons/symActorSmall.png')
           sonar=Custom('sonar','./qakicons/symActorSmall.png')
-     with Cluster('ctx_basicrobot', graph_attr=nodeattr):
+     with Cluster('ctx_basic_robot', graph_attr=nodeattr):
           basicrobot=Custom('basicrobot','./qakicons/symActorSmall.png')
-     with Cluster('ctx_oprobot', graph_attr=nodeattr):
-          oprobot=Custom('oprobot','./qakicons/symActorSmall.png')
-     wis >> Edge(color='blue', style='solid',  decorate='true', label='<led_on &nbsp; led_off &nbsp; >',  fontcolor='blue') >> led
-     sonar >> Edge(color='blue', style='solid',  decorate='true', label='<ash_full &nbsp; >',  fontcolor='blue') >> wis
+     sys >> Edge( label='waste_in', **evattr, decorate='true', fontcolor='darkgreen') >> wastestorage
+     sys >> Edge( label='get_ash', **evattr, decorate='true', fontcolor='darkgreen') >> ashstorage
+     sys >> Edge( label='turn_on', **evattr, decorate='true', fontcolor='darkgreen') >> incinerator
+     wis >> Edge(color='blue', style='solid',  decorate='true', label='<led_on &nbsp; led_off &nbsp; blink &nbsp; >',  fontcolor='blue') >> led
      oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<ash_out &nbsp; >',  fontcolor='blue') >> ashstorage
-     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<current_location &nbsp; job &nbsp; >',  fontcolor='blue') >> wis
-     sonar >> Edge(color='blue', style='solid',  decorate='true', label='<ash_qty &nbsp; blink &nbsp; >',  fontcolor='blue') >> ashstorage
+     ashstorage >> Edge(color='blue', style='solid',  decorate='true', label='<ash_qty &nbsp; >',  fontcolor='blue') >> wis
+     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<robot_status &nbsp; >',  fontcolor='blue') >> wis
      incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_out &nbsp; >',  fontcolor='blue') >> oprobot
      oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<burn_in &nbsp; >',  fontcolor='blue') >> incinerator
+     wis >> Edge(color='blue', style='solid',  decorate='true', label='<get_waste &nbsp; >',  fontcolor='blue') >> wastestorage
      wastestorage >> Edge(color='blue', style='solid',  decorate='true', label='<waste_qty &nbsp; >',  fontcolor='blue') >> wis
      wis >> Edge(color='blue', style='solid',  decorate='true', label='<start_robot &nbsp; >',  fontcolor='blue') >> oprobot
-     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<get_waste &nbsp; >',  fontcolor='blue') >> wastestorage
-     sonar >> Edge(color='blue', style='solid',  decorate='true', label='<blink &nbsp; >',  fontcolor='blue') >> led
      wis >> Edge(color='blue', style='solid',  decorate='true', label='<update_gui &nbsp; >',  fontcolor='blue') >> ssgui
      incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burning &nbsp; burn_out &nbsp; >',  fontcolor='blue') >> wis
 diag

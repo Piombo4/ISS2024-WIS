@@ -32,6 +32,7 @@ class Wastestorage ( name: String, scope: CoroutineScope, isconfined: Boolean=fa
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+					 transition(edgeName="t10",targetState="idle",cond=whenEvent("waste_in"))
 				}	 
 				state("idle") { //this:State
 					action { //it:State

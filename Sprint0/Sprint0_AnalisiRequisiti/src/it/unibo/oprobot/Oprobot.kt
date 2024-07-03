@@ -26,11 +26,9 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("get_waste", "get_waste(X)" ,"wastestorage" ) 
+						forward("robot_status", "robot_status(X)" ,"wis" ) 
 						forward("burn_in", "burn_in(X)" ,"incinerator" ) 
 						forward("ash_out", "ash_out(X)" ,"ashstorage" ) 
-						forward("current_location", "current_location(X)" ,"wis" ) 
-						forward("job", "job(X)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

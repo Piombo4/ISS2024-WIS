@@ -26,12 +26,13 @@ class Ashstorage ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
+						forward("ash_qty", "ash_qty(X)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
+					 transition(edgeName="t11",targetState="idle",cond=whenEvent("get_ash"))
 				}	 
 				state("idle") { //this:State
 					action { //it:State
