@@ -170,9 +170,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'sprint0_architettura_with_msg'
+        distributionBaseName = 'sprint1_architettura_with_msg'
         contents { 
-             from './sprint0_architettura_with_msg.pl'
+             from './sprint1_architettura_with_msg.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }
