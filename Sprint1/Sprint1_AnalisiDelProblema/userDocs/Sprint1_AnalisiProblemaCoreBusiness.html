@@ -1,0 +1,676 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<!--
+<link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
+<script type="text/javascript" src="../css/issStyle.js"></script>
+-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css"
+		crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js"
+		crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/templateISS.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/main.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/navbar.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/table.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/code.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+		rel="stylesheet">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+		rel="stylesheet">
+
+	<!-- <script type="text/javascript" src="./commons/resources/scripts/myScripts.js"></script> -->
+	<style type="text/css">
+		body {
+			margin: auto;
+			max-width: 1300px;
+			font-optical-sizing: auto;
+		}
+
+		body {
+			font-family: "Rubik" !important;
+			font-optical-sizing: auto;
+		}
+
+		P {}
+
+		;
+
+		a,
+		a:visited,
+		a:active,
+		a:link,
+		a:hover {
+			text-decoration: underline;
+			color: #545454;
+			background-color: transparent;
+			font-size: 93%;
+		}
+
+		a:hover {
+			background-color: #cccccc;
+		}
+
+
+		hr {
+			clear: both;
+			height: 1px;
+			color: #242424;
+			background-color: transparent;
+		}
+
+		h1,
+		h2,
+		h3,
+		h4 {
+			color: #242424;
+			clear: left;
+			font: 100% Tahoma, Helvetica, Arial, sans-serif;
+			margin-top: 1em;
+			padding-top: 0.5em;
+			border-radius: 10px;
+			padding: 5px;
+		}
+
+		top {
+			width: 100%;
+		}
+
+
+		#i {
+			color: #ff1010;
+		}
+
+		tt {
+			font-family: "Arial";
+			font-size: 90%;
+			color: #006600;
+		}
+
+		em {
+			font-family: "Arial";
+			font-size: 80%;
+			font-weight: bold;
+			border-style: solid;
+			border-color: #abe876;
+			color: #1632cc;
+		}
+
+		bc {
+			font-family: "Arial";
+			font-size: 90%;
+			font-weight: bold;
+			color: #990000;
+			background-color: #fcf8c7;
+		}
+
+		ks {
+			font-family: "Arial";
+			font-weight: bold;
+			color: #0000CD;
+			font-size: 90%;
+		}
+
+		kc {
+			font-family: "Arial";
+			font-weight: bold;
+			color: #008000;
+			font-size: 90%;
+		}
+
+		todo {
+			background-color: #FFFF00 !important
+		}
+
+		todo:before {
+			content: "TODO:";
+			font-weight: bold;
+		}
+
+		red {
+			color: #fa2929;
+			font-weight: bold;
+		}
+
+		pre {
+			font-family: "Consolas";
+			font-size: 85%;
+			background-color: #f5f5f5;
+			border: 1.5px solid silver;
+			padding: 5px;
+		}
+
+		m {
+			font-family: "Helvetica";
+			line-height: 100%;
+			font-size: 75%;
+		}
+
+		div.body {
+
+			font-size: 18px;
+		}
+
+		k {
+			color: #990000;
+			font-weight: bold;
+			font-size: 90%;
+		}
+
+		h1 {
+			font-size: 150%;
+			background-color: #b2c0ff;
+			padding: 10px;
+		}
+
+		h2 {
+			background-color: #9ed8ff;
+			font-size: 130%;
+		}
+
+		h3 {
+			background-color: #e6ccff;
+			font-size: 100%;
+		}
+
+		h4 {
+			background-color: #ccffcc;
+			font-size: 100%;
+			width: 95%;
+			border-radius: 5px;
+			padding: 2px;
+		}
+
+		h5 {
+			background-color: #d5ffb0;
+			font-size: 100%;
+
+		}
+
+		div.req {
+			background-color: #d9ffb3;
+			font-size: 18px;
+			width: 700px;
+			border: 3px solid green;
+			padding: 15px;
+			margin: 10px;
+		}
+
+		div.remark {
+			background-color: #E3F2FD;
+			border: 1.5px solid #d5f2ed;
+			padding: 15px;
+			margin: 10px;
+			border-radius: 15px;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+
+		td.disp {
+			background-color: #7b7bff;
+			color: white;
+		}
+
+		td.update {
+			background-color: rgb(151, 113, 254);
+			color: white;
+		}
+
+		td.event {
+			background-color: rgb(47, 255, 106);
+			color: #242424;
+		}
+
+		ol,
+		ul,
+		li {
+			margin: 0;
+			margin-left: 25px;
+			padding: 0;
+			padding-bottom: 5px;
+		}
+
+		td>ol,
+		td>ul,
+		td>ul {
+			margin-left: 0px;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		table {
+			table-layout: auto !important;
+		}
+
+		img {
+			border: 1.5px solid #d5f2ed
+		}
+
+		a,
+		a:visited,
+		a:active,
+		a:link,
+		a:hover {
+			text-decoration: underline;
+			color: #545454;
+			background-color: transparent;
+		}
+
+		div.wrapdesc {
+			width: 90%;
+			margin: auto;
+		}
+
+		msg {
+			color: #ff1010;
+		}
+
+		div.imagedesc {
+			width: 85%;
+			margin: auto;
+		}
+	</style>
+
+
+
+</head>
+
+
+
+
+
+
+<title>Sprint 1</title>
+</head>
+
+<!--
+	<body onload="loadNav();">
+		<div id="openButton" class="openButton" onclick="openNav(true)">&#9776; Menu</div>
+		<div id="sidenav" class="sidenav">
+			<a class="closeButton" href="javascript:void(0)" onclick="closeNav(true)">&times;</a>
+			<a href=".README.html">ReadMe</a>
+			<a class="sprint" href="../../../Sprint0/Codice/userDocs/Cold%20Storage%20Service%20-%20Natali%20V3.html">Sprint0</a>
+			<a class="sprint" href="../../../Sprint1.0/Codice/userDocs/Sprint%201.0%20-%20V3.html">Sprint1.0</a>
+			<a class="sprint" href="../../../Sprint1.1/Codice/userDocs/Sprint%201.1%20-%20V3.html">Sprint1.1</a>
+			<a id="currentSprint" class="sprint" href="#">&#8211;&#8212; Sprint2 &#8212;&#8211;</a>
+			<div class="sidenavSection">
+				<a href="#Goal Sprint 2">Goal Sprint 2</a>
+				<a href="#Requisiti">Requisiti</a>
+				<a href="#Analisi dei Requisiti">Analisi dei Requisiti</a>
+				<a href="#Analisi del Problema">Analisi del Problema</a>
+				<a href="#Test Plan">Test Plan</a>
+				<a href="#Progettazione">Progettazione</a>
+				<a href="#Deployment">Deployment</a>
+			</div>
+			<p class="separator">&mdash;&mdash;&mdash;&ndash;&ndash;&mdash;&mdash;&mdash;</p>
+			<a class="sprint" href="../../../Sprint3/Codice/userDoc/Sprint%203.html">Sprint3</a>
+			<bottom-spacer/>
+		</div>
+-->
+
+<body background="">
+	<div id="top">
+		<h1>Waste Incinerator Service - ISS 2024 <font size="5"></font>
+		</h1>
+	</div>
+
+	<div class="body">
+		<h2>Sprint 0</h2>
+		Nello <a href="../../../Sprint0/Sprint0_AnalisiRequisiti/userDocs/Sprint0_AnalisiRequisiti.html">Sprint 0 </a>
+		si sono formalizzati i requisiti del committente e si è andato ad impostare un primo modello del sistema (figura
+		sotto).
+		<center><img width="400px" src="../../../Sprint0/Sprint0_AnalisiRequisiti/sprint0_architetturaarch.png">
+		</center>
+		<h2>Sprint Goal</h2>
+		Gli obiettivi di questa fase sono due:
+		<ul>
+			<li>
+				Analizzare i problemi trovati nella fase di analisi dei requisiti relativamente al <b>Core Business</b>
+				del sistema (WIS-OpRobot-WasteStorage-Incinerator-AshStorage).
+			</li>
+			<li>
+				Progettare una prima demo del sistema relativo al Core Business, definire ed effettuare i primi test
+				plans.
+			</li>
+		</ul>
+		<h2>Analisi del problema</h2>
+		<h3>Come rappresentare l'area di servizio?</h3>
+		Per fare in modo che la macchina possa comprendere come è strutturata l'area di servizio, essa può essere
+		rappresentata in un piano cartesiano.<br> Inoltre, per muovere il robot utilizzermo il <a
+			href="../../../resources/BasicRobot24.html">software</a> fornito dal committente ed esso internamente
+		definisce l'area di movimento del robot
+		tramite una mappa che utilizza tale rappresentazione.<br>
+		La stanza viene quindi suddivisa in una griglia, dove ciascuna cella è un quadrato di lato D, ovvero il diametro
+		dell'<b>OpRobot</b>.<br>
+		In questo modo possiamo formalizzare il concetto di posizione, intesa come una coppia di coordinate cartesiane.
+		<br>
+		Per semplicità, <b>HOME</b> è l'origine(0,0).<br>
+		Nella stanza sono presenti diverse posizioni rilevanti:
+		<ul>
+			<li>
+				<b>HOME</b>
+			</li>
+			<li>
+				<b>WASTEIN</b>
+			</li>
+			<li>
+				<b>BURNIN</b>
+			</li>
+			<li>
+				<b>BURNOUT</b>
+			</li>
+			<li>
+				<b>ASHOUT</b>
+			</li>
+		</ul>
+		<br>
+		<center><img width="300px" src="../../../resources/griglia.png">
+		</center>
+		<h4>Come rappresentare le posizioni rilevanti all'interno nella mappa?</h4>
+
+		Ci sono diverse opzioni possibili:<br>
+		<ol>
+			<li>L'informazione è contenuta all'interno dell'OpRobot, che conosce le varie coordinate delle varie
+				posizioni e si sposta di conseguenza.</li>
+			<li>Si rappresentano le coordinate delle posizioni rilevanti in una base di conoscenza prolog.</li>
+			<li>Il robot non conosce nessuna posizione, ma conosce il percorso che deve attuare per arrivarci.</li>
+		</ol>
+		Si è preferita la seconda scelta, in questo modo si va ad evitare di assegnare ad un solo attore tutta
+		l'informazione relativa alle posizioni,
+		dando la possibilità a tutti i componenti di accedervi (sia il <b>WIS</b> che <b>OpRobot</b> necessitano di
+		queste informazioni).<br>
+		Inoltre questo approccio rimuove delle dipendenze logiche tra attori, che nel caso della soluzione <b>2</b>
+		erano presenti.
+		La soluzione 3 rende i componenti non modulabili, che influirebbe negativamente sulla scalabilità del
+		sistema.<br>
+		<center><img width="300px" src="../../../resources/maptxt.png"></center>
+		<h3>WIS</h3>
+		Il <b>WIS</b> è gia stato identificato come attore nella fase precedente e assume il ruolo di
+		"controllore/gestore" del sistema che fa da coordinatore delle comunicazioni. Questo fa sì che venga applicato
+		correttamente il <a href="../../../resources/Principi.html">Single responsibility principle</a>.
+
+		<h3>OpRobot</h3>
+		Il cliente mette a disposizione un <b>DDR Robot</b>, l'attuatore fisico del comportamento dell'<b>OpRobot</b>
+		che è un entità astratta che incapsula la logica del robot, e il suo sw di controllo (<b>BasicRobot</b>).
+		<br><br>
+
+		L'<b>OpRobot</b> sarebbe meglio rappresentato come attore, poichè il sw fornito dal cliente, che controlla il
+		DDR,
+		comunica solamente tramite scambio di messaggi. Di conseguenza è necessario modellare <b>OpRobot</b> affinché
+		sia in grado di utilizzare <b>l'interfaccia</b> offerta da <b>BasicRobot</b> per comandare il robot fisico.
+		<br>
+		<h4>Come muovere il robot da una posizione rilevante ad un altra?</h4>
+
+		Il software BasicRobot24, fornito da cliente, mette a disposizione un messaggio
+		<b>moverobot(TARGETX,TARGETY)</b> che in base alle coordinate inserite, muove il robot
+		verso di esse in modo automatico<br>
+		<h4>Come avviene lo spostamento di un pacchetto da parte di OpRobot?</h4>
+
+		La scelta più semplice, per rappresentare lo spostamento di 1 RP da una parte all'altra dell'area di servizio,
+		<b>OpRobot</b> mantiene
+		tramite una variabile (ad esempio booleana) l'informazione relativa al possedimento o meno di un pacchetto in un
+		determinato momento.
+
+		<h4>Interazioni</h4>
+		Dai requisiti è noto che il robot può iniziare il suo ciclo se il <b>Waste Storage</b> non è vuoto, l'<b>Ash
+			Storage</b> non
+		è pieno e l'<b>Incinerator</b> non sta bruciando. Per verificare quando tali condizioni sono vere ci sono, ad
+		esempio, due possibilità:
+		<ol>
+			<li><b>OpRobot</b> controlla attivamente lo stato del sistema e decide quando partire</li>
+			<li>Il <b>WIS</b> segnala all'OpRobot che può partire. </li>
+		</ol>
+		Si è scelta la seconda opzione, poichè il WIS è già stato designato come gestore del sistema.
+		<br>
+
+		Inoltre, per modellare il deposito/prelievo di RP/cenere da <b>Waste Storage</b>, <b>Incinerator</b> e <b>Ash
+			Storage</b> si utilizzano dei messaggi che possono essere modellati come delle Dispatch, questo poichè:
+		<ul>
+			<li>
+				sono tutti messaggi che non necessitano di una risposta con un contenuto informativo.
+			</li>
+			<li>
+				anche se modellati come request/reply, quest'ultima non darebbe conferma dall'esecuzione corretta
+				dell'azione.
+			</li>
+		</ul>
+
+		<h3>Waste Storage</h3>
+		Il <b>Waste Storage</b> viene modellato come un attore in quanto è un'entità che deve essere sempre attiva per
+		poter ricevere messaggi e rispondere di conseguenza.
+		<h4>Come rappresentare la Scale?</h4>
+		<ol>
+			<li>
+				Tramite un attore separato.
+			</li>
+			<li>
+				Tramite un POJO all'interno del WS.
+			</li>
+		</ol>
+
+		A prima vista, la prima opzione dovrebbe rendere il sistema più modulare. Però si andrebbero ad introdurre una
+		serie di interazioni tra il <b>Waste Storage</b> e la <b>Scale</b> ogni volta che viene fatto un deposito o un
+		prelievo di 1 RP.<br><br>
+		Di conseguenza, la stretta interazione tra i due componenti crea una dipendenza logica che riduce la
+		modularità e la loro riusabilità.<br>
+		Per questo motivo si è preferito rappresentare la <b>Scale</b> tramite una variabile all'interno del <b>Waste
+			Storage</b>.
+		<br>
+		Il waste storage interagisce anche con un entità esterna che periodicamente deposita 1 RP. Tale interazione è
+		modellata tramite una dispatch per lo stesso motivo analizzato nel caso di OpRobot.
+		<h3>Ash Storage</h3>
+		L'<b>Ash Storage</b> viene modellato come attore poichè è un'entità che scambia messaggi con il robot e con
+		l'entità esterna al sistema quando si richiede il prelievo delle ceneri. <br>
+
+
+
+		<h3>Contesti</h3>
+
+		Sarebbe possibile mettere ogni componente in un contesto diverso, in quanto aumenterebbe la scalabilità del
+		sistema.
+		Questo però significherebbe investire in più macchine per ospitare ciascun nodo. Per questo motivo, visto che
+		non è specificato nei requisit, si è deciso di organizzare i contesti in questo modo:
+		<ul>
+			<li>
+				<b>ctx_wis</b>: <b>WIS</b> + <b>Incinerator</b> + <red>OpRobot</red> + <red>Waste Storage</red> +
+				<red>
+					Ash Storage</red>
+			</li>
+			<li>
+				<b>ctx_basic_robot</b>: il <b>Basic Robot</b> per sua definizione è già presente in un contesto
+				separato
+			</li>
+		</ul>
+		In <red>rosso</red> gli attori e contesti aggiunti in questa fase.
+
+		<h3>Architettura Logica</h3>
+		<img src="../sprint1_architettura_with_msgarch.png" alt="">
+		<h3>Test Plans</h3>
+		<table>
+			<tr>
+				<th>
+					Test
+				</th>
+				<th>
+					Attori
+				</th>
+				<th>
+					Descrizione
+				</th>
+				<th>
+					Modello
+				</th>
+			</tr>
+			<tr>
+				<td>
+					Verifica delle condizioni e start OpRobot
+				</td>
+				<td>
+					<ul>
+						<li>
+							WIS
+						</li>
+						<li>
+							OpRobot
+						</li>
+					</ul>
+				</td>
+				<td>
+					Il WIS controlla se le condizioni per l'avvio di OpRobot sono verificate e gli invia il segnale
+					d'avvio.
+				</td>
+				<td>
+
+				</td>
+
+			</tr>
+			<tr>
+				<td>
+					Prelievo di un RP dal Waste Storage
+				</td>
+				<td>
+					<ul>
+						<li>
+							OpRobot
+						</li>
+						<li>
+							Waste Storage
+						</li>
+					</ul>
+				</td>
+				<td>
+					OpRobot interagisce con il Waste Storage per prelevare un RP. 
+				</td>
+				<td>
+
+				</td>
+
+			</tr>
+			<tr>
+				<td>
+					Deposito di un RP nell'Incinerator
+				</td>
+				<td>
+					<ul>
+						<li>
+							OpRobot
+						</li>
+						<li>
+							Incinerator
+						</li>
+					</ul>
+				</td>
+				<td>
+					OpRobot interagisce con l'Incinerator per depositare un RP.
+				</td>
+				<td>
+
+				</td>
+
+			</tr>
+			<tr>
+				<td>
+					Fine burning phase
+				</td>
+				<td>
+					<ul>
+						<li>
+							Incinerator
+						</li>
+						<li>
+							OpRobot
+						</li>
+						<li>
+							WIS
+						</li>
+					</ul>
+				</td>
+				<td>
+					L'incinerator comunica a OpRobot ed al WIS che ha finito di bruciare un RP.
+				</td>
+				<td>
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Prelievo cenere da Incinerator
+				</td>
+				<td>
+					<ul>
+						<li>
+							OpRobot
+						</li>
+						<li>
+							Incinerator
+						</li>
+					</ul>
+				</td>
+				<td>
+					OpRobot segnala all'Incinerator il prelievo della cenere.
+				</td>
+				<td>
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Deposito cenere in Ash Storage
+				</td>
+				<td>
+					<ul>
+						<li>
+							OpRobot
+						</li>
+						<li>
+							Ash Storage
+						</li>
+					</ul>
+				</td>
+				<td>
+					OpRobot segnala all'Ash Storage il deposito della cenere.
+				</td>
+				<td>
+
+				</td>
+			</tr>
+		</table>
+		<br>
+	</div>
+
+	<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+		By Alessandro Piombini & Danilo Cavallini
+		<br>
+		Email:
+		<ul>
+			<li>
+				alessandro.piombini@studio.unibo.it
+			</li>
+			<li>
+				danilo.cavallini@studio.unibo.it
+			</li>
+		</ul>
+		GIT repo: https://github.com/Piombo4/ISS2024-WIS
+		<br>
+
+	</div>
+</body>
+
+</html>

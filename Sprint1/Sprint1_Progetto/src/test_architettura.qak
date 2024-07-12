@@ -1,0 +1,43 @@
+System test_architettura
+
+Request start_test: start_test(N)
+Dispatch get_waste: get_waste(N)	//For testing
+Dispatch qty: qty(N)				//For testing
+Reply reply_qty : reply_qty(N)
+
+Context ctx_wastestorage  ip  [host="127.0.0.1" port=8016]
+Context ctx_ashstorage  ip  [host="127.0.0.2" port=8017]
+Context ctx_test  ip  [host="localhost" port=8018]
+
+ExternalQActor waste_storage context ctx_wastestorage
+ExternalQActor ash_storage context ctx_ashstorage
+
+QActor test_manager context ctx_test { 
+	State s0 initial{ 
+		
+	}
+	Goto idle
+	
+	State idle{	
+		println("$name IDLE...")	
+	}
+	Transition t0 
+		whenRequest start_test -> start
+		
+	State start{
+		observeResource ash_storage msgid qty
+		forward waste_storage -m get_waste : get_waste(1)
+	}
+	Transition t0 
+		whenMsg qty -> updateQty
+	
+	State updateQty{
+		onMsg(qty: qty(N)){
+			println("$name Quantità nell'ash storage: $N")
+			replyTo start_test with reply_qty : reply_qty(1) 
+		}
+	}
+	Transition t0 
+		whenMsg qty -> updateQty
+}
+

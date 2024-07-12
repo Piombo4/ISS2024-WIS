@@ -289,13 +289,13 @@
 	<div class="body">
 		<h2>Introduzione</h2>
 		<h2>Requisiti</h2>
-		<a href="../resources/temaFinale24.html">Requisiti</a> del committente.
+		<a href="../../../resources/temaFinale24.html">Requisiti</a> del committente.
 		<h2>Analisi dei requisiti</h2>
 		<h3>Perchè QAK</h3>
 		<p>Si è osservato che il sistema si compone di un insieme di componenti attivi (attori) all’interno di un
 			sistema distribuito, che comunicano per portare a termine un obiettivo scambiandosi messaggi.<br>
-			<a href="../resources/QakActors24.html">QAK</a> è un linguaggio che ci offre un livello di astrazione tale
-			da permettere di specificare le entità come degli <a href="../resources/QakActors24.html">attori</a>
+			<a href="../../../resources/QakActors24.html">QAK</a> è un linguaggio che ci offre un livello di astrazione tale
+			da permettere di specificare le entità come degli <a href="../../../resources/QakActors24.html">attori</a>
 			(reattivi e proattivi) che comunicano scambiandosi messaggi senza doverci preoccupare dell'implementazione
 			di
 			quest’ultimi a basso livello, lasciando quindi al programmatore l’onere di specificare solamente gli
@@ -345,7 +345,7 @@
 				</ol>
 			</div>
 		</div>
-
+		
 		<h3>Waste Storage</h3>
 		Il <b>waste storage</b> contiene una bilancia che deve aggiornare il WIS della quantità di RP all'interno dello
 		storage.<br>
@@ -360,12 +360,13 @@
 		che operano su un RaspPy PI e di cui non si può ancora dire nulla sulla loro natura
 		(se POJO o attori).
 
-		<h3><a href="../resources/BasicRobot24.html">BasicRobot</a></h3>
+		<h3><a href="../../../resources/BasicRobot24.html">BasicRobot</a></h3>
 		Software fornito direttamente dal cliente che utilizzeremo per muovere il robot, per mappare e muoversi da un
 		punto all’altro della struttura tramite il costruttore di mappe e il pianificatore integrato all’interno del
 		sw. Questo componente è un attore che girerà su un nodo computazionale separato, questo perchè è stato creato in
-		questo modo.
-
+		questo modo.<br>
+		Questo software permette di pilotare sia un robot virtuale che un DDR robot fisico semplicemente andando 
+		a cambiare un file di configurazione, implementando un livello di astrazione<br>
 		<h3>Mappa</h3>
 		L'area di servizio è una superfice euclidea piatta di forma rettangolare, di lati L1 ed L2.
 		<ul>
@@ -374,7 +375,7 @@
 				come aree in un piano cartesiano. La risoluzione di questo problema verrà analizzato alla prossima fase.
 			</li>
 		</ul>
-		<center><img width="1000px" src="../resources/Mappa.png"></center>
+		<center><img width="1000px" src="../../../resources/Mappa.png"></center>
 
 		<h2>Architettura Logica</h2>
 		<center><img width="400px" src="../sprint0_architetturaarch.png"></center>
