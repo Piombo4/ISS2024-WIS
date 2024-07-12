@@ -18,7 +18,8 @@ import unibo.basicomm23.utils.ConnectionFactory;
 
 
 public class TestInteractions {
-    private final static String actorName = "test_manager";
+    private final static String actorName1 = "test_manager";
+    private final static String actorName2 = "test_manager_ash";
     private static Interaction connSupport;
   
 
@@ -60,8 +61,28 @@ public static void activateSystemUsingDeploy() {
 
 
 	@Test
-	public void testSystem() {
-		IApplMessage req  = CommUtils.buildRequest("tester", "start_test", "start_test(X)", actorName);
+	public void prelievoRP() {
+		IApplMessage req  = CommUtils.buildRequest("tester", "start_test", "start_test(X)", actorName1);
+ 		try {
+  			 CommUtils.outmagenta("testSystem ======================================= ");
+			while( connSupport == null ) {
+ 				connSupport = ConnectionFactory.createClientSupport(ProtocolType.tcp, "localhost", "8018");
+ 				CommUtils.outcyan("testSystem another connect attempt ");
+ 				Thread.sleep(1000);
+ 			}
+ 			CommUtils.outcyan("CONNECTED to test_manager " + connSupport);
+			IApplMessage reply = connSupport.request(req);
+			CommUtils.outcyan("testSystem reply="+reply);
+			String answer = reply.msgContent();
+			assertEquals(answer, "reply_qty(0)");
+		} catch (Exception e) {
+			CommUtils.outred("testSystem ERROR " + e.getMessage());
+			fail("testRequest " + e.getMessage());
+		}
+	}
+	@Test
+	public void depositoCenere() {
+		IApplMessage req  = CommUtils.buildRequest("tester", "start_test", "start_test(X)", actorName2);
  		try {
   			 CommUtils.outmagenta("testSystem ======================================= ");
 			while( connSupport == null ) {
