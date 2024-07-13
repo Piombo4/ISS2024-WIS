@@ -1,0 +1,41 @@
+System ashstorage
+
+Dispatch get_ash: get_ash(N)
+Dispatch ash_out: ash_out(N)
+
+Context ctx_ashstorage  ip  [host="localhost" port=8019]
+Context ctx_oprobot  ip  [host="127.0.0.1" port=8017]
+Context ctx_mock_external_entity  ip  [host="127.0.0.2" port=8018]
+
+ExternalQActor op_robot context ctx_oprobot
+ExternalQActor mock_external_entity context ctx_mock_external_entity
+
+QActor ash_storage context ctx_ashstorage{
+	[#
+			var ash_qty = 0
+	#]
+	State s0 initial{ 
+		
+	}
+	Goto idle
+	
+	State idle {
+		println("$name IDLE...")
+	}
+	Transition t0 
+		whenMsg get_ash -> removeAsh
+		whenMsg ash_out -> addAsh
+	
+	State addAsh{
+		[#	ash_qty++  #]
+		println("$name Depositata la cenere di un RP!")
+	}
+	Transition t0 
+		whenMsg get_ash -> removeAsh
+		whenMsg ash_out -> addAsh
+	
+	State removeAsh{
+		[#	scale = 0  #]
+		println("$name Prelevata tutta la cenere!")
+	}
+}

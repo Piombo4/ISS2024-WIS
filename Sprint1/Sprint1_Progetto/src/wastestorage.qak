@@ -11,6 +11,9 @@ ExternalQActor op_robot context ctx_oprobot
 ExternalQActor mock_external_entity context ctx_mock_external_entity
 
 QActor waste_storage context ctx_wastestorage{
+	[#
+			var scale = 0
+	#]
 	State s0 initial{ 
 		
 	}
@@ -20,13 +23,19 @@ QActor waste_storage context ctx_wastestorage{
 		println("$name IDLE...")
 	}
 	Transition t0 
-		whenMsg waste_in ->
+		whenMsg waste_in -> addRP
+		whenMsg get_waste -> removeRP
 	
+	State addRP{
+		[#	scale += 50  #]
+		println("$name Depositato un RP!")
+	}
+	Transition t0 
+		whenMsg waste_in -> addRP
+		whenMsg get_waste -> removeRP
 	
-	
-	
-	
-	
-	
-	
+	State removeRP{
+		[#	scale -= 50  #]
+		println("$name Prelevato un RP!")
+	}
 }
