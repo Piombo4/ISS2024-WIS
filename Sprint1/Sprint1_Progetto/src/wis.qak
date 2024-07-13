@@ -1,0 +1,28 @@
+System wis
+
+Dispatch burning: burning(N)
+Dispatch waste_qty: waste_qty(N)
+Dispatch ash_qty: ash_qty(N)
+Dispatch burn_out: burn_out(N)
+
+Context ctx_wis  ip  [host="localhost" port=8014]
+Context ctx_oprobot  ip  [host="127.0.0.1" port=8017]
+
+ExternalQActor op_robot context ctx_oprobot
+
+QActor wis context ctx_wis{
+	[#
+			var ash_qty = 0
+			var waste_qty = 0
+			var isBurning: boolean = false;
+	#]
+	State s0 initial{ 
+		
+	}
+	Goto idle
+	
+	State idle {
+		println("$name IDLE...")
+	}
+	
+}

@@ -21,17 +21,13 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
+		
+					var ash_qty = 0
+					var waste_qty = 0
+					var isBurning: boolean = false;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						delay(500) 
-						CommUtils.outgreen("$name STARTS")
-						forward("start_robot", "start_robot(X)" ,"oprobot" ) 
-						forward("update_gui", "update_gui(X)" ,"ssgui" ) 
-						forward("get_waste", "get_waste(X)" ,"wastestorage" ) 
-						forward("led_on", "led_on(X)" ,"led" ) 
-						forward("led_off", "led_off(X)" ,"led" ) 
-						forward("blink", "blink(X)" ,"led" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

@@ -1,18 +1,13 @@
 %====================================================================================
 % wis description   
 %====================================================================================
-dispatch( start_robot, start_robot(X) ).
-dispatch( get_waste, get_waste(N) ).
-dispatch( burn_in, burn_in(X) ).
-dispatch( burn_out, burn_out(X) ).
-dispatch( ash_out, ash_out(N) ).
-request( moverobot, moverobot(TARGETX,TARGETY) ).
+dispatch( burning, burning(N) ).
+dispatch( waste_qty, waste_qty(N) ).
+dispatch( ash_qty, ash_qty(N) ).
+dispatch( burn_out, burn_out(N) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").
-context(ctx_basic_robot, "localhost",  "TCP", "8020").
- qactor( basic_robot, ctx_basic_robot, "external").
-  qactor( waste_storage, ctx_wis, "external").
-  qactor( ash_storage, ctx_wis, "external").
-  qactor( incinerator, ctx_wis, "external").
-  qactor( oprobot, ctx_wis, "it.unibo.oprobot.Oprobot").
- static(oprobot).
+context(ctx_oprobot, "127.0.0.1",  "TCP", "8017").
+ qactor( op_robot, ctx_oprobot, "external").
+  qactor( wis, ctx_wis, "it.unibo.wis.Wis").
+ static(wis).

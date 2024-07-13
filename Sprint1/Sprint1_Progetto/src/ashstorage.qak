@@ -13,6 +13,7 @@ ExternalQActor mock_external_entity context ctx_mock_external_entity
 QActor ash_storage context ctx_ashstorage{
 	[#
 			var ash_qty = 0
+			val MAX = 4
 	#]
 	State s0 initial{ 
 		
@@ -27,15 +28,24 @@ QActor ash_storage context ctx_ashstorage{
 		whenMsg ash_out -> addAsh
 	
 	State addAsh{
-		[#	ash_qty++  #]
+		if[#ash_qty<MAX#]{
+			[#	ash_qty++  #]
 		println("$name Depositata la cenere di un RP!")
+		}else{
+			println("$name Deposito pieno! ")
+		}
 	}
 	Transition t0 
 		whenMsg get_ash -> removeAsh
 		whenMsg ash_out -> addAsh
 	
 	State removeAsh{
-		[#	scale = 0  #]
-		println("$name Prelevata tutta la cenere!")
+		if[#ash_qty>0#]{
+			[#	ash_qty = 0  #]
+			println("$name Prelevata tutta la cenere!")
+		}else{
+			println("$name Deposito già vuoto!")
+		}
+		
 	}
 }

@@ -23,6 +23,7 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		
 					var ash_qty = 0
+					val MAX = 4
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -46,8 +47,13 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 				}	 
 				state("addAsh") { //this:State
 					action { //it:State
-							ash_qty++   
+						if( ash_qty<MAX 
+						 ){	ash_qty++   
 						CommUtils.outblack("$name Depositata la cenere di un RP!")
+						}
+						else
+						 {CommUtils.outblack("$name Deposito pieno! ")
+						 }
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -58,8 +64,13 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 				}	 
 				state("removeAsh") { //this:State
 					action { //it:State
-							scale = 0   
+						if( ash_qty>0 
+						 ){	ash_qty = 0   
 						CommUtils.outblack("$name Prelevata tutta la cenere!")
+						}
+						else
+						 {CommUtils.outblack("$name Deposito già vuoto!")
+						 }
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
