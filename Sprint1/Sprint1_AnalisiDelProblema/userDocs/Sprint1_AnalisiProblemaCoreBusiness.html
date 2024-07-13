@@ -478,8 +478,9 @@
 		<h3>Ash Storage</h3>
 		L'<b>Ash Storage</b> viene modellato come attore poichè è un'entità che scambia messaggi con il robot e con
 		l'entità esterna al sistema quando si richiede il prelievo delle ceneri. <br>
-
-
+		
+		<todo><h3>Entità esterna</h3></todo>
+		
 
 		<h3>Contesti</h3>
 
@@ -501,6 +502,7 @@
 		In <red>rosso</red> gli attori e contesti aggiunti in questa fase.
 
 		<h3>Architettura Logica</h3>
+		<todo>Rimpiazzare architettura logica</todo>
 		<img src="../sprint1_architettura_with_msgarch.png" alt="">
 		<h3>Test Plans</h3>
 		<table>
@@ -556,12 +558,37 @@
 					</ul>
 				</td>
 				<td>
-					OpRobot interagisce con il Waste Storage per prelevare un RP. 
+					OpRobot interagisce con il Waste Storage per prelevare un RP.
+				</td>
+				<td rowspan="2">
+					<ul>	
+						<li>
+							<a href="../src/test_architettura.qak"> TestManager.qak</a>
+						</li>
+						<li>
+							<a href="../src/main/java/test/TestInteractions.java"> TestInteractions.java</a>
+						</li>
+					</ul>
+				</td>
+
+			</tr>
+			<tr>
+				<td>
+					Deposito cenere in Ash Storage
 				</td>
 				<td>
-
+					<ul>
+						<li>
+							OpRobot
+						</li>
+						<li>
+							Ash Storage
+						</li>
+					</ul>
 				</td>
-
+				<td>
+					OpRobot segnala all'Ash Storage il deposito della cenere.
+				</td>
 			</tr>
 			<tr>
 				<td>
@@ -630,27 +657,7 @@
 
 				</td>
 			</tr>
-			<tr>
-				<td>
-					Deposito cenere in Ash Storage
-				</td>
-				<td>
-					<ul>
-						<li>
-							OpRobot
-						</li>
-						<li>
-							Ash Storage
-						</li>
-					</ul>
-				</td>
-				<td>
-					OpRobot segnala all'Ash Storage il deposito della cenere.
-				</td>
-				<td>
 
-				</td>
-			</tr>
 		</table>
 		<br>
 	</div>
