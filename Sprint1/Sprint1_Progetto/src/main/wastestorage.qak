@@ -1,0 +1,32 @@
+System wastestorage
+
+Dispatch get_waste: get_waste(N)
+Dispatch waste_in: waste_in(N)
+
+Context ctx_wastestorage  ip  [host="localhost" port=8016]
+Context ctx_oprobot  ip  [host="127.0.0.1" port=8017]
+Context ctx_mock_external_entity  ip  [host="127.0.0.2" port=8018]
+
+ExternalQActor op_robot context ctx_oprobot
+ExternalQActor mock_external_entity context ctx_mock_external_entity
+
+QActor waste_storage context ctx_wastestorage{
+	State s0 initial{ 
+		
+	}
+	Goto idle
+	
+	State idle {
+		println("$name IDLE...")
+	}
+	Transition t0 
+		whenMsg waste_in ->
+	
+	
+	
+	
+	
+	
+	
+	
+}
