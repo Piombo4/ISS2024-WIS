@@ -1,5 +1,5 @@
 package wis.util;
 
-enum class Direction {
-    WS,INCINERATOR,ASHSTORAGE,HOME
+enum class Position {
+    HOME,WASTEIN,BURNIN,BURNOUT,ASHOUT
 }

@@ -1,8 +1,2 @@
-<<<<<<< Updated upstream
-{"actor":"oprobot", "msgType":"dispatch", "curstate":"s0", "nextstate":"go_to_ws", "msgId":"start_robot"}
-=======
-{"actor":"ash_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"removeAsh", "msgId":"get_ash"}
-{"actor":"ash_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"addAsh", "msgId":"ash_out"}
-{"actor":"ash_storage", "msgType":"dispatch", "curstate":"addAsh", "nextstate":"removeAsh", "msgId":"get_ash"}
-{"actor":"ash_storage", "msgType":"dispatch", "curstate":"addAsh", "nextstate":"addAsh", "msgId":"ash_out"}
->>>>>>> Stashed changes
+{"actor":"oprobot", "msgType":"dispatch", "curstate":"waiting", "nextstate":"go_to_ws", "msgId":"start_robot"}
+{"actor":"oprobot", "msgType":"dispatch", "curstate":"wait_for_burn", "nextstate":"to_incinerator_burned", "msgId":"burn_out"}

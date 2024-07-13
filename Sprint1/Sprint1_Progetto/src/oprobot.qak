@@ -1,6 +1,11 @@
 System wis
 
 Dispatch start_robot : start_robot(X)
+Dispatch get_waste: get_waste(N)
+
+Dispatch burn_in : burn_in(X)
+Dispatch burn_out : burn_out(X)
+Dispatch ash_out: ash_out(N)
 
 Request moverobot    :  moverobot(TARGETX, TARGETY)
 Reply moverobotdone  :  moverobotok(ARG)
@@ -10,11 +15,15 @@ Context ctx_wis ip [host="localhost" port=8014]
 Context ctx_basic_robot  ip  [host="localhost" port=8020]
 
 ExternalQActor basic_robot context ctx_basic_robot
-   
+ExternalQActor waste_storage context ctx_wis
+ExternalQActor ash_storage context ctx_wis
+ExternalQActor incinerator context ctx_wis
+
 QActor oprobot context ctx_wis  {
 	[# 
 		import "wis.util"; 
-		var LOAD: boolean = false;
+		var RP: boolean = false;
+		var ASH: boolean = false;
 		var T: String = ""; 
 		var TX,TY; 
 		
@@ -26,13 +35,17 @@ QActor oprobot context ctx_wis  {
 		solve(consult("pointPicker.pl"))
 	}
 	
+	State waiting {
+	}
+	
 	Transition t0 whenMsg start_robot -> go_to_ws
 	
 	State go_to_ws {
-		[# T = Direction.WS.name; #]
+		
+		[# T = Position.WASTEIN.name; #]
 		solve(getPoint(T,X,Y))
 		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
-		
+			
 		request basic_robot -m moverobot:moverobot($TX,$TY)
 	}
 	
@@ -40,6 +53,82 @@ QActor oprobot context ctx_wis  {
 				  whenReply moverobotfailed -> go_to_ws
 				  
     State withdraw_ws {
-    	
+    	forward waste_storage -m get_waste:get_waste(1)
+    	[# RP = True; #]
     }
+    
+    State to_incinerator {
+    	[# T = Position.BURNIN.name; #]
+		solve(getPoint(T,X,Y))
+		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
+		
+		request basic_robot -m moverobot:moverobot($TX,$TY)
+    }
+    
+    Transition t2 whenReply moverobotdone -> ask_to_burn
+				  whenReply moverobotfailed -> to_incinerator
+				  
+	
+	State ask_to_burn {
+		forward incinerator -m burn_in:burn_in(1)
+		[# RP = false #]
+	}
+	
+	State go_wait_home {
+		[# T = Position.HOME.name; #]
+		solve(getPoint(T,X,Y))
+		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
+		
+		request basic_robot -m moverobot:moverobot($TX,$TY)
+	}
+    
+    Transition t3 whenReply moverobotdone -> wait_for_burn
+				  whenReply moverobotfailed -> go_wait_home
+				  
+	State wait_for_burn {
+	}
+	
+	Transition t4 whenMsg burn_out -> to_incinerator_burned
+	
+	State to_incinerator_burned {
+		[# T = Position.BURNOUT.name; #]
+		solve(getPoint(T,X,Y))
+		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
+		
+		request basic_robot -m moverobot:moverobot($TX,$TY)
+		
+		[# ASH = true #]
+	}
+	
+	Transition t5 whenReply moverobotdone -> wait_for_burn
+				  whenReply moverobotfailed -> to_incinerator_burned
+	
+	State to_ash_storage {
+		
+		[# T = Position.ASHOUT.name; #]
+		solve(getPoint(T,X,Y))
+		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
+	
+		request basic_robot -m moverobot:moverobot($TX,$TY)
+	}
+	
+	
+	Transition t6 whenReply moverobotdone -> ask_as
+				  whenReply moverobotfailed -> to_ash_storage
+	
+	State ask_as {
+		forward ash_storage -m ash_out:ash_out(1)
+		[# ASH = false #]
+	}
+	
+	State go_back_home {
+		[# T = Position.HOME.name; #]
+		solve(getPoint(T,X,Y))
+		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
+		
+		request basic_robot -m moverobot:moverobot($TX,$TY)
+	}
+	
+	Transition t7 whenReply moverobotdone -> waiting
+				  whenReply moverobotfailed -> go_back_home
 }

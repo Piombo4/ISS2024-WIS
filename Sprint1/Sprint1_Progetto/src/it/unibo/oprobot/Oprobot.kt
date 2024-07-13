@@ -23,7 +23,8 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		 
 				import "wis.util"; 
-				var LOAD: boolean = false;
+				var RP: boolean = false;
+				var ASH: boolean = false;
 				var T: String = ""; 
 				var TX,TY; 
 				
@@ -38,11 +39,19 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+				}	 
+				state("waiting") { //this:State
+					action { //it:State
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition(edgeName="t00",targetState="go_to_ws",cond=whenDispatch("start_robot"))
 				}	 
 				state("go_to_ws") { //this:State
 					action { //it:State
-						 T = Direction.WS.name;  
+						 T = Position.WASTEIN.name;  
 						solve("getPoint(T,X,Y)","") //set resVar	
 						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
 						}
@@ -59,11 +68,128 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 				}	 
 				state("withdraw_ws") { //this:State
 					action { //it:State
+						forward("get_waste", "get_waste(1)" ,"waste_storage" ) 
+						 RP = True;  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+				}	 
+				state("to_incinerator") { //this:State
+					action { //it:State
+						 T = Position.BURNIN.name;  
+						solve("getPoint(T,X,Y)","") //set resVar	
+						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
+						}
+						else
+						{}
+						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t23",targetState="ask_to_burn",cond=whenReply("moverobotdone"))
+					transition(edgeName="t24",targetState="to_incinerator",cond=whenReply("moverobotfailed"))
+				}	 
+				state("ask_to_burn") { //this:State
+					action { //it:State
+						forward("burn_in", "burn_in(1)" ,"incinerator" ) 
+						 RP = false  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+				}	 
+				state("go_wait_home") { //this:State
+					action { //it:State
+						 T = Position.HOME.name;  
+						solve("getPoint(T,X,Y)","") //set resVar	
+						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
+						}
+						else
+						{}
+						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t35",targetState="wait_for_burn",cond=whenReply("moverobotdone"))
+					transition(edgeName="t36",targetState="go_wait_home",cond=whenReply("moverobotfailed"))
+				}	 
+				state("wait_for_burn") { //this:State
+					action { //it:State
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t47",targetState="to_incinerator_burned",cond=whenDispatch("burn_out"))
+				}	 
+				state("to_incinerator_burned") { //this:State
+					action { //it:State
+						 T = Position.BURNOUT.name;  
+						solve("getPoint(T,X,Y)","") //set resVar	
+						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
+						}
+						else
+						{}
+						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						 ASH = true  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t58",targetState="wait_for_burn",cond=whenReply("moverobotdone"))
+					transition(edgeName="t59",targetState="to_incinerator_burned",cond=whenReply("moverobotfailed"))
+				}	 
+				state("to_ash_storage") { //this:State
+					action { //it:State
+						 T = Position.ASHOUT.name;  
+						solve("getPoint(T,X,Y)","") //set resVar	
+						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
+						}
+						else
+						{}
+						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t610",targetState="ask_as",cond=whenReply("moverobotdone"))
+					transition(edgeName="t611",targetState="to_ash_storage",cond=whenReply("moverobotfailed"))
+				}	 
+				state("ask_as") { //this:State
+					action { //it:State
+						forward("ash_out", "ash_out(1)" ,"ash_storage" ) 
+						 ASH = false  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+				}	 
+				state("go_back_home") { //this:State
+					action { //it:State
+						 T = Position.HOME.name;  
+						solve("getPoint(T,X,Y)","") //set resVar	
+						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
+						}
+						else
+						{}
+						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t712",targetState="waiting",cond=whenReply("moverobotdone"))
+					transition(edgeName="t713",targetState="go_back_home",cond=whenReply("moverobotfailed"))
 				}	 
 			}
 		}
