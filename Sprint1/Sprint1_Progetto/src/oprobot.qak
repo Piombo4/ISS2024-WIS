@@ -1,0 +1,45 @@
+System wis
+
+Dispatch start_robot : start_robot(X)
+
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
+
+Context ctx_wis ip [host="localhost" port=8014] 
+Context ctx_basic_robot  ip  [host="localhost" port=8020]
+
+ExternalQActor basic_robot context ctx_basic_robot
+   
+QActor oprobot context ctx_wis  {
+	[# 
+		import "wis.util"; 
+		var LOAD: boolean = false;
+		var T: String = ""; 
+		var TX,TY; 
+		
+		#]
+	
+	State s0 initial {
+		println("$name STARTS") color green 
+		solve(consult("sysRules.pl"))
+		solve(consult("pointPicker.pl"))
+	}
+	
+	Transition t0 whenMsg start_robot -> go_to_ws
+	
+	State go_to_ws {
+		[# T = Direction.WS.name; #]
+		solve(getPoint(T,X,Y))
+		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
+		
+		request basic_robot -m moverobot:moverobot($TX,$TY)
+	}
+	
+	Transition t1 whenReply moverobotdone -> withdraw_ws
+				  whenReply moverobotfailed -> go_to_ws
+				  
+    State withdraw_ws {
+    	
+    }
+}

@@ -147,7 +147,7 @@ eclipse {
 
 application {
     //Define the main class for the application.
-    mainClassName    = 'it.unibo.ctx_wastestorage.MainCtx_wastestorageKt'
+    mainClassName    = 'it.unibo.ctx_basic_robot.MainCtx_basic_robotKt'
 }
  
  jar {
@@ -170,9 +170,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'wastestorage'
+        distributionBaseName = 'wis'
         contents { 
-             from './wastestorage.pl'
+             from './wis.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }
@@ -183,7 +183,7 @@ task run0(type: JavaExec) {
     group = "Execution"
     description = "Run the main class with JavaExecTask"
     classpath = sourceSets.main.runtimeClasspath
-    main = 'it.unibo.ctx_wastestorage.MainCtx_wastestorageKt'
+    main = 'it.unibo.ctx_basic_robot.MainCtx_basic_robotKt'
 }
 
 /*

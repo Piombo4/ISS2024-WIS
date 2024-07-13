@@ -21,26 +21,44 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
+		 
+				import "wis.util"; 
+				var LOAD: boolean = false;
+				var T: String = ""; 
+				var TX,TY; 
+				
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("robot_status", "robot_status(X)" ,"wis" ) 
-						forward("burn_in", "burn_in(X)" ,"incinerator" ) 
-						forward("ash_out", "ash_out(X)" ,"ashstorage" ) 
-						request("doplan", "doplan(X)" ,"basic_robot" )  
+						solve("consult('sysRules.pl')","") //set resVar	
+						solve("consult('pointPicker.pl')","") //set resVar	
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t10",targetState="idle",cond=whenReply("doplandone"))
-					transition(edgeName="t11",targetState="idle",cond=whenReply("doplanfailed"))
+					 transition(edgeName="t00",targetState="go_to_ws",cond=whenDispatch("start_robot"))
 				}	 
-				state("idle") { //this:State
+				state("go_to_ws") { //this:State
 					action { //it:State
-						CommUtils.outblack("$name IDLE...")
+						 T = Direction.WS.name;  
+						solve("getPoint(T,X,Y)","") //set resVar	
+						if( currentSolution.isSuccess() ) { TX = getCurSol(X); TY = getCurSol(Y);  
+						}
+						else
+						{}
+						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t11",targetState="withdraw_ws",cond=whenReply("moverobotdone"))
+					transition(edgeName="t12",targetState="go_to_ws",cond=whenReply("moverobotfailed"))
+				}	 
+				state("withdraw_ws") { //this:State
+					action { //it:State
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
