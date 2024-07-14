@@ -478,6 +478,26 @@
 		Per questo motivo si è preferito rappresentare la <b>Scale</b> tramite una variabile all'interno del <b>Waste
 			Storage</b>.
 		<br>
+		<h4>Interazione con il WIS</h4>
+		Da requisiti, il <b>WIS</b> deve sapere il valore misurato dalla <b>Scale</b>. Visto che quest'ultima è
+		rappresentata tramite una variabile, sono possibili due opzioni:
+		<ul>
+			<li>
+				<b>Waste Storage</b> notifica tramite una Request/Reply il valore della <b>Scale</b> ogni volta che
+				cambia.
+			</li>
+			<li>
+				il <b>WIS</b> osserva la variabile e l'informazione viene trasmessa tramite updateResource.
+			</li>
+
+		</ul>
+		L'opzione scelta è la seconda. Con l'opzione 1 il <b>WIS</b> dovrebbe periodicamente inviare una richiesta di
+		aggiornamento al <b>Waste Storage</b> per
+		ottenere il valore, costituendo così una interazione a Polling. <br> Per questo motivo si preferisce che sia il
+		<b>Waste Storage</b>
+		ad aggiornare il <b>WIS</b> direttamente ad ogni
+		cambiamento del suo stato interno.
+		<br>
 		<h4>Deposito RP nel Waste Storage</h4>
 		Il waste storage interagisce anche con un entità esterna che in momenti non precisati può depositare 1 RP. <br>
 		Dato che il Waste Storage non ha una capacità massima di RP, tale interazione può essere modellata tramite una
@@ -494,15 +514,13 @@
 		(anche nel caso in cui il AS sia vuoto, quindi riporterà 0 nella risposta)<br>
 		<h3>Incinerator</h3>
 		L'<b>Incinerator</b> è già stato modellato come un attore nella fase precedente.
-		<h4>Interazioni</h4>
-		<h5>Come modellare l'accensione dell'Incinerator?</h5>
+		<h4>Come modellare l'accensione dell'Incinerator?</h4>
 		Da requisiti, <b>Incinerator</b> riceve da un'entità esterna un <b>segnale di accensione</b>. Esso viene
 		modellato come una dispatch, in quanto non è necessario che venga ricevuto da altri componenti (evento), mentre
 		una possibile risposta non
 		avrebbe un contenuto informativo utile/affidabile (in caso si usasse una request reply).
 		<br>
-		<br>
-		<h5>Come notificare il WIS dell'inizio della burning phase?</h5>
+		<h4>Come notificare il WIS dell'inizio della burning phase?</h4>
 		Il <b>WIS</b>, da requisiti, ha necessità di sapere se l'<b>Incinerator</b> stia bruciando o meno.
 		Le opzioni possibili sono:
 		<ul>
@@ -519,21 +537,34 @@
 		Il segnale inviato al <b>WIS</b> è modellato come una dispatch per gli stessi motivi
 		elencati per il punto precedente.
 		<br>
-		<br>
-		<h5>Come notificare WIS e OpRobot della fine della burning phase?</h5>
+
+		<h4>Come notificare WIS e OpRobot della fine della burning phase?</h4>
 		Da requisiti è noto che <b>Incinerator</b> notifica <b>OpRobot</b> e <b>WIS</b> della fine della burning phase.
 		Tale segnale è nuovamente modellato come una dispatch per gli stessi motivi elencati sopra.
 		<br>
 		<h3>Entità esterna</h3>
-		<todo></todo>
-
-
+		Da requisiti è noto che esiste un'entità esterna che gestisce alcune funzionalità come:
+		<ul>
+			<li>
+				Depositare RP nel <b>Waste Storage</b>
+			</li>
+			<li>
+				Prelevare la cenere dall'<b>Ash Storage</b>
+			</li>
+			<li>
+				Accendere l'<b>Incinerator</b>
+			</li>
+		</ul>
+		Nel testo del committente non è specificato se questa entità sia esterna solo ai componenti ma interna al
+		sistema oppure esterna a tutto. <br>
+		Per semplicità e per mantenere il sistema più scalabile, si è deciso di considerare l'entità come esterna
+		all'intero sistema. Di conseguenza, nella fase di progetto si userà un mock che simulerà le interazioni con
+		essa.
 		<h3>Contesti</h3>
-
 		Sarebbe possibile mettere ogni componente in un contesto diverso, in quanto aumenterebbe la scalabilità del
 		sistema.
 		Questo però significherebbe investire in più macchine per ospitare ciascun nodo. Per questo motivo, visto che
-		non è specificato nei requisit, si è deciso di organizzare i contesti in questo modo:
+		non è specificato nei requisiti, si è deciso di organizzare i contesti in questo modo:
 		<ul>
 			<li>
 				<b>ctx_wis</b>: <b>WIS</b> + <b>Incinerator</b> + <red>OpRobot</red> + <red>Waste Storage</red> +
@@ -548,7 +579,6 @@
 		In <red>rosso</red> gli attori e contesti aggiunti in questa fase.
 
 		<h3>Architettura Logica</h3>
-		<todo>Rimpiazzare architettura logica</todo>
 		<img src="../sprint1_architettura_with_msgarch.png" alt="">
 		<h3>Test Plans</h3>
 		<table>
