@@ -1,44 +1,35 @@
 System sprint1_architettura_with_msg
 
-
 // WIS
 Dispatch start_robot : start_robot(X)
-Dispatch update_gui : update_gui(X)
+
+// OPROBOT
+Dispatch waiting : waiting(X)
 
 // WASTE STORAGE
-Event waste_in : waste_in(X)
+Dispatch waste_in : waste_in(X)
 Dispatch waste_qty : waste_qty(X)
 Dispatch get_waste : get_waste(X)
 
 // INCINERATOR
-Event turn_on : turn_on(X)
+Dispatch turn_on : turn_on(X)
 Dispatch burn_in : burn_in(X)
-Dispatch burning : burning(X)
-Dispatch burn_out : burn_out(X)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
 
 // ASH STORAGE
-Dispatch ash_out : ash_out(X)
-Event get_ash : get_ash(X)
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL)
 
-// SONAR
-Dispatch ash_qty : ash_qty(X)
-Dispatch ash_full : ash_full(X)
+// BASIC ROBOT
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 
-// LED
-Dispatch led_on : led_on(X)
-Dispatch led_off : led_off(X)
-Dispatch blink : blink(X)
-
-Request doplan : doplan(X)
-Reply doplandone : doplandone(X)
-Reply doplanfailed : doplanfailed(X)
-
-// OPROBOT
-Dispatch robot_status : robot_status(X)
 
 Context ctx_wis  ip  [host="localhost" port=8014] 
-Context ctx_gui  ip  [host="localhost" port=8015] 
-Context ctx_monitoringdevice  ip  [host="localhost" port=8019]
 Context ctx_basic_robot  ip  [host="localhost" port=8020]
 
 ExternalQActor basic_robot context ctx_basic_robot
@@ -48,16 +39,18 @@ QActor oprobot context ctx_wis {
 	State s0 initial{
 		delay 500   
 		println("$name STARTS") color green 
+	
+		forward wis -m waiting:waiting(1)
+
+		forward wastestorage -m get_waste:get_waste(1)
+		forward incinerator -m burn_in:burn_in(1)
+		forward ashstorage -m deposit_ash:deposit_ash(1)
 		
-		forward wis -m robot_status:robot_status(X)	
-		forward incinerator -m burn_in:burn_in(X)
-		forward ashstorage -m ash_out:ash_out(X)
-		
-		request basic_robot -m doplan : doplan(X)
+		request basic_robot -m moverobot : moverobot(1,2)
 	}
 	
-	Transition t1 whenReply doplandone -> idle
-				whenReply doplanfailed -> idle
+	Transition t1 whenReply moverobotdone -> idle
+				whenReply moverobotfailed -> idle
 		 
 	State idle{
 		println("$name IDLE...")
@@ -69,27 +62,9 @@ QActor wis context ctx_wis {
 		delay 500   
 		println("$name STARTS") color green 
 		
-		forward oprobot -m start_robot:start_robot(X)
-		forward ssgui -m update_gui:update_gui(X)
 		
-		forward wastestorage -m get_waste:get_waste(X)
+		forward oprobot -m start_robot:start_robot(1)
 		
-		forward led -m led_on:led_on(X)
-		forward led -m led_off:led_off(X)
-		forward led -m blink:blink(X)
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
-
-
-
-QActor ssgui context ctx_gui { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
 	} 
 	Goto idle 
 	State idle{
@@ -111,12 +86,11 @@ QActor wastestorage context ctx_wis {
 		println("$name IDLE...")
 	}
 }
+
 QActor ashstorage context ctx_wis { 
 	State s0 initial{
 		delay 500   
 		println("$name STARTS") color green 
-		
-		forward wis -m ash_qty : ash_qty(X)
 	} 
 	
 	//Transition t1 whenEvent get_ash -> idle
@@ -125,14 +99,15 @@ QActor ashstorage context ctx_wis {
 		println("$name IDLE...")
 	}
 }
+
 QActor incinerator context ctx_wis { 
 	State s0 initial{
 		delay 500   
 		println("$name STARTS") color green 
 		
-		forward wis -m burning : burning(X)
-		forward oprobot -m burn_out : burnout(X)
-		forward wis -m burn_out : burnout(X)
+		forward wis -m burn_start : burn_start(X)
+		forward oprobot -m burn_end : burn_end(X)
+		forward wis -m burn_end : burn_end(X)
 	} 
 	
 	//Transition t1 whenEvent turn_on -> idle
@@ -141,26 +116,3 @@ QActor incinerator context ctx_wis {
 		println("$name IDLE...")
 	}
 }
-QActor led context ctx_monitoringdevice { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
-		
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
-QActor sonar context ctx_monitoringdevice { 
-	State s0 initial{
-		delay 500   
-		println("$name STARTS") color green 
-	} 
-	Goto idle 
-	State idle{
-		println("$name IDLE...")
-	}
-}
-
-

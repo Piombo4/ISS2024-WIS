@@ -26,12 +26,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("start_robot", "start_robot(X)" ,"oprobot" ) 
-						forward("update_gui", "update_gui(X)" ,"ssgui" ) 
-						forward("get_waste", "get_waste(X)" ,"wastestorage" ) 
-						forward("led_on", "led_on(X)" ,"led" ) 
-						forward("led_off", "led_off(X)" ,"led" ) 
-						forward("blink", "blink(X)" ,"led" ) 
+						forward("start_robot", "start_robot(1)" ,"oprobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

@@ -147,7 +147,11 @@ eclipse {
 
 application {
     //Define the main class for the application.
+<<<<<<< Updated upstream
     mainClassName    = 'it.unibo.ctx_wis.MainCtx_wisKt'
+=======
+    mainClassName    = 'it.unibo.ctx_wastestorage.MainCtx_wastestorageKt'
+>>>>>>> Stashed changes
 }
  
  jar {
@@ -170,9 +174,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'wis'
+        distributionBaseName = 'wastestorage'
         contents { 
-             from './wis.pl'
+             from './wastestorage.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }
@@ -183,7 +187,11 @@ task run0(type: JavaExec) {
     group = "Execution"
     description = "Run the main class with JavaExecTask"
     classpath = sourceSets.main.runtimeClasspath
+<<<<<<< Updated upstream
     main = 'it.unibo.ctx_wis.MainCtx_wisKt'
+=======
+    main = 'it.unibo.ctx_wastestorage.MainCtx_wastestorageKt'
+>>>>>>> Stashed changes
 }
 
 /*

@@ -26,7 +26,6 @@ class Ashstorage ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("ash_qty", "ash_qty(X)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

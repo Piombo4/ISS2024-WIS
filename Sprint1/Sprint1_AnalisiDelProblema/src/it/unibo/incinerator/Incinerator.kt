@@ -26,9 +26,9 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("burning", "burning(X)" ,"wis" ) 
-						forward("burn_out", "burnout(X)" ,"oprobot" ) 
-						forward("burn_out", "burnout(X)" ,"wis" ) 
+						forward("burn_start", "burn_start(X)" ,"wis" ) 
+						forward("burn_end", "burn_end(X)" ,"oprobot" ) 
+						forward("burn_end", "burn_end(X)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

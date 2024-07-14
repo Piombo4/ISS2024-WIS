@@ -26,17 +26,18 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("robot_status", "robot_status(X)" ,"wis" ) 
-						forward("burn_in", "burn_in(X)" ,"incinerator" ) 
-						forward("ash_out", "ash_out(X)" ,"ashstorage" ) 
-						request("doplan", "doplan(X)" ,"basic_robot" )  
+						forward("waiting", "waiting(1)" ,"wis" ) 
+						forward("get_waste", "get_waste(1)" ,"wastestorage" ) 
+						forward("burn_in", "burn_in(1)" ,"incinerator" ) 
+						forward("deposit_ash", "deposit_ash(1)" ,"ashstorage" ) 
+						request("moverobot", "moverobot(1,2)" ,"basic_robot" )  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t10",targetState="idle",cond=whenReply("doplandone"))
-					transition(edgeName="t11",targetState="idle",cond=whenReply("doplanfailed"))
+					 transition(edgeName="t10",targetState="idle",cond=whenReply("moverobotdone"))
+					transition(edgeName="t11",targetState="idle",cond=whenReply("moverobotfailed"))
 				}	 
 				state("idle") { //this:State
 					action { //it:State
