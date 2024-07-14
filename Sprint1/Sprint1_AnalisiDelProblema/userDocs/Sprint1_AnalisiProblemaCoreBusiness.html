@@ -342,7 +342,8 @@
 		Gli obiettivi di questa fase sono due:
 		<ul>
 			<li>
-				Analizzare i problemi trovati nella fase di analisi dei requisiti relativamente al <b>Core Business</b>
+				Analizzare problematiche emerse dalla fase precedente (o non specificate) relativamente al <b>Core
+					Business</b>
 				del sistema (WIS-OpRobot-WasteStorage-Incinerator-AshStorage).
 			</li>
 			<li>
@@ -405,6 +406,7 @@
 		Il <b>WIS</b> è gia stato identificato come attore nella fase precedente e assume il ruolo di
 		"controllore/gestore" del sistema che fa da coordinatore delle comunicazioni. Questo fa sì che venga applicato
 		correttamente il <a href="../../../resources/Principi.html">Single responsibility principle</a>.
+		<br>
 
 		<h3>OpRobot</h3>
 		Il cliente mette a disposizione un <b>DDR Robot</b>, l'attuatore fisico del comportamento dell'<b>OpRobot</b>
@@ -413,22 +415,21 @@
 
 		L'<b>OpRobot</b> sarebbe meglio rappresentato come attore, poichè il sw fornito dal cliente, che controlla il
 		DDR,
-		comunica solamente tramite scambio di messaggi. Di conseguenza è necessario modellare <b>OpRobot</b> affinché
+		comunica solamente tramite scambio di messaggi. Di conseguenza è necessario modellarlo affinché
 		sia in grado di utilizzare <b>l'interfaccia</b> offerta da <b>BasicRobot</b> per comandare il robot fisico.
 		<br>
 		<h4>Come muovere il robot da una posizione rilevante ad un altra?</h4>
 
-		Il software BasicRobot24, fornito da cliente, mette a disposizione un messaggio
+		Il software <b>BasicRobot24</b>, fornito dal cliente, mette a disposizione un messaggio
 		<b>moverobot(TARGETX,TARGETY)</b> che in base alle coordinate inserite, muove il robot
 		verso di esse in modo automatico<br>
 		<h4>Come avviene lo spostamento di un pacchetto da parte di OpRobot?</h4>
-
-		La scelta più semplice, per rappresentare lo spostamento di 1 RP da una parte all'altra dell'area di servizio,
+		Per semplicità, per rappresentare lo spostamento di 1 RP da una parte all'altra dell'area di servizio,
 		<b>OpRobot</b> mantiene
 		tramite una variabile (ad esempio booleana) l'informazione relativa al possedimento o meno di un pacchetto in un
 		determinato momento.
 
-		<h4>Interazioni</h4>
+		<h4 id="opRobotInteractions">Interazioni</h4>
 		Dai requisiti è noto che il robot può iniziare il suo ciclo se il <b>Waste Storage</b> non è vuoto, l'<b>Ash
 			Storage</b> non
 		è pieno e l'<b>Incinerator</b> non sta bruciando. Per verificare quando tali condizioni sono vere ci sono, ad
@@ -437,11 +438,15 @@
 			<li><b>OpRobot</b> controlla attivamente lo stato del sistema e decide quando partire</li>
 			<li>Il <b>WIS</b> segnala all'OpRobot che può partire. </li>
 		</ol>
-		Si è scelta la seconda opzione, poichè il WIS è già stato designato come gestore del sistema.
-		<br>
-
-		Inoltre, per modellare il deposito/prelievo di RP/cenere da <b>Waste Storage</b>, <b>Incinerator</b> e <b>Ash
+		Si è scelta la seconda opzione, poichè il WIS è già stato designato come gestore del sistema. Il segnale verrà
+		modellato come una dispatch in quanto è un'informazione fire and forget.<br>
+		Visto che il <b>WIS</b> non sa in quale momento il robot è fermo in home ad aspettare il messaggio di inizio, si
+		ritiene
+		opportuno di introdurre un'altra Dispatch per questo scopo.
+		<br><br>
+		Per tutte le interazioni con <b>Waste Storage</b>, <b>Incinerator</b> e <b>Ash
 			Storage</b> si utilizzano dei messaggi che possono essere modellati come delle Dispatch, questo poichè:
+
 		<ul>
 			<li>
 				sono tutti messaggi che non necessitano di una risposta con un contenuto informativo.
@@ -473,14 +478,55 @@
 		Per questo motivo si è preferito rappresentare la <b>Scale</b> tramite una variabile all'interno del <b>Waste
 			Storage</b>.
 		<br>
-		Il waste storage interagisce anche con un entità esterna che periodicamente deposita 1 RP. Tale interazione è
-		modellata tramite una dispatch per lo stesso motivo analizzato nel caso di OpRobot.
+		<h4>Deposito RP nel Waste Storage</h4>
+		Il waste storage interagisce anche con un entità esterna che in momenti non precisati può depositare 1 RP. <br>
+		Dato che il Waste Storage non ha una capacità massima di RP, tale interazione può essere modellata tramite una
+		dispatch <br>
+		per lo stesso <a href="#opRobotInteractions">motivo analizzato nel caso di OpRobot</a>.
 		<h3>Ash Storage</h3>
 		L'<b>Ash Storage</b> viene modellato come attore poichè è un'entità che scambia messaggi con il robot e con
 		l'entità esterna al sistema quando si richiede il prelievo delle ceneri. <br>
-		
-		<todo><h3>Entità esterna</h3></todo>
-		
+		<h4>Prelievo di cenere da parte di un entità esterna</h4>
+		Un'entità esterna può interagire in momenti non precisati con l'Ash Storage per richiedere di prelevare tutte le
+		ceneri attualmente presenti.<br>
+		Per modellare questa interazione ci sono due possibilità: Dispatch o Request/reply.<br>
+		Si è deciso di utilizzare una Request/Reply perchè la risposta deve contenere la quantità di cenere prelevata
+		(anche nel caso in cui il AS sia vuoto, quindi riporterà 0 nella risposta)<br>
+		<h3>Incinerator</h3>
+		L'<b>Incinerator</b> è già stato modellato come un attore nella fase precedente.
+		<h4>Interazioni</h4>
+		<h5>Come modellare l'accensione dell'Incinerator?</h5>
+		Da requisiti, <b>Incinerator</b> riceve da un'entità esterna un <b>segnale di accensione</b>. Esso viene
+		modellato come una dispatch, in quanto non è necessario che venga ricevuto da altri componenti (evento), mentre
+		una possibile risposta non
+		avrebbe un contenuto informativo utile/affidabile (in caso si usasse una request reply).
+		<br>
+		<br>
+		<h5>Come notificare il WIS dell'inizio della burning phase?</h5>
+		Il <b>WIS</b>, da requisiti, ha necessità di sapere se l'<b>Incinerator</b> stia bruciando o meno.
+		Le opzioni possibili sono:
+		<ul>
+			<li>
+				<b>Incinerator</b> invia un segnale al <b>WIS</b>
+			</li>
+			<li>
+				<b>OpRobot</b> invia un segnale al <b>WIS</b>
+			</li>
+		</ul>
+
+		Si è scelta la prima strada, per compartimentalizzare meglio il sistema, evitando di dare troppe responsabilità
+		a <b>OpRobot</b>. <br>
+		Il segnale inviato al <b>WIS</b> è modellato come una dispatch per gli stessi motivi
+		elencati per il punto precedente.
+		<br>
+		<br>
+		<h5>Come notificare WIS e OpRobot della fine della burning phase?</h5>
+		Da requisiti è noto che <b>Incinerator</b> notifica <b>OpRobot</b> e <b>WIS</b> della fine della burning phase.
+		Tale segnale è nuovamente modellato come una dispatch per gli stessi motivi elencati sopra.
+		<br>
+		<h3>Entità esterna</h3>
+		<todo></todo>
+
 
 		<h3>Contesti</h3>
 
@@ -561,7 +607,7 @@
 					OpRobot interagisce con il Waste Storage per prelevare un RP.
 				</td>
 				<td rowspan="2">
-					<ul>	
+					<ul>
 						<li>
 							<a href="../src/test_architettura.qak"> TestManager.qak</a>
 						</li>
