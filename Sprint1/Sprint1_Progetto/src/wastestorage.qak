@@ -1,7 +1,32 @@
 System wastestorage
 
-Dispatch get_waste: get_waste(N)
-Dispatch waste_in: waste_in(N)
+// WIS
+Dispatch start_robot : start_robot(X)
+
+// OPROBOT
+Dispatch waiting : waiting(X)
+
+// WASTE STORAGE
+Dispatch waste_in : waste_in(X)
+Dispatch waste_qty : waste_qty(X)
+Dispatch get_waste : get_waste(X)
+
+// INCINERATOR
+Dispatch turn_on : turn_on(X)
+Dispatch burn_in : burn_in(X)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
+
+// ASH STORAGE
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL)
+
+// BASIC ROBOT
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 
 Context ctx_wastestorage  ip  [host="localhost" port=8016]
 Context ctx_oprobot  ip  [host="127.0.0.1" port=8017]

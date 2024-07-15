@@ -1,37 +1,32 @@
 System sprint1_architettura_with_msg
 
-
 // WIS
 Dispatch start_robot : start_robot(X)
-Dispatch update_gui : update_gui(X)
+
+// OPROBOT
+Dispatch waiting : waiting(X)
 
 // WASTE STORAGE
-Event waste_in : waste_in(X)
+Dispatch waste_in : waste_in(X)
 Dispatch waste_qty : waste_qty(X)
 Dispatch get_waste : get_waste(X)
 
 // INCINERATOR
-Event turn_on : turn_on(X)
+Dispatch turn_on : turn_on(X)
 Dispatch burn_in : burn_in(X)
-Dispatch burning : burning(X)
-Dispatch burn_out : burn_out(X)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
 
 // ASH STORAGE
-Dispatch ash_out : ash_out(X)
-Event get_ash : get_ash(X)
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL)
 
-// SONAR
-Dispatch ash_qty : ash_qty(X)
-Dispatch ash_full : ash_full(X)
-
-// LED
-Dispatch led_on : led_on(X)
-Dispatch led_off : led_off(X)
-Dispatch blink : blink(X)
-
-Request doplan : doplan(X)
-Reply doplandone : doplandone(X)
-Reply doplanfailed : doplanfailed(X)
+// BASIC ROBOT
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 
 // OPROBOT
 Dispatch robot_status : robot_status(X)

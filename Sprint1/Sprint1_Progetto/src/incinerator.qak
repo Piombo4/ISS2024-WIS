@@ -52,7 +52,9 @@ QActor incinerator context ctx_wis{
 	Transition t1 whenMsg burn_in -> burnRP
 	
 	State burnRP {
-		[# var RP = 1 #]
+		[# var RP = 1; #]
+		forward wis -m burn_start:burn_start(1)
+		delay
 	}
 	
 	Transition t0 
