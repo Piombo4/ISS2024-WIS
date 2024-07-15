@@ -1,12 +1,29 @@
 System wis
 
+// WIS
 Dispatch start_robot : start_robot(X)
-Dispatch get_waste: get_waste(N)
 
+// OPROBOT
+Dispatch waiting : waiting(X)
+
+// WASTE STORAGE
+Dispatch waste_in : waste_in(X)
+Dispatch waste_qty : waste_qty(X)
+Dispatch get_waste : get_waste(X)
+
+// INCINERATOR
+Dispatch turn_on : turn_on(X)
 Dispatch burn_in : burn_in(X)
-Dispatch burn_out : burn_out(X)
-Dispatch ash_out: ash_out(N)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
 
+// ASH STORAGE
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL)
+
+// BASIC ROBOT
 Request moverobot    :  moverobot(TARGETX, TARGETY)
 Reply moverobotdone  :  moverobotok(ARG)
 Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
@@ -18,6 +35,7 @@ ExternalQActor basic_robot context ctx_basic_robot
 ExternalQActor waste_storage context ctx_wis
 ExternalQActor ash_storage context ctx_wis
 ExternalQActor incinerator context ctx_wis
+ExternalQActor wis context ctx_wis
 
 QActor oprobot context ctx_wis  {
 	[# 
@@ -25,9 +43,8 @@ QActor oprobot context ctx_wis  {
 		var RP: boolean = false;
 		var ASH: boolean = false;
 		var T: String = ""; 
-		var TX,TY; 
-		
-		#]
+		var TX,TY; 	
+	#]
 	
 	State s0 initial {
 		println("$name STARTS") color green 
@@ -36,12 +53,12 @@ QActor oprobot context ctx_wis  {
 	}
 	
 	State waiting {
+		forward wis -m waiting:waiting(1)
 	}
 	
-	Transition t0 whenMsg start_robot -> go_to_ws
+	Transition t0 whenMsg start_robot -> to_ws
 	
-	State go_to_ws {
-		
+	State to_ws {
 		[# T = Position.WASTEIN.name; #]
 		solve(getPoint(T,X,Y))
 		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
@@ -50,7 +67,7 @@ QActor oprobot context ctx_wis  {
 	}
 	
 	Transition t1 whenReply moverobotdone -> withdraw_ws
-				  whenReply moverobotfailed -> go_to_ws
+				  whenReply moverobotfailed -> to_ws
 				  
     State withdraw_ws {
     	forward waste_storage -m get_waste:get_waste(1)
@@ -88,7 +105,7 @@ QActor oprobot context ctx_wis  {
 	State wait_for_burn {
 	}
 	
-	Transition t4 whenMsg burn_out -> to_incinerator_burned
+	Transition t4 whenMsg burn_end -> to_incinerator_burned
 	
 	State to_incinerator_burned {
 		[# T = Position.BURNOUT.name; #]
@@ -96,15 +113,17 @@ QActor oprobot context ctx_wis  {
 		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
 		
 		request basic_robot -m moverobot:moverobot($TX,$TY)
-		
+	}
+	
+	Transition t5 whenReply moverobotdone -> get_ash
+				  whenReply moverobotfailed -> to_incinerator_burned
+	
+	State get_ash {
+		forward incinerator -m get_ash:get_ash(1)
 		[# ASH = true #]
 	}
 	
-	Transition t5 whenReply moverobotdone -> wait_for_burn
-				  whenReply moverobotfailed -> to_incinerator_burned
-	
 	State to_ash_storage {
-		
 		[# T = Position.ASHOUT.name; #]
 		solve(getPoint(T,X,Y))
 		ifSolved { [# TX = getCurSol(X); TY = getCurSol(Y); #]}
@@ -117,7 +136,7 @@ QActor oprobot context ctx_wis  {
 				  whenReply moverobotfailed -> to_ash_storage
 	
 	State ask_as {
-		forward ash_storage -m ash_out:ash_out(1)
+		forward ash_storage -m deposit_ash:deposit_ash(1)
 		[# ASH = false #]
 	}
 	

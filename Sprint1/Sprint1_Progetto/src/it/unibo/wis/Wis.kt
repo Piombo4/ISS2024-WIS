@@ -28,11 +28,6 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-<<<<<<< Updated upstream
-=======
-						delay(500) 
-						CommUtils.outgreen("$name STARTS")
->>>>>>> Stashed changes
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

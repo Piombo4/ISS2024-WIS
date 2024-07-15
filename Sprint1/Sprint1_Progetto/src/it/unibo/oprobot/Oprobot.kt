@@ -26,8 +26,7 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 				var RP: boolean = false;
 				var ASH: boolean = false;
 				var T: String = ""; 
-				var TX,TY; 
-				
+				var TX,TY; 	
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -42,14 +41,15 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 				}	 
 				state("waiting") { //this:State
 					action { //it:State
+						forward("waiting", "waiting(1)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="go_to_ws",cond=whenDispatch("start_robot"))
+					 transition(edgeName="t00",targetState="to_ws",cond=whenDispatch("start_robot"))
 				}	 
-				state("go_to_ws") { //this:State
+				state("to_ws") { //this:State
 					action { //it:State
 						 T = Position.WASTEIN.name;  
 						solve("getPoint(T,X,Y)","") //set resVar	
@@ -64,7 +64,7 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					sysaction { //it:State
 					}	 	 
 					 transition(edgeName="t11",targetState="withdraw_ws",cond=whenReply("moverobotdone"))
-					transition(edgeName="t12",targetState="go_to_ws",cond=whenReply("moverobotfailed"))
+					transition(edgeName="t12",targetState="to_ws",cond=whenReply("moverobotfailed"))
 				}	 
 				state("withdraw_ws") { //this:State
 					action { //it:State
@@ -127,7 +127,7 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t47",targetState="to_incinerator_burned",cond=whenDispatch("burn_out"))
+					 transition(edgeName="t47",targetState="to_incinerator_burned",cond=whenDispatch("burn_end"))
 				}	 
 				state("to_incinerator_burned") { //this:State
 					action { //it:State
@@ -138,14 +138,23 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 						else
 						{}
 						request("moverobot", "moverobot($TX,$TY)" ,"basic_robot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t58",targetState="get_ash",cond=whenReply("moverobotdone"))
+					transition(edgeName="t59",targetState="to_incinerator_burned",cond=whenReply("moverobotfailed"))
+				}	 
+				state("get_ash") { //this:State
+					action { //it:State
+						forward("get_ash", "get_ash(1)" ,"incinerator" ) 
 						 ASH = true  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t58",targetState="wait_for_burn",cond=whenReply("moverobotdone"))
-					transition(edgeName="t59",targetState="to_incinerator_burned",cond=whenReply("moverobotfailed"))
 				}	 
 				state("to_ash_storage") { //this:State
 					action { //it:State
@@ -166,7 +175,7 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 				}	 
 				state("ask_as") { //this:State
 					action { //it:State
-						forward("ash_out", "ash_out(1)" ,"ash_storage" ) 
+						forward("deposit_ash", "deposit_ash(1)" ,"ash_storage" ) 
 						 ASH = false  
 						//genTimer( actor, state )
 					}

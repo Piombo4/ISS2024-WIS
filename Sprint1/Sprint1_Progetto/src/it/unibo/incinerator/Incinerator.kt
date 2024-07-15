@@ -21,21 +21,57 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
+		
+					var RP: int = 0;
+					val BTIME: int = 4000;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						delay(500) 
-						CommUtils.outgreen("$name STARTS")
+						CommUtils.outblack("$name IDLE...")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
+					 transition(edgeName="t00",targetState="working",cond=whenDispatch("turn_on"))
 				}	 
-				state("idle") { //this:State
+				state("working") { //this:State
 					action { //it:State
-						CommUtils.outblack("$name IDLE...")
+						CommUtils.outblack("$name Acceso inceneritore")
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t11",targetState="burnRP",cond=whenDispatch("burn_in"))
+				}	 
+				state("burnRP") { //this:State
+					action { //it:State
+						 var RP = 1  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t02",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t03",targetState="removeRP",cond=whenDispatch("get_waste"))
+				}	 
+				state("addRP") { //this:State
+					action { //it:State
+							scale += 50   
+						CommUtils.outblack("$name Depositato un RP!")
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t04",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t05",targetState="removeRP",cond=whenDispatch("get_waste"))
+				}	 
+				state("removeRP") { //this:State
+					action { //it:State
+							scale -= 50   
+						CommUtils.outblack("$name Prelevato un RP!")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

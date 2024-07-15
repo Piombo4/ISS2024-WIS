@@ -1,7 +1,6 @@
-<<<<<<< Updated upstream
-=======
-{"actor":"waste_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"addRP", "msgId":"waste_in"}
-{"actor":"waste_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"removeRP", "msgId":"get_waste"}
-{"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"addRP", "msgId":"waste_in"}
-{"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"removeRP", "msgId":"get_waste"}
->>>>>>> Stashed changes
+{"actor":"incinerator", "msgType":"dispatch", "curstate":"s0", "nextstate":"working", "msgId":"turn_on"}
+{"actor":"incinerator", "msgType":"dispatch", "curstate":"working", "nextstate":"burnRP", "msgId":"burn_in"}
+{"actor":"incinerator", "msgType":"dispatch", "curstate":"burnRP", "nextstate":"addRP", "msgId":"waste_in"}
+{"actor":"incinerator", "msgType":"dispatch", "curstate":"burnRP", "nextstate":"removeRP", "msgId":"get_waste"}
+{"actor":"incinerator", "msgType":"dispatch", "curstate":"addRP", "nextstate":"addRP", "msgId":"waste_in"}
+{"actor":"incinerator", "msgType":"dispatch", "curstate":"addRP", "nextstate":"removeRP", "msgId":"get_waste"}

@@ -1,0 +1,74 @@
+System wastestorage
+
+// WIS
+Dispatch start_robot : start_robot(X)
+
+// OPROBOT
+Dispatch waiting : waiting(X)
+
+// WASTE STORAGE
+Dispatch waste_in : waste_in(X)
+Dispatch waste_qty : waste_qty(X)
+Dispatch get_waste : get_waste(X)
+
+// INCINERATOR
+Dispatch turn_on : turn_on(X)
+Dispatch burn_in : burn_in(X)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
+
+// ASH STORAGE
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL)
+
+// BASIC ROBOT
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
+
+Context ctx_wis  ip  [host="localhost" port=8014] 
+
+ExternalQActor op_robot context ctx_wis
+ExternalQActor wis context ctx_wis
+
+QActor incinerator context ctx_wis{
+	[#
+			var RP: int = 0;
+			val BTIME: int = 4000;
+	#]
+	
+	State s0 initial { 
+		println("$name IDLE...")
+	}
+	
+	Transition t0 whenMsg turn_on -> working
+	
+	State working {
+		println("$name Acceso inceneritore")
+	}
+	
+	Transition t1 whenMsg burn_in -> burnRP
+	
+	State burnRP {
+		[# var RP = 1 #]
+	}
+	
+	Transition t0 
+		whenMsg waste_in -> addRP
+		whenMsg get_waste -> removeRP
+	
+	State addRP{
+		[#	scale += 50  #]
+		println("$name Depositato un RP!")
+	}
+	Transition t0 
+		whenMsg waste_in -> addRP
+		whenMsg get_waste -> removeRP
+	
+	State removeRP{
+		[#	scale -= 50  #]
+		println("$name Prelevato un RP!")
+	}
+}
