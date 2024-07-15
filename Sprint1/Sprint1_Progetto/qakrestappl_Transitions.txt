@@ -1,0 +1,10 @@
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+{"actor":"waste_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"addRP", "msgId":"waste_in"}
+{"actor":"waste_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"removeRP", "msgId":"get_waste"}
+{"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"addRP", "msgId":"waste_in"}
+{"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"removeRP", "msgId":"get_waste"}
+=======
+>>>>>>> 8a1182f86cecf3964817e3a9013508f28a28be34
+>>>>>>> Stashed changes

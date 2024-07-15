@@ -28,14 +28,14 @@ Request moverobot    :  moverobot(TARGETX, TARGETY)
 Reply moverobotdone  :  moverobotok(ARG)
 Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 
-Context ctx_ashstorage  ip  [host="localhost" port=8019]
-Context ctx_oprobot  ip  [host="127.0.0.1" port=8017]
-Context ctx_mock_external_entity  ip  [host="127.0.0.2" port=8018]
+Context ctx_wis  ip  [host="localhost" port=8016]
+Context ctx_external_entity  ip  [host="127.0.0.1" port=8017]
 
-ExternalQActor op_robot context ctx_oprobot
-ExternalQActor mock_external_entity context ctx_mock_external_entity
+ExternalQActor external_entity context ctx_external_entity
 
-QActor ash_storage context ctx_ashstorage{
+
+
+QActor ash_storage context ctx_wis{
 	[#
 			var ash_qty = 0
 			val MAX = 4
@@ -49,8 +49,8 @@ QActor ash_storage context ctx_ashstorage{
 		println("$name IDLE...")
 	}
 	Transition t0 
-		whenMsg get_ash -> removeAsh
-		whenMsg ash_out -> addAsh
+		whenRequest empty_ash -> removeAsh
+		whenMsg deposit_ash -> addAsh
 	
 	State addAsh{
 		if[#ash_qty<MAX#]{
@@ -61,14 +61,16 @@ QActor ash_storage context ctx_ashstorage{
 		}
 	}
 	Transition t0 
-		whenMsg get_ash -> removeAsh
-		whenMsg ash_out -> addAsh
+		whenRequest empty_ash -> removeAsh
+		whenMsg deposit_ash -> addAsh
 	
 	State removeAsh{
 		if[#ash_qty>0#]{
+			replyTo empty_ash with ashes_taken: ashes_taken($ash_qty) 
 			[#	ash_qty = 0  #]
 			println("$name Prelevata tutta la cenere!")
 		}else{
+			replyTo empty_ash with ashes_taken: ashes_taken($ash_qty)
 			println("$name Deposito già vuoto!")
 		}
 		

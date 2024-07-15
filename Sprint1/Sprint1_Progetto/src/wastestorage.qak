@@ -28,16 +28,15 @@ Request moverobot    :  moverobot(TARGETX, TARGETY)
 Reply moverobotdone  :  moverobotok(ARG)
 Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 
-Context ctx_wastestorage  ip  [host="localhost" port=8016]
-Context ctx_oprobot  ip  [host="127.0.0.1" port=8017]
-Context ctx_mock_external_entity  ip  [host="127.0.0.2" port=8018]
+Dispatch get_waste: get_waste(N)
+Dispatch waste_in: waste_in(N)
+Dispatch scaleinfo: scaleinfo(N)
 
-ExternalQActor op_robot context ctx_oprobot
-ExternalQActor mock_external_entity context ctx_mock_external_entity
+Context ctx_wis  ip  [host="localhost" port=8016]
 
-QActor waste_storage context ctx_wastestorage{
+QActor waste_storage context ctx_wis{
 	[#
-			var scale = 0
+			var scale: Int = 0
 	#]
 	State s0 initial{ 
 		
@@ -53,6 +52,7 @@ QActor waste_storage context ctx_wastestorage{
 	
 	State addRP{
 		[#	scale += 50  #]
+		updateResource [# "scaleinfo($scale)" #]
 		println("$name Depositato un RP!")
 	}
 	Transition t0 
@@ -61,6 +61,7 @@ QActor waste_storage context ctx_wastestorage{
 	
 	State removeRP{
 		[#	scale -= 50  #]
+		updateResource [# "scaleinfo($scale)" #]
 		println("$name Prelevato un RP!")
 	}
 }
