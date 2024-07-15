@@ -33,9 +33,9 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="working",cond=whenDispatch("turn_on"))
+					 transition(edgeName="t00",targetState="ready",cond=whenDispatch("turn_on"))
 				}	 
-				state("working") { //this:State
+				state("ready") { //this:State
 					action { //it:State
 						CommUtils.outblack("$name Acceso inceneritore")
 						//genTimer( actor, state )
@@ -43,40 +43,31 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t11",targetState="burnRP",cond=whenDispatch("burn_in"))
+					 transition(edgeName="t11",targetState="burn_rp",cond=whenDispatch("burn_in"))
 				}	 
-				state("burnRP") { //this:State
+				state("burn_rp") { //this:State
 					action { //it:State
-						 var RP = 1  
+						 var RP = 1;  
+						forward("burn_start", "burn_start(1)" ,"wis" ) 
+						delay(BTIME)
+						forward("burn_end", "burn_end(1)" ,"wis" ) 
+						forward("burn_end", "burn_end(1)" ,"op_robot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t02",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t03",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t12",targetState="get_ash",cond=whenDispatch("get_ash"))
 				}	 
-				state("addRP") { //this:State
+				state("get_ash") { //this:State
 					action { //it:State
-							scale += 50   
-						CommUtils.outblack("$name Depositato un RP!")
+						 var RP = 0;  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t04",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t05",targetState="removeRP",cond=whenDispatch("get_waste"))
-				}	 
-				state("removeRP") { //this:State
-					action { //it:State
-							scale -= 50   
-						CommUtils.outblack("$name Prelevato un RP!")
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
+					 transition( edgeName="goto",targetState="ready", cond=doswitch() )
 				}	 
 			}
 		}

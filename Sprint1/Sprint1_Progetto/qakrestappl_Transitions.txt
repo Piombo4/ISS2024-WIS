@@ -1,2 +1,0 @@
-{"actor":"oprobot", "msgType":"dispatch", "curstate":"waiting", "nextstate":"to_ws", "msgId":"start_robot"}
-{"actor":"oprobot", "msgType":"dispatch", "curstate":"wait_for_burn", "nextstate":"to_incinerator_burned", "msgId":"burn_end"}

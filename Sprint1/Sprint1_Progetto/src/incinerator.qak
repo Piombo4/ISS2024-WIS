@@ -43,34 +43,28 @@ QActor incinerator context ctx_wis{
 		println("$name IDLE...")
 	}
 	
-	Transition t0 whenMsg turn_on -> working
+	Transition t0 whenMsg turn_on -> ready
 	
-	State working {
+	State ready {
 		println("$name Acceso inceneritore")
 	}
 	
-	Transition t1 whenMsg burn_in -> burnRP
+	Transition t1 whenMsg burn_in -> burn_rp
 	
-	State burnRP {
+	State burn_rp {
 		[# var RP = 1; #]
 		forward wis -m burn_start:burn_start(1)
-		delay
+		delayVar BTIME
+		
+		forward wis -m burn_end:burn_end(1)
+		forward op_robot -m burn_end:burn_end(1)
 	}
 	
-	Transition t0 
-		whenMsg waste_in -> addRP
-		whenMsg get_waste -> removeRP
+	Transition t1 whenMsg get_ash -> get_ash
 	
-	State addRP{
-		[#	scale += 50  #]
-		println("$name Depositato un RP!")
+	State get_ash {
+		[# var RP = 0; #]
 	}
-	Transition t0 
-		whenMsg waste_in -> addRP
-		whenMsg get_waste -> removeRP
 	
-	State removeRP{
-		[#	scale -= 50  #]
-		println("$name Prelevato un RP!")
-	}
+	Goto ready
 }
