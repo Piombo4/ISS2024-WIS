@@ -17,23 +17,15 @@ import it.unibo.kactor.sysUtil.createActor   //Sept2023
 class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : ActorBasicFsm( name, scope, confined=isconfined ){
 
 	override fun getInitialState() : String{
-		return "s0"
+		return "idle"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		
-					var ash_qty = 0
-					val MAX = 4
+					var ash_qty: Int = 0;
+					var R: Int = 0;
+					val MAX: Int = 4;
 		return { //this:ActionBasciFsm
-				state("s0") { //this:State
-					action { //it:State
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
-				}	 
 				state("idle") { //this:State
 					action { //it:State
 						CommUtils.outblack("$name IDLE...")
@@ -42,8 +34,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="removeAsh",cond=whenDispatch("get_ash"))
-					transition(edgeName="t01",targetState="addAsh",cond=whenDispatch("ash_out"))
+					 transition(edgeName="t00",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t01",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("addAsh") { //this:State
 					action { //it:State
@@ -59,18 +51,15 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t02",targetState="removeAsh",cond=whenDispatch("get_ash"))
-					transition(edgeName="t03",targetState="addAsh",cond=whenDispatch("ash_out"))
+					 transition(edgeName="t02",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t03",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("removeAsh") { //this:State
 					action { //it:State
-						if( ash_qty>0 
-						 ){	ash_qty = 0   
-						CommUtils.outblack("$name Prelevata tutta la cenere!")
-						}
-						else
-						 {CommUtils.outblack("$name Deposito già vuoto!")
-						 }
+						 R = ash_qty;  
+						 ash_qty = 0;  
+						answer("empty_ash", "ashes_taken", "ashes_taken($R)"   )  
+						CommUtils.outblack("$name Prelevata $R cenere")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

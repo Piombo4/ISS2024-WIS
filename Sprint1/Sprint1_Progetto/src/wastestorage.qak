@@ -21,7 +21,7 @@ Dispatch get_ash : get_ash(X)
 // ASH STORAGE
 Dispatch deposit_ash : deposit_ash(X)
 Request empty_ash : empty_ash(X)
-Reply ashes_taken : ashes_taken(LEVEL)
+Reply ashes_taken : ashes_taken(LEVEL) for empty_ash
 
 // BASIC ROBOT
 Request moverobot    :  moverobot(TARGETX, TARGETY)
@@ -36,23 +36,20 @@ Context ctx_wis  ip  [host="localhost" port=8016]
 
 QActor waste_storage context ctx_wis{
 	[#
-			var scale: Int = 0
+			var scale: Int = 0;
 	#]
-	State s0 initial{ 
-		
-	}
-	Goto idle
 	
-	State idle {
-		println("$name IDLE...")
+	State s0 initial{ 
+		println("$name INIZIATO")
 	}
+	
 	Transition t0 
 		whenMsg waste_in -> addRP
 		whenMsg get_waste -> removeRP
 	
 	State addRP{
-		[#	scale += 50  #]
-		updateResource [# "scaleinfo($scale)" #]
+		[#	scale += 50;  #]
+		updateResource [# "waste_qty($scale)" #]
 		println("$name Depositato un RP!")
 	}
 	Transition t0 

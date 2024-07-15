@@ -21,7 +21,7 @@ Dispatch get_ash : get_ash(X)
 // ASH STORAGE
 Dispatch deposit_ash : deposit_ash(X)
 Request empty_ash : empty_ash(X)
-Reply ashes_taken : ashes_taken(LEVEL)
+Reply ashes_taken : ashes_taken(LEVEL) for empty_ash
 
 // BASIC ROBOT
 Request moverobot    :  moverobot(TARGETX, TARGETY)
@@ -33,21 +33,17 @@ Context ctx_external_entity  ip  [host="127.0.0.1" port=8017]
 
 ExternalQActor external_entity context ctx_external_entity
 
-
-
 QActor ash_storage context ctx_wis{
 	[#
-			var ash_qty = 0
-			val MAX = 4
+			var ash_qty: Int = 0;
+			var R: Int = 0;
+			val MAX: Int = 4;
 	#]
-	State s0 initial{ 
-		
-	}
-	Goto idle
 	
-	State idle {
+	State idle initial {
 		println("$name IDLE...")
 	}
+	
 	Transition t0 
 		whenRequest empty_ash -> removeAsh
 		whenMsg deposit_ash -> addAsh
@@ -55,7 +51,7 @@ QActor ash_storage context ctx_wis{
 	State addAsh{
 		if[#ash_qty<MAX#]{
 			[#	ash_qty++  #]
-		println("$name Depositata la cenere di un RP!")
+			println("$name Depositata la cenere di un RP!")
 		}else{
 			println("$name Deposito pieno! ")
 		}
@@ -65,14 +61,10 @@ QActor ash_storage context ctx_wis{
 		whenMsg deposit_ash -> addAsh
 	
 	State removeAsh{
-		if[#ash_qty>0#]{
-			replyTo empty_ash with ashes_taken: ashes_taken($ash_qty) 
-			[#	ash_qty = 0  #]
-			println("$name Prelevata tutta la cenere!")
-		}else{
-			replyTo empty_ash with ashes_taken: ashes_taken($ash_qty)
-			println("$name Deposito già vuoto!")
-		}
+		[# R = ash_qty; #]
+		[# ash_qty = 0; #]
 		
+		replyTo empty_ash with ashes_taken : ashes_taken($R)
+		println("$name Prelevata $R cenere")
 	}
 }

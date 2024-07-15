@@ -22,20 +22,11 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		
-					var scale: Int = 0
+					var scale: Int = 0;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
-				}	 
-				state("idle") { //this:State
-					action { //it:State
-						CommUtils.outblack("$name IDLE...")
+						CommUtils.outblack("$name INIZIATO")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -46,8 +37,8 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 				}	 
 				state("addRP") { //this:State
 					action { //it:State
-							scale += 50   
-						updateResourceRep( "scaleinfo($scale)"  
+							scale += 50;   
+						updateResourceRep( "waste_qty($scale)"  
 						)
 						CommUtils.outblack("$name Depositato un RP!")
 						//genTimer( actor, state )

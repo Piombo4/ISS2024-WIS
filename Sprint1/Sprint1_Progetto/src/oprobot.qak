@@ -21,7 +21,7 @@ Dispatch get_ash : get_ash(X)
 // ASH STORAGE
 Dispatch deposit_ash : deposit_ash(X)
 Request empty_ash : empty_ash(X)
-Reply ashes_taken : ashes_taken(LEVEL)
+Reply ashes_taken : ashes_taken(LEVEL) for empty_ash
 
 // BASIC ROBOT
 Request moverobot    :  moverobot(TARGETX, TARGETY)

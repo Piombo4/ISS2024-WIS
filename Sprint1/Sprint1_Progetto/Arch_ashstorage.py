@@ -25,10 +25,8 @@ with Diagram('ashstorageArch', show=False, outformat='png', graph_attr=graphattr
   with Cluster('env'):
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
-     with Cluster('ctx_ashstorage', graph_attr=nodeattr):
+     with Cluster('ctx_wis', graph_attr=nodeattr):
           ash_storage=Custom('ash_storage','./qakicons/symActorSmall.png')
-     with Cluster('ctx_oprobot', graph_attr=nodeattr):
-          op_robot=Custom('op_robot(ext)','./qakicons/externalQActor.png')
-     with Cluster('ctx_mock_external_entity', graph_attr=nodeattr):
-          mock_external_entity=Custom('mock_external_entity(ext)','./qakicons/externalQActor.png')
+     with Cluster('ctx_external_entity', graph_attr=nodeattr):
+          external_entity=Custom('external_entity(ext)','./qakicons/externalQActor.png')
 diag
