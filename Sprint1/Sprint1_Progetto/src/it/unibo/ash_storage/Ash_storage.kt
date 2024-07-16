@@ -35,8 +35,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t030",targetState="removeAsh",cond=whenRequest("empty_ash"))
-					transition(edgeName="t031",targetState="addAsh",cond=whenDispatch("deposit_ash"))
+					 transition(edgeName="t031",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t032",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("addAsh") { //this:State
 					action { //it:State
@@ -52,8 +52,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t032",targetState="removeAsh",cond=whenRequest("empty_ash"))
-					transition(edgeName="t033",targetState="addAsh",cond=whenDispatch("deposit_ash"))
+					 transition(edgeName="t033",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t034",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("removeAsh") { //this:State
 					action { //it:State

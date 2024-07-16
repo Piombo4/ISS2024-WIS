@@ -21,7 +21,7 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
-		
+		 
 					var RP: Int = 0;
 					val BTIME: Long = 4000L;
 		return { //this:ActionBasciFsm
@@ -34,7 +34,7 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t027",targetState="ready",cond=whenDispatch("turn_on"))
+					 transition(edgeName="t028",targetState="ready",cond=whenDispatch("turn_on"))
 				}	 
 				state("ready") { //this:State
 					action { //it:State
@@ -44,7 +44,7 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t128",targetState="burn_rp",cond=whenDispatch("burn_in"))
+					 transition(edgeName="t129",targetState="burn_rp",cond=whenDispatch("burn_in"))
 				}	 
 				state("burn_rp") { //this:State
 					action { //it:State
@@ -58,7 +58,7 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t129",targetState="get_ash",cond=whenDispatch("get_ash"))
+					 transition(edgeName="t130",targetState="get_ash",cond=whenDispatch("get_ash"))
 				}	 
 				state("get_ash") { //this:State
 					action { //it:State

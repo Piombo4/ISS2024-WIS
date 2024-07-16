@@ -3,7 +3,7 @@ System -trace wis
 // WIS
 Dispatch start_robot : start_robot(X)
  
-// op_robot
+// op_robot 
 Dispatch waiting : waiting(X)
 
 // WASTE STORAGE
@@ -28,10 +28,16 @@ Request moverobot    :  moverobot(TARGETX, TARGETY)
 Reply moverobotdone  :  moverobotok(ARG)
 Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 
+Request engage        : engage(OWNER, STEPTIME)	
+Reply   engagedone    : engagedone(ARG)    for engage
+Reply   engagerefused : engagerefused(ARG) for engage
+
+Dispatch disengage    : disengage(ARG)
+
 Context ctx_wis  ip  [host="localhost" port=8014]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
 
-ExternalQActor basic_robot context ctx_basic_robot
+ExternalQActor basicrobot context ctx_basic_robot
 
 QActor mock context ctx_wis {
 	State s0 initial {
@@ -134,10 +140,12 @@ QActor op_robot context ctx_wis  {
 		solve(consult("sysRules.pl"))
 		solve(consult("pointPicker.pl"))
 		solve(consult("positions.pl"))
-		println("$name FINITO CONSULT")
+		request basicrobot -m engage:engage($MyName,350)
 	}
 	
-	Goto waiting
+	Transition t0
+	 whenReply engagedone ->waiting
+	 whenReply engagerefused ->s0
 	
 	State waiting {
 		forward wis -m waiting:waiting(1)
@@ -146,15 +154,16 @@ QActor op_robot context ctx_wis  {
 	Transition t0 whenMsg start_robot -> to_ws
 	
 	State to_ws {
-		[# T = Position.WASTEIN.name; #]
-		solve( getPoint(T,TX,TY) )
+		[# T = Position.wastein.name; #]
+		solve( getPoint($T,TX,TY) )
 		[# X = getCurSol("TX").toString(); #]
 		[# Y = getCurSol("TY").toString(); #]
-		request basic_robot -m moverobot:moverobot($X,$Y)
+		
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
 	Transition t1 whenReply moverobotdone -> withdraw_ws
-				  whenReply moverobotfailed -> to_ws
+				 
 				  
     State withdraw_ws {
     	forward waste_storage -m get_waste:get_waste(1)
@@ -164,11 +173,13 @@ QActor op_robot context ctx_wis  {
     Goto to_incinerator
     
     State to_incinerator {
-    	[# T = Position.BURNIN.name; #]
-		solve( getPoint(T,TX,TY) )
+    	
+    	[# T = Position.burnin.name; #]
+		solve( getPoint($T,TX,TY) )
 		[# X = getCurSol("TX").toString(); #]
 		[# Y = getCurSol("TY").toString(); #]
-		request basic_robot -m moverobot:moverobot($X,$Y)
+		
+		request basicrobot -m moverobot:moverobot($X,$Y)
     }
     
     Transition t2 whenReply moverobotdone -> ask_to_burn
@@ -183,11 +194,11 @@ QActor op_robot context ctx_wis  {
 	Goto go_wait_home
 	
 	State go_wait_home {
-		[# T = Position.HOME.name; #]
-		solve( getPoint(T,TX,TY) )
+		[# T = Position.home.name; #]
+		solve( getPoint($T,TX,TY) )
 		[# X = getCurSol("TX").toString(); #]
 		[# Y = getCurSol("TY").toString(); #]
-		request basic_robot -m moverobot:moverobot($X,$Y)
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
     
     Transition t3 whenReply moverobotdone -> wait_for_burn
@@ -199,11 +210,11 @@ QActor op_robot context ctx_wis  {
 	Transition t4 whenMsg burn_end -> to_incinerator_burned
 	
 	State to_incinerator_burned {
-		[# T = Position.BURNOUT.name; #]
-		solve( getPoint(T,TX,TY) )
+		[# T = Position.burnout.name; #]
+		solve( getPoint($T,TX,TY) )
 		[# X = getCurSol("TX").toString(); #]
 		[# Y = getCurSol("TY").toString(); #]
-		request basic_robot -m moverobot:moverobot($X,$Y)
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
 	Transition t5 whenReply moverobotdone -> get_ash
@@ -217,11 +228,11 @@ QActor op_robot context ctx_wis  {
 	Goto to_ash_storage
 	
 	State to_ash_storage {
-		[# T = Position.ASHOUT.name; #]
-		solve( getPoint(T,TX,TY) )
+		[# T = Position.ashout.name; #]
+		solve( getPoint($T,TX,TY) )
 		[# X = getCurSol("TX").toString(); #]
 		[# Y = getCurSol("TY").toString(); #]
-		request basic_robot -m moverobot:moverobot($X,$Y)
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
 	
@@ -236,11 +247,11 @@ QActor op_robot context ctx_wis  {
 	Goto go_back_home
 	
 	State go_back_home {
-		[# T = Position.HOME.name; #]
-		solve( getPoint(T,TX,TY) )
+		[# T = Position.home.name; #]
+		solve( getPoint($T,TX,TY) )
 		[# X = getCurSol("TX").toString(); #]
 		[# Y = getCurSol("TY").toString(); #]
-		request basic_robot -m moverobot:moverobot($X,$Y)
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
 	Transition t7 whenReply moverobotdone -> waiting
@@ -249,7 +260,7 @@ QActor op_robot context ctx_wis  {
 
 
 QActor incinerator context ctx_wis{
-	[#
+	[# 
 			var RP: Int = 0;
 			val BTIME: Long = 4000L;
 	#]

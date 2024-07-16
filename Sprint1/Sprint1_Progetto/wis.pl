@@ -15,10 +15,14 @@ dispatch( deposit_ash, deposit_ash(X) ).
 request( empty_ash, empty_ash(X) ).
 reply( ashes_taken, ashes_taken(LEVEL) ).  %%for empty_ash
 request( moverobot, moverobot(TARGETX,TARGETY) ).
+request( engage, engage(OWNER,STEPTIME) ).
+reply( engagedone, engagedone(ARG) ).  %%for engage
+reply( engagerefused, engagerefused(ARG) ).  %%for engage
+dispatch( disengage, disengage(ARG) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").
 context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").
- qactor( basic_robot, ctx_basic_robot, "external").
+ qactor( basicrobot, ctx_basic_robot, "external").
   qactor( mock, ctx_wis, "it.unibo.mock.Mock").
  static(mock).
   qactor( wis, ctx_wis, "it.unibo.wis.Wis").

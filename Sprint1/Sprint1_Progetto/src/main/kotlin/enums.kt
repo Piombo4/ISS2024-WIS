@@ -1,5 +1,5 @@
 package wis.util;
 
 enum class Position {
-    HOME,WASTEIN,BURNIN,BURNOUT,ASHOUT
+    home,wastein,burnin,burnout,ashout
 }
