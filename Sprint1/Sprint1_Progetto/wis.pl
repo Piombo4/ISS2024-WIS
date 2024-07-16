@@ -15,6 +15,7 @@ dispatch( deposit_ash, deposit_ash(X) ).
 request( empty_ash, empty_ash(X) ).
 reply( ashes_taken, ashes_taken(LEVEL) ).  %%for empty_ash
 request( moverobot, moverobot(TARGETX,TARGETY) ).
+dispatch( setdirection, dir(D) ).
 request( engage, engage(OWNER,STEPTIME) ).
 reply( engagedone, engagedone(ARG) ).  %%for engage
 reply( engagerefused, engagerefused(ARG) ).  %%for engage

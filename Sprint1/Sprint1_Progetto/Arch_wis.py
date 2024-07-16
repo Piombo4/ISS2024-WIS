@@ -41,7 +41,9 @@ with Diagram('wisArch', show=False, outformat='png', graph_attr=graphattr) as di
      op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<waiting &nbsp; >',  fontcolor='blue') >> wis
      mock >> Edge(color='blue', style='solid',  decorate='true', label='<waste_in &nbsp; >',  fontcolor='blue') >> waste_storage
      incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_end &nbsp; >',  fontcolor='blue') >> op_robot
+     wis >> Edge(color='blue', style='solid',  decorate='true', label='<turn_on &nbsp; >',  fontcolor='blue') >> incinerator
      wis >> Edge(color='blue', style='solid',  decorate='true', label='<start_robot &nbsp; >',  fontcolor='blue') >> op_robot
+     op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<setdirection &nbsp; >',  fontcolor='blue') >> basicrobot
      op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<deposit_ash &nbsp; >',  fontcolor='blue') >> ash_storage
      waste_storage >> Edge(color='blue', style='solid',  decorate='true', label='<waste_qty &nbsp; >',  fontcolor='blue') >> wis
      incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_start &nbsp; burn_end &nbsp; >',  fontcolor='blue') >> wis

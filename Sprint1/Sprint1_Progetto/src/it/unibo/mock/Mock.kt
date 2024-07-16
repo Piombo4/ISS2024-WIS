@@ -26,7 +26,7 @@ class Mock ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 					action { //it:State
 						delay(500) 
 						forward("waste_in", "waste_in(1)" ,"waste_storage" ) 
-						delay(10000) 
+						delay(15000) 
 						request("empty_ash", "empty_ash(1)" ,"ash_storage" )  
 						//genTimer( actor, state )
 					}
@@ -37,7 +37,7 @@ class Mock ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 				}	 
 				state("reply") { //this:State
 					action { //it:State
-						delay(10000) 
+						delay(15000) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

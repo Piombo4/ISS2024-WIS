@@ -1,1 +1,1 @@
-getPoint(P, X, Y):- position(X,Y,P).
+getPoint(P, X, Y, DIR):- position(X,Y,DIR,P).
