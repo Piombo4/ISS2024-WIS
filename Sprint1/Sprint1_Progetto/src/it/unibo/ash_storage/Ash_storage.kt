@@ -28,14 +28,15 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 		return { //this:ActionBasciFsm
 				state("idle") { //this:State
 					action { //it:State
-						CommUtils.outblack("$name IDLE...")
+						delay(500) 
+						CommUtils.outgreen("$name INIZIATO")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="removeAsh",cond=whenRequest("empty_ash"))
-					transition(edgeName="t01",targetState="addAsh",cond=whenDispatch("deposit_ash"))
+					 transition(edgeName="t030",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t031",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("addAsh") { //this:State
 					action { //it:State
@@ -51,8 +52,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t02",targetState="removeAsh",cond=whenRequest("empty_ash"))
-					transition(edgeName="t03",targetState="addAsh",cond=whenDispatch("deposit_ash"))
+					 transition(edgeName="t032",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t033",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("removeAsh") { //this:State
 					action { //it:State

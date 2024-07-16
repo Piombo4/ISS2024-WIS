@@ -26,14 +26,12 @@ class Incinerator ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("burn_start", "burn_start(X)" ,"wis" ) 
-						forward("burn_end", "burn_end(X)" ,"oprobot" ) 
-						forward("burn_end", "burn_end(X)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
 				}	 
 				state("idle") { //this:State
 					action { //it:State

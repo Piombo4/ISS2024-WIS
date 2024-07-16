@@ -1,0 +1,355 @@
+System -trace wis
+ 
+// WIS
+Dispatch start_robot : start_robot(X)
+ 
+// op_robot
+Dispatch waiting : waiting(X)
+
+// WASTE STORAGE
+Dispatch waste_in : waste_in(X)
+Dispatch waste_qty : waste_qty(X)
+Dispatch get_waste : get_waste(X)
+
+// INCINERATOR
+Dispatch turn_on : turn_on(X)
+Dispatch burn_in : burn_in(X)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
+
+// ASH STORAGE
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL) for empty_ash
+
+// BASIC ROBOT
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
+
+Context ctx_wis  ip  [host="localhost" port=8014]
+Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
+
+ExternalQActor basic_robot context ctx_basic_robot
+
+QActor mock context ctx_wis {
+	State s0 initial {
+		delay 500
+		forward waste_storage -m waste_in:waste_in(1)	
+		delay 10000
+		request ash_storage -m empty_ash:empty_ash(1)
+	}
+	
+	Transition t0 whenReply ashes_taken -> reply
+	
+	State reply  {
+		delay 10000
+	}
+	
+	Goto s0
+}
+
+QActor wis context ctx_wis {
+	[#
+			var ash_qty = 0
+			var waste_qty = 0
+			var isBurning: Boolean = false;
+			var robot_waiting: Boolean = false;
+	#]
+	State s0 initial{ 
+		delay 500
+		observeResource waste_storage msgid waste_qty
+        println("$name INIZIATO") color green
+	}
+	
+	Transition t0
+		whenMsg waiting -> robotWaiting
+		whenMsg waste_qty -> updateWasteQty
+		whenMsg burn_start -> startBurningPhase
+		whenMsg burn_end -> endBurningPhase
+		
+	State robotWaiting{
+		[# robot_waiting = true #]
+	}
+	
+	Goto verifyConditions
+	
+	State updateWasteQty{
+		onMsg(waste_qty:waste_qty(N)){
+			[# waste_qty = payloadArg(0).toInt()/50 #]
+		}
+	}
+	
+	Goto verifyConditions
+		
+	State startBurningPhase{
+		[# isBurning = true #]
+	}
+	
+	Transition t0
+		whenMsg waiting -> robotWaiting
+		whenMsg waste_qty -> updateWasteQty
+		whenMsg burn_start -> startBurningPhase
+		whenMsg burn_end -> endBurningPhase
+		
+	State endBurningPhase{
+		[# isBurning = false #]
+	}
+	
+	Goto verifyConditions
+	
+	State verifyConditions{
+		if [# robot_waiting && !isBurning && waste_qty > 0 #]{
+			
+			forward op_robot -m start_robot:start_robot(1)		
+			[# robot_waiting = false #]
+		}
+	}
+	
+	Transition t0
+		whenMsg waiting -> robotWaiting
+		whenMsg waste_qty -> updateWasteQty
+		whenMsg burn_start -> startBurningPhase
+		whenMsg burn_end -> endBurningPhase
+	
+}
+
+
+QActor op_robot context ctx_wis  { 
+	import "wis.util.*"
+	[#  
+		var RP: Boolean = false;
+		var ASH: Boolean = false;
+		var T: String = ""; 
+		var TX = "";
+		var TY = "";
+		var X = "";
+		var Y = "";
+	#]
+	
+	State s0 initial {
+		delay 500
+		println("$name INIZIATO") color green 
+		solve(consult("sysRules.pl"))
+		solve(consult("pointPicker.pl"))
+		solve(consult("positions.pl"))
+		println("$name FINITO CONSULT")
+	}
+	
+	Goto waiting
+	
+	State waiting {
+		forward wis -m waiting:waiting(1)
+	}
+	
+	Transition t0 whenMsg start_robot -> to_ws
+	
+	State to_ws {
+		[# T = Position.WASTEIN.name; #]
+		solve( getPoint(T,TX,TY) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		request basic_robot -m moverobot:moverobot($X,$Y)
+	}
+	
+	Transition t1 whenReply moverobotdone -> withdraw_ws
+				  whenReply moverobotfailed -> to_ws
+				  
+    State withdraw_ws {
+    	forward waste_storage -m get_waste:get_waste(1)
+    	[# RP = true; #]
+    }
+    
+    Goto to_incinerator
+    
+    State to_incinerator {
+    	[# T = Position.BURNIN.name; #]
+		solve( getPoint(T,TX,TY) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		request basic_robot -m moverobot:moverobot($X,$Y)
+    }
+    
+    Transition t2 whenReply moverobotdone -> ask_to_burn
+				  whenReply moverobotfailed -> to_incinerator
+				  
+	
+	State ask_to_burn {
+		forward incinerator -m burn_in:burn_in(1)
+		[# RP = false #]
+	}
+	
+	Goto go_wait_home
+	
+	State go_wait_home {
+		[# T = Position.HOME.name; #]
+		solve( getPoint(T,TX,TY) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		request basic_robot -m moverobot:moverobot($X,$Y)
+	}
+    
+    Transition t3 whenReply moverobotdone -> wait_for_burn
+				  whenReply moverobotfailed -> go_wait_home
+				  
+	State wait_for_burn {
+	}
+	
+	Transition t4 whenMsg burn_end -> to_incinerator_burned
+	
+	State to_incinerator_burned {
+		[# T = Position.BURNOUT.name; #]
+		solve( getPoint(T,TX,TY) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		request basic_robot -m moverobot:moverobot($X,$Y)
+	}
+	
+	Transition t5 whenReply moverobotdone -> get_ash
+				  whenReply moverobotfailed -> to_incinerator_burned
+	
+	State get_ash {
+		forward incinerator -m get_ash:get_ash(1)
+		[# ASH = true #]
+	}
+	
+	Goto to_ash_storage
+	
+	State to_ash_storage {
+		[# T = Position.ASHOUT.name; #]
+		solve( getPoint(T,TX,TY) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		request basic_robot -m moverobot:moverobot($X,$Y)
+	}
+	
+	
+	Transition t6 whenReply moverobotdone -> ask_as
+				  whenReply moverobotfailed -> to_ash_storage
+	
+	State ask_as {
+		forward ash_storage -m deposit_ash:deposit_ash(1)
+		[# ASH = false #]
+	}
+	
+	Goto go_back_home
+	
+	State go_back_home {
+		[# T = Position.HOME.name; #]
+		solve( getPoint(T,TX,TY) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		request basic_robot -m moverobot:moverobot($X,$Y)
+	}
+	
+	Transition t7 whenReply moverobotdone -> waiting
+				  whenReply moverobotfailed -> go_back_home
+}
+
+
+QActor incinerator context ctx_wis{
+	[#
+			var RP: Int = 0;
+			val BTIME: Long = 4000L;
+	#]
+	
+	State s0 initial { 
+		delay 500
+		println("$name INIZIATO") color green
+	}
+	
+	Transition t0 whenMsg turn_on -> ready
+	
+	State ready {
+		println("$name Acceso inceneritore")
+	}
+	
+	Transition t1 whenMsg burn_in -> burn_rp
+	
+	State burn_rp {
+		[# var RP = 1; #]
+		forward wis -m burn_start:burn_start(1)
+		delayVar BTIME
+		
+		forward wis -m burn_end:burn_end(1)
+		forward op_robot -m burn_end:burn_end(1)
+	}
+	
+	Transition t1 whenMsg get_ash -> get_ash
+	
+	State get_ash {
+		[# var RP = 0; #]
+	}
+	
+	Goto ready
+}
+
+
+QActor ash_storage context ctx_wis{
+	[#
+			var ash_qty: Int = 0;
+			var R: Int = 0;
+			val MAX: Int = 4;
+	#]
+	
+	State idle initial {
+		delay 500
+		println("$name INIZIATO") color green
+	}
+	
+	Transition t0 
+		whenRequest empty_ash -> removeAsh
+		whenMsg deposit_ash -> addAsh
+	
+	State addAsh{
+		if[#ash_qty<MAX#]{
+			[#	ash_qty++  #]
+			println("$name Depositata la cenere di un RP!")
+		}else{
+			println("$name Deposito pieno! ")
+		}
+	}
+	Transition t0 
+		whenRequest empty_ash -> removeAsh
+		whenMsg deposit_ash -> addAsh
+	
+	State removeAsh{
+		[# R = ash_qty; #]
+		[# ash_qty = 0; #]
+		
+		replyTo empty_ash with ashes_taken : ashes_taken($R)
+		println("$name Prelevata $R cenere")
+	}
+}
+
+
+QActor waste_storage context ctx_wis{
+	[#
+			var scale: Int = 0;
+	#]
+	
+	State s0 initial{ 
+		delay 500
+		println("$name INIZIATO") color green
+	}
+	
+	Transition t0 
+		whenMsg waste_in -> addRP
+		whenMsg get_waste -> removeRP
+	
+	State addRP{
+		[#	scale += 50;  #]
+		updateResource [# "waste_qty($scale)" #]
+		println("$name Depositato un RP!")
+	}
+	Transition t0 
+		whenMsg waste_in -> addRP
+		whenMsg get_waste -> removeRP
+	
+	State removeRP{
+		[#	scale -= 50  #]
+		updateResource [# "scaleinfo($scale)" #]
+		println("$name Prelevato un RP!")
+	}
+}

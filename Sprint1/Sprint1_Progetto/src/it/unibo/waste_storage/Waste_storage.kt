@@ -26,14 +26,15 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						CommUtils.outblack("$name INIZIATO")
+						delay(500) 
+						CommUtils.outgreen("$name INIZIATO")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t01",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t034",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t035",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 				state("addRP") { //this:State
 					action { //it:State
@@ -46,8 +47,8 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t02",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t03",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t036",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t037",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 				state("removeRP") { //this:State
 					action { //it:State

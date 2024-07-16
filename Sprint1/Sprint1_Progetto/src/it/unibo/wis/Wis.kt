@@ -24,25 +24,85 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 		
 					var ash_qty = 0
 					var waste_qty = 0
-					var isBurning: boolean = false;
+					var isBurning: Boolean = false;
+					var robot_waiting: Boolean = false;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
+						delay(500) 
+						observeResource("localhost","8014","ctx_wis","waste_storage","waste_qty")
+						CommUtils.outgreen("$name INIZIATO")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
+					 transition(edgeName="t01",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t02",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t03",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t04",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
-				state("idle") { //this:State
+				state("robotWaiting") { //this:State
 					action { //it:State
-						CommUtils.outblack("$name IDLE...")
+						 robot_waiting = true  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
+				}	 
+				state("updateWasteQty") { //this:State
+					action { //it:State
+						if( checkMsgContent( Term.createTerm("waste_qty(X)"), Term.createTerm("waste_qty(N)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								 waste_qty = payloadArg(0).toInt()/50  
+						}
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
+				}	 
+				state("startBurningPhase") { //this:State
+					action { //it:State
+						 isBurning = true  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t05",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t06",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t07",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t08",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+				}	 
+				state("endBurningPhase") { //this:State
+					action { //it:State
+						 isBurning = false  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
+				}	 
+				state("verifyConditions") { //this:State
+					action { //it:State
+						if(  robot_waiting && !isBurning && waste_qty > 0  
+						 ){forward("start_robot", "start_robot(1)" ,"op_robot" ) 
+						 robot_waiting = false  
+						}
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t09",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t010",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t011",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t012",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
 			}
 		}

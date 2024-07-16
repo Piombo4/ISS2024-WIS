@@ -26,16 +26,23 @@ with Diagram('wisArch', show=False, outformat='png', graph_attr=graphattr) as di
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
      with Cluster('ctx_wis', graph_attr=nodeattr):
-          oprobot=Custom('oprobot','./qakicons/symActorSmall.png')
-          waste_storage=Custom('waste_storage(ext)','./qakicons/externalQActor.png')
-          ash_storage=Custom('ash_storage(ext)','./qakicons/externalQActor.png')
-          incinerator=Custom('incinerator(ext)','./qakicons/externalQActor.png')
-          wis=Custom('wis(ext)','./qakicons/externalQActor.png')
+          mock=Custom('mock','./qakicons/symActorSmall.png')
+          wis=Custom('wis','./qakicons/symActorSmall.png')
+          op_robot=Custom('op_robot','./qakicons/symActorSmall.png')
+          incinerator=Custom('incinerator','./qakicons/symActorSmall.png')
+          ash_storage=Custom('ash_storage','./qakicons/symActorSmall.png')
+          waste_storage=Custom('waste_storage','./qakicons/symActorSmall.png')
      with Cluster('ctx_basic_robot', graph_attr=nodeattr):
           basic_robot=Custom('basic_robot(ext)','./qakicons/externalQActor.png')
-     oprobot >> Edge(color='magenta', style='solid', decorate='true', label='<moverobot &nbsp; >',  fontcolor='magenta') >> basic_robot
-     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<burn_in &nbsp; get_ash &nbsp; >',  fontcolor='blue') >> incinerator
-     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<deposit_ash &nbsp; >',  fontcolor='blue') >> ash_storage
-     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<waiting &nbsp; >',  fontcolor='blue') >> wis
-     oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<get_waste &nbsp; >',  fontcolor='blue') >> waste_storage
+     mock >> Edge(color='magenta', style='solid', decorate='true', label='<empty_ash<font color="darkgreen"> ashes_taken</font> &nbsp; >',  fontcolor='magenta') >> ash_storage
+     op_robot >> Edge(color='magenta', style='solid', decorate='true', label='<moverobot &nbsp; >',  fontcolor='magenta') >> basic_robot
+     op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<burn_in &nbsp; get_ash &nbsp; >',  fontcolor='blue') >> incinerator
+     op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<get_waste &nbsp; >',  fontcolor='blue') >> waste_storage
+     op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<waiting &nbsp; >',  fontcolor='blue') >> wis
+     mock >> Edge(color='blue', style='solid',  decorate='true', label='<waste_in &nbsp; >',  fontcolor='blue') >> waste_storage
+     incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_end &nbsp; >',  fontcolor='blue') >> op_robot
+     wis >> Edge(color='blue', style='solid',  decorate='true', label='<start_robot &nbsp; >',  fontcolor='blue') >> op_robot
+     op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<deposit_ash &nbsp; >',  fontcolor='blue') >> ash_storage
+     waste_storage >> Edge(color='blue', style='solid',  decorate='true', label='<waste_qty &nbsp; >',  fontcolor='blue') >> wis
+     incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_start &nbsp; burn_end &nbsp; >',  fontcolor='blue') >> wis
 diag

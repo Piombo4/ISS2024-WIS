@@ -26,7 +26,6 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
-						forward("start_robot", "start_robot(1)" ,"oprobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 fun main() = runBlocking {
 	//System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "ERROR");
 	QakContext.createContexts(
-	        "localhost", this, "sprint1_architettura_with_msg.pl", "sysRules.pl", "ctx_monitoringdevice"
+	        "localhost", this, "sprint0_architettura.pl", "sysRules.pl", "ctx_monitoringdevice"
 	)
 	//JAN Facade
 	//JAN24 Display
