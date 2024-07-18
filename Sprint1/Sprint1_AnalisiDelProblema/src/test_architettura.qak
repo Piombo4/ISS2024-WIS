@@ -17,17 +17,17 @@ Request start_test: start_test(N)
 Dispatch start_robot: start_robot(N)
 Dispatch qty: qty(N)
 
-Reply successful : successful(X) for start_test
-Reply fail : fail(X) for start_test
+Reply successful : successful(X)
+Reply fail : fail(X)
 
-Context ctx_wis ip [host="127.0.0.1" port=8014]
+Context ctx_wis  [host="127.0.0.1" port=8014]
 Context ctx_test  ip  [host="localhost" port=8018]
 
 ExternalQActor waste_storage context ctx_wis
 ExternalQActor ash_storage context ctx_wis
 
 QActor test_manager context ctx_test { 
-	[# var ERROR: Boolean = false #]
+	[# var ERROR = false #]
 	State s0 initial{ 
 		println("$name IDLE...")	
 	}
@@ -45,8 +45,8 @@ QActor test_manager context ctx_test {
 
 	State added_rp {
 		onMsg(waste_qty: waste_qty(X)){
-			println("$name Quantità nel waste storage: ${payloadArg(0)}")
-			if [# payloadArg(0).toInt() != 50 #] {
+			println("$name Quantità nel waste storage: $X")
+			if [# payloadArg(0) != 50 #] {
 				[# ERROR = true #]
 			}
 		}
@@ -55,7 +55,7 @@ QActor test_manager context ctx_test {
 	Goto fail if [# ERROR #] else ask_to_get
 
 	State ask_to_get {
-		forward waste_storage -m get_waste:get_waste(1)
+		forward forward waste_storage -m get_waste:get_waste(1)
 	}
 
 	Transition t0 
@@ -64,8 +64,8 @@ QActor test_manager context ctx_test {
 		
 	State update_qty{
 		onMsg(waste_qty: waste_qty(N)){
-			println("$name Quantità nel waste storage: ${payloadArg(0)}")
-			if [# payloadArg(0).toInt() != 0 #] {
+			println("$name Quantità nel waste storage: $N")
+			if [# payloadArg(0) != 0 #] {
 				[# ERROR = true #]
 			}
 		}
@@ -101,8 +101,8 @@ QActor test_manager_ash context ctx_test {
 		
 	State ash_ok{
 		onMsg(ashes_taken: ashes_taken(LEVEL)){
-			println("$name Quantità nel ash storage: ${payloadArg(0)}")
-			if [# payloadArg(0).toInt() != 1 #] {
+			println("$name Quantità nel ash storage: $LEVEL")
+			if [# payloadArg(0) != 1 #] {
 				[# ERROR = true #]
 			}
 		}

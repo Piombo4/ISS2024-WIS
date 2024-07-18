@@ -2,10 +2,10 @@ System -trace wis
  
 // WIS
 Dispatch start_robot : start_robot(X)
- 
+
 // op_robot  
 Dispatch waiting : waiting(X)
-
+ 
 // WASTE STORAGE
 Dispatch waste_in : waste_in(X)
 Dispatch waste_qty : waste_qty(X)
@@ -30,8 +30,8 @@ Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 Dispatch setdirection : dir( D )
 
 Request engage        : engage(OWNER,STEPTIME)	
-Reply   engagedone    : engagedone(ARG)    for engage
-Reply   engagerefused : engagerefused(ARG) for engage
+Reply   engagedone    : engagedone(ARG)    
+Reply   engagerefused : engagerefused(ARG) 
 
 Dispatch disengage    : disengage(ARG)
 
@@ -41,7 +41,7 @@ Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
 
 ExternalQActor basicrobot context ctx_basic_robot
 
-QActor mock context ctx_mock {
+QActor mock context ctx_wis {
 	State s0 initial {
 		delay 500
 		forward waste_storage -m waste_in:waste_in(1)	

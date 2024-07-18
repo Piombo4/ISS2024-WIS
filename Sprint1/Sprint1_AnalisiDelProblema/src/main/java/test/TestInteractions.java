@@ -33,7 +33,8 @@ public static void activateSystemUsingDeploy() {
 			try {
 				CommUtils.outmagenta("test_manager activateSystemUsingDeploy ");
 				Process p = Runtime.getRuntime().exec("./src/main/java/test/test_manager.bat");
-				showOutput(p,ColorsOut.BLACK);
+				//showOutput(p,ColorsOut.BLACK);
+				
 			} catch ( Exception e) {
 				CommUtils.outred("test_manager activate ERROR " + e.getMessage());
 			}
@@ -74,7 +75,7 @@ public static void activateSystemUsingDeploy() {
 			IApplMessage reply = connSupport.request(req);
 			CommUtils.outcyan("testSystem reply="+reply);
 			String answer = reply.msgContent();
-			assertEquals(answer, "reply_qty(0)");
+			assertEquals(answer, "successful(1)");
 		} catch (Exception e) {
 			CommUtils.outred("testSystem ERROR " + e.getMessage());
 			fail("testRequest " + e.getMessage());
@@ -94,7 +95,7 @@ public static void activateSystemUsingDeploy() {
 			IApplMessage reply = connSupport.request(req);
 			CommUtils.outcyan("testSystem reply="+reply);
 			String answer = reply.msgContent();
-			assertEquals(answer, "reply_qty(1)");
+			assertEquals(answer, "successful(1)");
 		} catch (Exception e) {
 			CommUtils.outred("testSystem ERROR " + e.getMessage());
 			fail("testRequest " + e.getMessage());
