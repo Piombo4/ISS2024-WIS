@@ -332,12 +332,14 @@
 		<h2>Progetto</h2>
 		<h3>Descrizione</h3>
 
-		Come accennato nell'analisi del problema, per tenere traccia delle posizioni rilevanti si è utilizzata una <a href="../positions.pl">base
+		Come accennato nell'analisi del problema, per tenere traccia delle posizioni rilevanti si è utilizzata una <a
+			href="../positions.pl">base
 			di conoscenza prolog</a>. <br>
 		Inoltre, si è deciso di assegnare ad <b>OpRobot</b> la responsabilità di trovare all'interno di tale base le
 		coordinate di una specifica posizione (nell'analisi del problema si era evidenziato che tutti i componenti,
 		potenzialmente, hanno il diritto di accedervi).<br>
-		L'opRobot sfrutterà questa base di conoscenza per poter comunicare le coordinate relative alle posizioni al BasicRobot e quindi spostarsi verso questi punti rilevanti<br>
+		L'opRobot sfrutterà questa base di conoscenza per poter comunicare le coordinate relative alle posizioni al
+		BasicRobot e quindi spostarsi verso questi punti rilevanti<br>
 		Il predicato prolog creato ha funzionamento molto intuitivo: prende in ingresso una posizione e tre variabili
 		libere, x, y ed una direzione, ed unifica con la posizione che fa match:
 		<ul>
@@ -367,20 +369,47 @@
 				Accendere l'incinerator
 			</li>
 		</ol>
-		<b>1,2):</b>Per poter simulare il funzionamento del sistema completo, per i punti <b>1</b> e <b>2</b> è stata introdotto
+		<b>1,2):</b>Per poter simulare il funzionamento del sistema completo, per i punti <b>1</b> e <b>2</b> è stata
+		introdotto
 		un attore fittizio (mock), che gira su un contesto separato e invia messaggi che emulano queste due
 		azioni.<br>
-		<b>3): </b>Nei requisiti era specificato che l'incinerator deve essere messo in funzione da un segnale di un'entità esterna.<br>
-		Quindi per simulare questo comportamento, per semplicità, si è deciso che sarà il <b>WIS</b> ad inviare il segnale di
+		<b>3): </b>Nei requisiti era specificato che l'incinerator deve essere messo in funzione da un segnale di
+		un'entità esterna.<br>
+		Quindi per simulare questo comportamento, per semplicità, si è deciso che sarà il <b>WIS</b> ad inviare il
+		segnale di
 		accensione all'<b>Incinerator</b>.<br>
 
 		<h3>Nuova Architettura Logica</h3>
-		<img src="../core_businessarch.png" >
+		<img src="../core_businessarch.png">
 		<h3>Deployment</h3>
-		
+		Per poter eseguire la demo del Core Business sono disponibili due file batch:
+		<ul>
+			<li>
+				<a href="../../unibo.basicrobot24/basicRobot.bat">basicRobot.bat</a>: avvia l'immagine docker del WEnv,
+				imposta la stanza impostata nel file sceneConfig.js e apre una tab di chrome per la visualizzazione
+			</li>
+			<li>
+				<a href="../build/distributions/wis-1.0/wis-1.0/bin/wis.bat">wis.bat</a> esegue il sistema
+			</li>
+		</ul>
+		<b>NB</b>: per eseguire correttamente il sistema, è necessaria la cartella unibolibs che contiene le librerie
+		necessarie per l'esecuzione. Tale libreria va posizionata un livello sotto alla cartella dello Sprint1.
+		<br>
+		<br>
+		<b>Directory tree</b>:<br>
 
-
-
+		Sprint1<br>
+		|<br>
+		+ - - Sprint1_AnalisiDelProblema <br>
+		+ - - Sprint1_Progetto <br>
+		&nbsp&nbsp&nbsp&nbsp| <br>
+		&nbsp&nbsp&nbsp&nbsp+ - - build/distributions/wis-1.0/bin <br>
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp| <br>
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp+ - - wis.bat <br>
+		+ - - unibo.basicrobot24 <br>
+		&nbsp&nbsp&nbsp&nbsp| <br>
+		&nbsp&nbsp&nbsp&nbsp+ - - basicRobot.bat
+		<br>
 		<br>
 	</div>
 

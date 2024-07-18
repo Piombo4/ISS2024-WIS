@@ -29,7 +29,7 @@ Reply moverobotdone  :  moverobotok(ARG)
 Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 Dispatch setdirection : dir( D )
 
-Request engage        : engage(OWNER, STEPTIME)	
+Request engage        : engage(OWNER,STEPTIME)	
 Reply   engagedone    : engagedone(ARG)    for engage
 Reply   engagerefused : engagerefused(ARG) for engage
 
@@ -146,12 +146,11 @@ QActor op_robot context ctx_wis  {
 	Goto engage
 	
 	State engage {
-		request basicrobot -m engage:engage($MyName,330)
+		request basicrobot -m engage:engage($MyName,300)
 	}
 	
-	Transition t0 whenTime 5000 -> engage	
-				  whenReply engagedone -> waiting
-	 			  whenReply engagerefused -> engage
+	Transition t0 whenReply engagedone -> waiting
+		whenReply engagerefused -> engage
 	 
 	State waiting {
 		forward wis -m waiting:waiting(1)

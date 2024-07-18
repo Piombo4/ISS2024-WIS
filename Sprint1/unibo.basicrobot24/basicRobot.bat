@@ -7,4 +7,3 @@ for /f "tokens=1 delims= " %%a in ('docker ps -a ^| findstr "virtualrobotdisi23:
 docker cp sceneConfig.js %cid%:/home/node/WEnv/WebGLScene/sceneConfig.js
 docker commit %cid%
 
-
