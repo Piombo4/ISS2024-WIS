@@ -32,7 +32,6 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						delay(500) 
 						CommUtils.outgreen("$name INIZIATO")
 						solve("consult('sysRules.pl')","") //set resVar	
 						solve("consult('pointPicker.pl')","") //set resVar	
@@ -122,9 +121,9 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="go_wait_home", cond=doswitch() )
+					 transition( edgeName="goto",targetState="go_back_home", cond=doswitch() )
 				}	 
-				state("go_wait_home") { //this:State
+				state("go_back_home") { //this:State
 					action { //it:State
 						 T = Position.home.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -140,7 +139,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					sysaction { //it:State
 					}	 	 
 					 transition(edgeName="t319",targetState="wait_for_burn",cond=whenReply("moverobotdone"))
-					transition(edgeName="t320",targetState="go_wait_home",cond=whenReply("moverobotfailed"))
+					transition(edgeName="t320",targetState="go_back_home",cond=whenReply("moverobotfailed"))
 				}	 
 				state("wait_for_burn") { //this:State
 					action { //it:State
@@ -211,24 +210,6 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					sysaction { //it:State
 					}	 	 
 					 transition( edgeName="goto",targetState="go_back_home", cond=doswitch() )
-				}	 
-				state("go_back_home") { //this:State
-					action { //it:State
-						 T = Position.home.name;  
-						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
-						 X = getCurSol("TX").toString();  
-						 Y = getCurSol("TY").toString();  
-						 D = getCurSol("TDIR").toString();  
-						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
-						delay(500) 
-						forward("setdirection", "dir($D)" ,"basicrobot" ) 
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t726",targetState="waiting",cond=whenReply("moverobotdone"))
-					transition(edgeName="t727",targetState="go_back_home",cond=whenReply("moverobotfailed"))
 				}	 
 			}
 		}

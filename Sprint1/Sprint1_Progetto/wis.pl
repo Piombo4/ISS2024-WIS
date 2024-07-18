@@ -17,6 +17,8 @@ reply( ashes_taken, ashes_taken(LEVEL) ).  %%for empty_ash
 request( moverobot, moverobot(TARGETX,TARGETY) ).
 dispatch( setdirection, dir(D) ).
 request( engage, engage(OWNER,STEPTIME) ).
+reply( engagedone, engagedone(ARG) ).  %%for engage
+reply( engagerefused, engagerefused(ARG) ).  %%for engage
 dispatch( disengage, disengage(ARG) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").

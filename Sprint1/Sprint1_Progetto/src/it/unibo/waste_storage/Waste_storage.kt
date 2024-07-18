@@ -33,8 +33,8 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t035",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t036",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t033",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t034",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 				state("addRP") { //this:State
 					action { //it:State
@@ -47,8 +47,8 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t037",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t038",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t035",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t036",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 				state("removeRP") { //this:State
 					action { //it:State

@@ -34,7 +34,7 @@ with Diagram('wisArch', show=False, outformat='png', graph_attr=graphattr) as di
           waste_storage=Custom('waste_storage','./qakicons/symActorSmall.png')
      with Cluster('ctx_basic_robot', graph_attr=nodeattr):
           basicrobot=Custom('basicrobot(ext)','./qakicons/externalQActor.png')
-     op_robot >> Edge(color='magenta', style='solid', decorate='true', label='<engage &nbsp; moverobot &nbsp; >',  fontcolor='magenta') >> basicrobot
+     op_robot >> Edge(color='magenta', style='solid', decorate='true', label='<engage<font color="darkgreen"> engagedone engagerefused</font> &nbsp; moverobot &nbsp; >',  fontcolor='magenta') >> basicrobot
      mock >> Edge(color='magenta', style='solid', decorate='true', label='<empty_ash<font color="darkgreen"> ashes_taken</font> &nbsp; >',  fontcolor='magenta') >> ash_storage
      op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<burn_in &nbsp; get_ash &nbsp; >',  fontcolor='blue') >> incinerator
      op_robot >> Edge(color='blue', style='solid',  decorate='true', label='<get_waste &nbsp; >',  fontcolor='blue') >> waste_storage
