@@ -336,8 +336,8 @@
 			di conoscenza prolog</a>. <br>
 		Inoltre, si è deciso di assegnare ad <b>OpRobot</b> la responsabilità di trovare all'interno di tale base le
 		coordinate di una specifica posizione (nell'analisi del problema si era evidenziato che tutti i componenti,
-		potenzialmente, hanno il diritto di accedervi).
-		<br>
+		potenzialmente, hanno il diritto di accedervi).<br>
+		L'opRobot sfrutterà questa base di conoscenza per poter comunicare le coordinate relative alle posizioni al BasicRobot e quindi spostarsi verso questi punti rilevanti<br>
 		Il predicato prolog creato ha funzionamento molto intuitivo: prende in ingresso una posizione e tre variabili
 		libere, x, y ed una direzione, ed unifica con la posizione che fa match:
 		<ul>
@@ -367,22 +367,17 @@
 				Accendere l'incinerator
 			</li>
 		</ol>
-		<b>1,2):</b>Per poter simulare il funzionamento del sistema completo, per i punti <b>1</b> e <b>2</b> è stata introdotta
+		<b>1,2):</b>Per poter simulare il funzionamento del sistema completo, per i punti <b>1</b> e <b>2</b> è stata introdotto
 		un attore fittizio (mock), che gira su un contesto separato e invia messaggi che emulano queste due
 		azioni.<br>
-		<b>3): </b>Da requisiti si è inoltre evinto che una entità esterna dovrà accendere l'inceneritore.<br>
-		Quindi per simulare questo comportamento, per semplicità si è deciso che sarà il WIS ad inviare il segnale di
-		accensione all'inceneritore.<br>
+		<b>3): </b>Nei requisiti era specificato che l'incinerator deve essere messo in funzione da un segnale di un'entità esterna.<br>
+		Quindi per simulare questo comportamento, per semplicità, si è deciso che sarà il <b>WIS</b> ad inviare il segnale di
+		accensione all'<b>Incinerator</b>.<br>
 
-		<h3>Tabella Qactors</h3>
 		<h3>Nuova Architettura Logica</h3>
-		<h3>Interazione dell'entità esterna con il sistema</h3>
+		<img src="../core_businessarch.png" >
+		<h3>Deployment</h3>
 		
-		<todo>Aggiungere mock all'architettura?</todo>
-		<todo>Aggiungere prolog per le posizioni</todo>
-
-		<h3>VEnv + Build</h3>
-
 
 
 
