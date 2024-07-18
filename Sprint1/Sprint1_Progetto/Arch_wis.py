@@ -26,12 +26,13 @@ with Diagram('wisArch', show=False, outformat='png', graph_attr=graphattr) as di
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
      with Cluster('ctx_wis', graph_attr=nodeattr):
-          mock=Custom('mock','./qakicons/symActorSmall.png')
           wis=Custom('wis','./qakicons/symActorSmall.png')
           op_robot=Custom('op_robot','./qakicons/symActorSmall.png')
           incinerator=Custom('incinerator','./qakicons/symActorSmall.png')
           ash_storage=Custom('ash_storage','./qakicons/symActorSmall.png')
           waste_storage=Custom('waste_storage','./qakicons/symActorSmall.png')
+     with Cluster('ctx_mock', graph_attr=nodeattr):
+          mock=Custom('mock','./qakicons/symActorSmall.png')
      with Cluster('ctx_basic_robot', graph_attr=nodeattr):
           basicrobot=Custom('basicrobot(ext)','./qakicons/externalQActor.png')
      op_robot >> Edge(color='magenta', style='solid', decorate='true', label='<engage<font color="darkgreen"> engagedone engagerefused</font> &nbsp; moverobot &nbsp; >',  fontcolor='magenta') >> basicrobot
