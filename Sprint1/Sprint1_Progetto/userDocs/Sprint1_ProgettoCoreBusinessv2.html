@@ -330,29 +330,73 @@
 		<h2>Architettura Logica</h2>
 		<center><img src="../sprint1_architettura_with_msgarch.png"></center>
 		<h2>Progetto</h2>
-        <h3>Descrizione di ciò che abbiamo fatto</h3>
-        <ul>
-            <li>
-                Supponiamo che l’ash storage non è mai pieno
-            </li>
-            <li>
-                La funzione per prendere le posizioni dalla base prolog
-            </li>
-            <li>
-                Per semplicità simuliamo l'entità esterna come un attore
-            </li>
-        </ul>
+		<h3>Descrizione</h3>
 
-        <h3>Tabella Qactors</h3>
-        <h3>Nuova Architettura Logica</h3>
-        <todo>Aggiungere mock all'architettura?</todo>
+		Come accennato nell'analisi del problema, per tenere traccia delle posizioni rilevanti si è utilizzata una base
+		di conoscenza prolog (link al file). <br>
+		Inoltre, si è deciso di assegnare ad <b>OpRobot</b> la responsabilità di trovare all'interno di tale base le
+		coordinate di una specifica posizione (nell'analisi del problema si era evidenziato che tutti i componenti,
+		potenzialmente, hanno il diritto di accedervi).
+		<br>
+		Il predicato prolog creato ha funzionamento molto intuitivo: prende in ingresso una posizione e tre variabili
+		libere, x, y ed una direzione, ed unifica con la posizione che fa match:
+		<ul>
+			<li>
+				x: ascissa del punto
+			</li>
+			<li>
+				y: ordinata del punto
+			</li>
+			<li>
+				direzione: permette di ruotare il robot in modo che sia rivolto verso la posizione rilevante interessata
+				(es. affinchè sia rivolto verso <b>BURNIN</b> quando deposita un pacchetto).
+			</li>
+		</ul>
+		<br>
+		
+
+		<ul>
+			<li>
+				Supponiamo che l’ash storage non è mai pieno
+			</li>
+			<li>
+				La funzione per prendere le posizioni dalla base prolog
+			</li>
+			<li>
+				Per semplicità simuliamo l'entità esterna come un attore
+			</li>
+		</ul>
+
+		<h3>Tabella Qactors</h3>
+		<h3>Nuova Architettura Logica</h3>
+		<h3>Interazione dell'entità esterna con il sistema</h3>
+		Il progetto prevede che una entità esterna possa:
+		<ol>
+			<li>
+				Inserire un RP all'interno del Waste Storage
+			</li>
+			<li>
+				Prelevare cenere dall'Ash Storage
+			</li>
+			<li>
+				Accendere l'incinerator
+			</li>
+		</ol>
+		<b>1,2):</b>Per poter simulare il funzionamento del sistema completo, per il punto <b>1</b> e <b>2</b> abbiamo
+		introdotto
+		una attore fittizzio (mock), che gira su un contesto separato e invia messaggi che emulano queste due
+		azioni.<br>
+		<b>3): </b>Da requisiti si è inoltre evinto che una entità esterna dovrà accendere l'inceneritore.<br>
+		Quindi per simulare questo comportamento, per semplicità si è deciso che sarà il WIS ad inviare il segnale di
+		accensione all'inceneritore.<br>
+		<todo>Aggiungere mock all'architettura?</todo>
 		<todo>Aggiungere prolog per le posizioni</todo>
 
-        <h3>VEnv + Build</h3>
-		
+		<h3>VEnv + Build</h3>
 
-		
-		
+
+
+
 		<br>
 	</div>
 

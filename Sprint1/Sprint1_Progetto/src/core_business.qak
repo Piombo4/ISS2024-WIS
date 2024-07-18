@@ -36,11 +36,12 @@ Reply   engagerefused : engagerefused(ARG) for engage
 Dispatch disengage    : disengage(ARG)
 
 Context ctx_wis  ip  [host="localhost" port=8014]
+Context ctx_mock  ip  [host="localhost" port=8015]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
 
 ExternalQActor basicrobot context ctx_basic_robot
 
-QActor mock context ctx_wis {
+QActor mock context ctx_mock {
 	State s0 initial {
 		delay 500
 		forward waste_storage -m waste_in:waste_in(1)	
@@ -53,7 +54,6 @@ QActor mock context ctx_wis {
 	State reply  {
 		delay 15000
 	}
-	
 	Goto s0
 }
  
@@ -197,8 +197,7 @@ QActor op_robot context ctx_wis  {
     
     Transition t2 whenReply moverobotdone -> ask_to_burn
 				  whenReply moverobotfailed -> to_incinerator
-				  
-	
+
 	State ask_to_burn {
 		delay 1500
 		forward incinerator -m burn_in:burn_in(1)
