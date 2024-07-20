@@ -15,14 +15,11 @@ import unibo.basicomm23.utils.ColorsOut;
 import unibo.basicomm23.utils.CommUtils;
 import unibo.basicomm23.utils.ConnectionFactory;
 
-
-
 public class TestInteractions {
     private final static String actorName1 = "test_manager";
     private final static String actorName2 = "test_manager_ash";
     private static Interaction connSupport;
   
-
 /*
  *  Method to activate the system
  *  using the distribution

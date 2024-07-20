@@ -483,8 +483,7 @@
 		rappresentata tramite una variabile, sono possibili due opzioni:
 		<ul>
 			<li>
-				<b>Waste Storage</b> notifica tramite una Request/Reply il valore della <b>Scale</b> ogni volta che
-				cambia.
+				Il <b>WIS</b> richiede tramite una Request/Reply il valore della <b>Scale</b> periodicamente.
 			</li>
 			<li>
 				il <b>WIS</b> osserva la variabile e l'informazione viene trasmessa tramite updateResource.
@@ -621,12 +620,12 @@
 			</tr>
 			<tr>
 				<td>
-					Prelievo di un RP dal Waste Storage
+					Prelievo e inserimento di un RP dal Waste Storage
 				</td>
 				<td>
 					<ul>
 						<li>
-							OpRobot
+							OpRobot e Entità Esterna
 						</li>
 						<li>
 							Waste Storage
@@ -634,7 +633,8 @@
 					</ul>
 				</td>
 				<td>
-					OpRobot interagisce con il Waste Storage per prelevare un RP.
+					L'entità esterna inserisce un RP, succesivamente l'OpRobot interagisce con il Waste Storage per prelevare l'RP. Si controllano 
+					il peso dell'RP dato dalla bilancia all'interno del WS per verificarne il corretto funzionamento 
 				</td>
 				<td rowspan="2">
 					<ul>
@@ -650,12 +650,12 @@
 			</tr>
 			<tr>
 				<td>
-					Deposito cenere in Ash Storage
+					Deposito e prelievo cenere in Ash Storage
 				</td>
 				<td>
 					<ul>
 						<li>
-							OpRobot
+							OpRobot e EntitàEsterna
 						</li>
 						<li>
 							Ash Storage
@@ -663,7 +663,8 @@
 					</ul>
 				</td>
 				<td>
-					OpRobot segnala all'Ash Storage il deposito della cenere.
+					OpRobot segnala all'Ash Storage il deposito della cenere. 
+					L'entità esterna successivamente richiede il prelievo di un RP di cenere, controllando che la quantità fornita sia quella corretta
 				</td>
 			</tr>
 			<tr>
