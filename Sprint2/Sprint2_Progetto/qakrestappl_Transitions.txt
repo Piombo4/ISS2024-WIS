@@ -1,0 +1,2 @@
+{"actor":"test_manager", "msgType":"dispatch", "curstate":"start", "nextstate":"updateQty", "msgId":"qty"}
+{"actor":"test_manager", "msgType":"dispatch", "curstate":"updateQty", "nextstate":"updateQty", "msgId":"qty"}

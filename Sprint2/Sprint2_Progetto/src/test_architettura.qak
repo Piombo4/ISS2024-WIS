@@ -1,0 +1,120 @@
+System test_architettura
+
+
+
+// WASTE STORAGE
+Dispatch waste_in : waste_in(X)
+Dispatch waste_qty : waste_qty(X)
+Dispatch get_waste : get_waste(X)
+
+// ASH STORAGE
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL) for empty_ash
+
+// TEST
+Request start_test: start_test(N)
+Dispatch start_robot: start_robot(N)
+Dispatch qty: qty(N)
+
+Reply successful : successful(X) for start_test
+Reply fail : fail(X) for start_test
+
+Context ctx_wis ip [host="127.0.0.1" port=8014]
+Context ctx_test  ip  [host="localhost" port=8018]
+
+ExternalQActor waste_storage context ctx_wis
+ExternalQActor ash_storage context ctx_wis
+
+QActor test_manager context ctx_test { 
+	[# var ERROR: Boolean = false #]
+	State s0 initial{ 
+		println("$name IDLE...")	
+	}
+	
+	Goto start
+		
+	State start {
+		observeResource waste_storage msgid waste_qty
+		forward waste_storage -m waste_in:waste_in(1)
+	}
+
+	Transition t0 
+		whenTime 15000 -> fail
+		whenMsg waste_qty -> added_rp
+
+	State added_rp {
+		onMsg(waste_qty: waste_qty(X)){
+			println("$name Quantità nel waste storage: ${payloadArg(0)}")
+			if [# payloadArg(0).toInt() != 50 #] {
+				[# ERROR = true #]
+			}
+		}
+	}
+
+	Goto fail if [# ERROR #] else ask_to_get
+
+	State ask_to_get {
+		forward waste_storage -m get_waste:get_waste(1)
+	}
+
+	Transition t0 
+		whenTime 15000 -> fail
+		whenMsg waste_qty -> update_qty
+		
+	State update_qty{
+		onMsg(waste_qty: waste_qty(N)){
+			println("$name Quantità nel waste storage: ${payloadArg(0)}")
+			if [# payloadArg(0).toInt() != 0 #] {
+				[# ERROR = true #]
+			}
+		}
+	}
+
+	Goto fail if [# ERROR #] else end
+	
+	State fail {
+		replyTo start_test with fail : fail(1) 
+	}
+
+	State end {
+		replyTo start_test with successful : successful(1) 
+	}
+}
+
+QActor test_manager_ash context ctx_test { 
+	[# var ERROR = false #]
+	State s0 initial{ 
+		println("$name IDLE...")	
+	}
+	
+	Goto start
+		
+	State start {
+		forward ash_storage -m deposit_ash:deposit_ash(1)
+		request ash_storage -m empty_ash:empty_ash(1)
+	}
+
+	Transition t0 
+		whenTime 15000 -> fail
+		whenReply ashes_taken -> ash_ok
+		
+	State ash_ok{
+		onMsg(ashes_taken: ashes_taken(LEVEL)){
+			println("$name Quantità nel ash storage: ${payloadArg(0)}")
+			if [# payloadArg(0).toInt() != 1 #] {
+				[# ERROR = true #]
+			}
+		}
+	}
+
+	Goto fail if [# ERROR #] else end
+	
+	State fail {
+		replyTo start_test with fail : fail(1) 
+	}
+
+	State end {
+		replyTo start_test with successful : successful(1) 
+	}
+}
