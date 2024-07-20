@@ -390,6 +390,8 @@
         Si preferisce avere un singolo messaggio (opzione 2) in modo da semplificare l'interfaccia del Led e del sistema
         e si ritiene più opportuno che questo messaggio sia modellato come Dispatch dato che è una informazione
         fire-and-forget che il WIS invia al Led senza bisogno di una risposta con un contenuto significativo.
+        <h4>Come interagire con il led fisico?</h4>
+        Deve essere sviluppato un software di basso livello che permette di cambiare tra gli stati del led fisico in correspondenza ai cambiamenti dell'attore led 
         <h3>Sonar</h3>
         Come accennato precedentemente viene modellato come attore. Il suo compito è quello di misurare costantemente il
         livello di cenere all'interno dell'<b>Ash Storage</b>. Una volta che il livello misurato è minore di una soglia
@@ -399,14 +401,31 @@
         Per modellare tale interazione sono possibili due opzioni:
         <ol>
             <li>
-
+                Il <b>WIS</b> richiede tramite una Request/Reply il valore misurato dal <b>Sonar</b> periodicamente.
             </li>
             <li>
-
+                il <b>Sonar</b> notifica ogni variazione della misura al <b>WIS</b> tramite updateResource
             </li>
         </ol>
+        L'opzione scelta è la seconda. Con l'opzione 1 il <b>WIS</b> dovrebbe periodicamente inviare una richiesta di
+        aggiornamento al <b>Sonar</b> per
+        ottenere il valore, costituendo così una interazione a Polling. <br> Per questo motivo si preferisce che sia il
+        <b>Sonar</b>
+        ad aggiornare il <b>WIS</b> direttamente ad ogni
+        cambiamento del suo stato interno.
 
-
+        <h4>Come interagire con il sonar fisico?</h4>
+        Per interagire con il sonar fisico (HC-SR04) abbiamo bisogno di un software che permetta di avviare/fermare il
+        sonar e leggerne i valori misurati.<br>
+        Una problematica simile è gia stata affrontata nel progetto <a
+            href="../resources/RaspApplCode24.html#progetto-sonarqak24"> sonarqak24</a> (<a href="./unibo.sonarqak24/">
+            link progetto</a>) di cui utilizzermo principalmente il componente <a
+            href="./unibo.sonarqak24/src/sonarqak24.qaktt"><i>sonardevice</i></a> per comandare il sonar fisico<br>
+        Tale attore incaspula il codice di basso livello <a
+            href="./unibo.sonarqak24/resources/pipes/sonar.py"><i>sonar.py</i></a>, permettendoci poter procedere in
+        modo topDown. In questo modo andrà solamente
+        creato un attore di alto livello contenente la logica applicativa che delegherà al livello più basso
+        l'interazione con il sonar fisico.
         <h2>Architettura Logica</h2>
 
         <h2>Test Plans</h2>
@@ -424,147 +443,6 @@
                 <th>
                     Modello
                 </th>
-            </tr>
-            <tr>
-                <td>
-                    Verifica delle condizioni e start OpRobot
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            WIS
-                        </li>
-                        <li>
-                            OpRobot
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    Il WIS controlla se le condizioni per l'avvio di OpRobot sono verificate e gli invia il segnale
-                    d'avvio.
-                </td>
-                <td>
-
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    Prelievo e inserimento di un RP dal Waste Storage
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            OpRobot e Entità Esterna
-                        </li>
-                        <li>
-                            Waste Storage
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    L'entità esterna inserisce un RP, succesivamente l'OpRobot interagisce con il Waste Storage per
-                    prelevare l'RP. Si controllano
-                    il peso dell'RP dato dalla bilancia all'interno del WS per verificarne il corretto funzionamento
-                </td>
-                <td rowspan="2">
-                    <ul>
-                        <li>
-                            <a href="../src/test_architettura.qak"> TestManager.qak</a>
-                        </li>
-                        <li>
-                            <a href="../src/main/java/test/TestInteractions.java"> TestInteractions.java</a>
-                        </li>
-                    </ul>
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    Deposito e prelievo cenere in Ash Storage
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            OpRobot e EntitàEsterna
-                        </li>
-                        <li>
-                            Ash Storage
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    OpRobot segnala all'Ash Storage il deposito della cenere.
-                    L'entità esterna successivamente richiede il prelievo di un RP di cenere, controllando che la
-                    quantità fornita sia quella corretta
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Deposito di un RP nell'Incinerator
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            OpRobot
-                        </li>
-                        <li>
-                            Incinerator
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    OpRobot interagisce con l'Incinerator per depositare un RP.
-                </td>
-                <td>
-
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    Fine burning phase
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            Incinerator
-                        </li>
-                        <li>
-                            OpRobot
-                        </li>
-                        <li>
-                            WIS
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    L'incinerator comunica a OpRobot ed al WIS che ha finito di bruciare un RP.
-                </td>
-                <td>
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Prelievo cenere da Incinerator
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            OpRobot
-                        </li>
-                        <li>
-                            Incinerator
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    OpRobot segnala all'Incinerator il prelievo della cenere.
-                </td>
-                <td>
-
-                </td>
             </tr>
 
         </table>
