@@ -1,5 +1,5 @@
 System sprint2_architetturalogica
-
+ 
 // WIS
 Dispatch start_robot : start_robot(X)
 
@@ -32,6 +32,7 @@ Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 Dispatch led_status : led_status(X)
 
 //SONAR
+Dispatch ash_level : ash_level(LEVEL)
 Event sonardata    : distance(D)   //emitted  by sonardevice  
 
 Dispatch sonarwork : sonarwork(X)
@@ -49,6 +50,8 @@ QActor oprobot context ctx_wis {
 	State s0 initial{
 		delay 500   
 		println("$name STARTS") color green 
+		
+		observeResource sonar msgid ash_level
 	
 		forward wis -m waiting:waiting(1)
 
@@ -127,6 +130,7 @@ QActor incinerator context ctx_wis {
 		println("$name IDLE...")
 	}
 }
+
 QActor led context ctx_monitoring_device{
 	State s0 initial{
 		delay 500   
@@ -134,7 +138,8 @@ QActor led context ctx_monitoring_device{
 	}
 	
 }
-QActor sonar24 context ctx_monitoring_device{   
+
+QActor sonar context ctx_monitoring_device{   
 	State s0 initial{  
 		println("sonar24 | ready") 
 		delay 1000 //give time to start sonardevice ...

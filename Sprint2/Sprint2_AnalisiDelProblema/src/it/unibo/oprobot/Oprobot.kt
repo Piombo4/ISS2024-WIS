@@ -26,6 +26,7 @@ class Oprobot ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
+						observeResource("localhost","8021","ctx_monitoring_device","sonar","ash_level")
 						forward("waiting", "waiting(1)" ,"wis" ) 
 						forward("get_waste", "get_waste(1)" ,"wastestorage" ) 
 						forward("burn_in", "burn_in(1)" ,"incinerator" ) 

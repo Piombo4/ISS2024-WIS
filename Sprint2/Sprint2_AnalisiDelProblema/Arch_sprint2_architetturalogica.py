@@ -35,14 +35,15 @@ with Diagram('sprint2_architetturalogicaArch', show=False, outformat='png', grap
           basic_robot=Custom('basic_robot(ext)','./qakicons/externalQActor.png')
      with Cluster('ctx_monitoring_device', graph_attr=nodeattr):
           led=Custom('led','./qakicons/symActorSmall.png')
-          sonar24=Custom('sonar24','./qakicons/symActorSmall.png')
+          sonar=Custom('sonar','./qakicons/symActorSmall.png')
           sonardevice=Custom('sonardevice','./qakicons/symActorSmall.png')
-     sonardevice >> Edge( label='sonardata', **eventedgeattr, decorate='true', fontcolor='red') >> sonar24
+     sonardevice >> Edge( label='sonardata', **eventedgeattr, decorate='true', fontcolor='red') >> sonar
      oprobot >> Edge(color='magenta', style='solid', decorate='true', label='<moverobot &nbsp; >',  fontcolor='magenta') >> basic_robot
      wis >> Edge(color='blue', style='solid',  decorate='true', label='<led_status &nbsp; >',  fontcolor='blue') >> led
      oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<deposit_ash &nbsp; >',  fontcolor='blue') >> ashstorage
      oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<waiting &nbsp; >',  fontcolor='blue') >> wis
      incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_end &nbsp; >',  fontcolor='blue') >> oprobot
+     sonar >> Edge(color='blue', style='solid',  decorate='true', label='<ash_level &nbsp; >',  fontcolor='blue') >> oprobot
      oprobot >> Edge(color='blue', style='solid',  decorate='true', label='<burn_in &nbsp; >',  fontcolor='blue') >> incinerator
      wastestorage >> Edge(color='blue', style='solid',  decorate='true', label='<waste_qty &nbsp; >',  fontcolor='blue') >> wis
      wis >> Edge(color='blue', style='solid',  decorate='true', label='<start_robot &nbsp; >',  fontcolor='blue') >> oprobot

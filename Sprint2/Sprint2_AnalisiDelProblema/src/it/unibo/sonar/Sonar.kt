@@ -24,23 +24,39 @@ class Sonar ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) 
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						delay(500) 
-						CommUtils.outgreen("$name STARTS")
+						CommUtils.outblack("sonar24 | ready")
+						delay(1000) 
+						subscribeToLocalActor("sonardevice") 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="idle", cond=doswitch() )
+					 transition( edgeName="goto",targetState="work", cond=doswitch() )
 				}	 
-				state("idle") { //this:State
+				state("work") { //this:State
 					action { //it:State
-						CommUtils.outblack("$name IDLE...")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+					 transition(edgeName="t02",targetState="handlesonardata",cond=whenEvent("sonardata"))
+				}	 
+				state("handlesonardata") { //this:State
+					action { //it:State
+						CommUtils.outyellow("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
+						if( checkMsgContent( Term.createTerm("distance(D)"), Term.createTerm("distance(D)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								CommUtils.outmagenta("$name | distance=${payloadArg(0)}")
+						}
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition( edgeName="goto",targetState="work", cond=doswitch() )
 				}	 
 			}
 		}
