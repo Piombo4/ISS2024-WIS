@@ -32,6 +32,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
+						delay(500) 
 						CommUtils.outgreen("$name INIZIATO")
 						solve("consult('sysRules.pl')","") //set resVar	
 						solve("consult('pointPicker.pl')","") //set resVar	
@@ -121,9 +122,9 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="go_back_home", cond=doswitch() )
+					 transition( edgeName="goto",targetState="go_wait_home", cond=doswitch() )
 				}	 
-				state("go_back_home") { //this:State
+				state("go_wait_home") { //this:State
 					action { //it:State
 						 T = Position.home.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -210,6 +211,24 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					sysaction { //it:State
 					}	 	 
 					 transition( edgeName="goto",targetState="go_back_home", cond=doswitch() )
+				}	 
+				state("go_back_home") { //this:State
+					action { //it:State
+						 T = Position.home.name;  
+						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
+						 X = getCurSol("TX").toString();  
+						 Y = getCurSol("TY").toString();  
+						 D = getCurSol("TDIR").toString();  
+						forward("setdirection", "dir(up)" ,"basicrobot" ) 
+						delay(500) 
+						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t626",targetState="waiting",cond=whenReply("moverobotdone"))
+					transition(edgeName="t627",targetState="go_back_home",cond=whenReply("moverobotfailed"))
 				}	 
 			}
 		}

@@ -15,7 +15,7 @@
 {"actor":"incinerator", "msgType":"dispatch", "curstate":"s0", "nextstate":"ready", "msgId":"turn_on"}
 {"actor":"incinerator", "msgType":"dispatch", "curstate":"ready", "nextstate":"burn_rp", "msgId":"burn_in"}
 {"actor":"incinerator", "msgType":"dispatch", "curstate":"burn_rp", "nextstate":"get_ash", "msgId":"get_ash"}
-{"actor":"ash_storage", "msgType":"dispatch", "curstate":"idle", "nextstate":"addAsh", "msgId":"deposit_ash"}
+{"actor":"ash_storage", "msgType":"dispatch", "curstate":"s0", "nextstate":"addAsh", "msgId":"deposit_ash"}
 {"actor":"ash_storage", "msgType":"dispatch", "curstate":"addAsh", "nextstate":"addAsh", "msgId":"deposit_ash"}
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"s0", "nextstate":"addRP", "msgId":"waste_in"}
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"s0", "nextstate":"removeRP", "msgId":"get_waste"}

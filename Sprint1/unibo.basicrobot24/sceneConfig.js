@@ -36,7 +36,7 @@ const config = {
    staticObstacles: [
         {
             name: "plasticBox",
-            centerPosition: { x: 0.34, y: 0.35},
+            centerPosition: { x: 0.34, y: 0.38},
             size: { x: 0.03, y: 0.07}
         },
  
@@ -85,8 +85,8 @@ const config = {
         },
         {
             name: "wallLeft",
-            centerPosition: { x: 0.02, y: 0.48},
-            size: { x: 0.01, y: 0.94}
+            centerPosition: { x: 0.00, y: 0.5},
+            size: { x: 0.001, y: 0.94}
         },
         {
             name: "wallRight",

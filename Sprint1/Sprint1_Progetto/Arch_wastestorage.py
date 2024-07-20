@@ -26,9 +26,5 @@ with Diagram('wastestorageArch', show=False, outformat='png', graph_attr=graphat
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
      with Cluster('ctx_wis', graph_attr=nodeattr):
-          incinerator=Custom('incinerator','./qakicons/symActorSmall.png')
-          op_robot=Custom('op_robot(ext)','./qakicons/externalQActor.png')
-          wis=Custom('wis(ext)','./qakicons/externalQActor.png')
-     incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_start &nbsp; burn_end &nbsp; >',  fontcolor='blue') >> wis
-     incinerator >> Edge(color='blue', style='solid',  decorate='true', label='<burn_end &nbsp; >',  fontcolor='blue') >> op_robot
+          waste_storage=Custom('waste_storage','./qakicons/symActorSmall.png')
 diag

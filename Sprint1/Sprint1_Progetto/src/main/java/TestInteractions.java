@@ -32,8 +32,11 @@ public static void activateSystemUsingDeploy() {
 		public void run(){
 			try {
 				CommUtils.outmagenta("test_manager activateSystemUsingDeploy ");
-				Process p = Runtime.getRuntime().exec("./src/main/java/test/test_manager.bat");
-				//showOutput(p,ColorsOut.BLACK);
+				Process p = Runtime.getRuntime().exec("./gradlew.bat run");
+				Process p1 = Runtime.getRuntime().exec("./gradlew.bat runTest");
+				
+				showOutput(p,ColorsOut.BLACK);
+				showOutput(p1,ColorsOut.BLACK);
 				
 			} catch ( Exception e) {
 				CommUtils.outred("test_manager activate ERROR " + e.getMessage());
@@ -48,6 +51,7 @@ public static void activateSystemUsingDeploy() {
  */
 	@BeforeClass
 	public static void activate() {
+		
 		CommUtils.outmagenta("test_manager activate ");
 		//activateSystemUsingGradle();
 		activateSystemUsingDeploy();
@@ -101,4 +105,22 @@ public static void activateSystemUsingDeploy() {
 			fail("testRequest " + e.getMessage());
 		}
 	}
+	public static void showOutput(Process proc, String color){
+	    new Thread(){
+	        public void run(){
+	            try {
+	            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+	            BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+	            ColorsOut.outappl("Here is the standard output of the command:\n", color);
+	            while (true){
+	                String s = stdInput.readLine();
+	                if ( s != null ) ColorsOut.outappl( s, color );
+	            } 
+	            }catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }.start();
+	}
 }
+

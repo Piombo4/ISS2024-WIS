@@ -17,7 +17,7 @@ import it.unibo.kactor.sysUtil.createActor   //Sept2023
 class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : ActorBasicFsm( name, scope, confined=isconfined ){
 
 	override fun getInitialState() : String{
-		return "idle"
+		return "s0"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
@@ -26,7 +26,7 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					var R: Int = 0;
 					val MAX: Int = 4;
 		return { //this:ActionBasciFsm
-				state("idle") { //this:State
+				state("s0") { //this:State
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name INIZIATO")
@@ -35,8 +35,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t029",targetState="removeAsh",cond=whenRequest("empty_ash"))
-					transition(edgeName="t030",targetState="addAsh",cond=whenDispatch("deposit_ash"))
+					 transition(edgeName="t031",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t032",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("addAsh") { //this:State
 					action { //it:State
@@ -52,8 +52,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t031",targetState="removeAsh",cond=whenRequest("empty_ash"))
-					transition(edgeName="t032",targetState="addAsh",cond=whenDispatch("deposit_ash"))
+					 transition(edgeName="t033",targetState="removeAsh",cond=whenRequest("empty_ash"))
+					transition(edgeName="t034",targetState="addAsh",cond=whenDispatch("deposit_ash"))
 				}	 
 				state("removeAsh") { //this:State
 					action { //it:State

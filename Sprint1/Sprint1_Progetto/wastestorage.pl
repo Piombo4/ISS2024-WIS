@@ -15,9 +15,10 @@ dispatch( deposit_ash, deposit_ash(X) ).
 request( empty_ash, empty_ash(X) ).
 reply( ashes_taken, ashes_taken(LEVEL) ).  %%for empty_ash
 request( moverobot, moverobot(TARGETX,TARGETY) ).
+dispatch( get_waste, get_waste(N) ).
+dispatch( waste_in, waste_in(N) ).
+dispatch( scaleinfo, scaleinfo(N) ).
 %====================================================================================
-context(ctx_wis, "localhost",  "TCP", "8014").
- qactor( op_robot, ctx_wis, "external").
-  qactor( wis, ctx_wis, "external").
-  qactor( incinerator, ctx_wis, "it.unibo.incinerator.Incinerator").
- static(incinerator).
+context(ctx_wis, "localhost",  "TCP", "8016").
+ qactor( waste_storage, ctx_wis, "it.unibo.waste_storage.Waste_storage").
+ static(waste_storage).

@@ -175,6 +175,8 @@ distributions {
              from './wis.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
+             from './positions.pl'
+             from './pointPicker.pl'
         }
     }
 } 
@@ -184,6 +186,13 @@ task run0(type: JavaExec) {
     description = "Run the main class with JavaExecTask"
     classpath = sourceSets.main.runtimeClasspath
     main = 'it.unibo.ctx_wis.MainCtx_wisKt'
+}
+
+task runTest(type: JavaExec) {
+    group = "Execution"
+    description = "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'it.unibo.ctx_test.MainCtx_testKt'
 }
 
 /*

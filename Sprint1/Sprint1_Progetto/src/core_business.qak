@@ -28,6 +28,7 @@ Request moverobot    :  moverobot(TARGETX, TARGETY)
 Reply moverobotdone  :  moverobotok(ARG)
 Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
 Dispatch setdirection : dir( D )
+Dispatch setrobotstate: setpos(X,Y,D)
 
 Request engage        : engage(OWNER,STEPTIME)	
 Reply   engagedone    : engagedone(ARG) for engage 
@@ -36,7 +37,6 @@ Reply   engagerefused : engagerefused(ARG) for engage
 Dispatch disengage    : disengage(ARG)
 
 Context ctx_wis  ip  [host="localhost" port=8014]
-Context ctx_mock  ip  [host="localhost" port=8015]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
 
 ExternalQActor basicrobot context ctx_basic_robot
@@ -135,8 +135,8 @@ QActor op_robot context ctx_wis  {
 		var D = "";
 	#]
 	 
-	State s0 initial {
-	
+	State s0 initial { 
+		delay 500
 		println("$name INIZIATO") color green 
 		solve(consult("sysRules.pl"))
 		solve(consult("pointPicker.pl"))
@@ -155,7 +155,6 @@ QActor op_robot context ctx_wis  {
 		whenReply engagerefused -> engage
 	 
 	State waiting {
-		
 		forward wis -m waiting:waiting(1)
 	}
 	
@@ -206,9 +205,9 @@ QActor op_robot context ctx_wis  {
 		[# RP = false #]
 	}
 	
-	Goto go_back_home
+	Goto go_wait_home
 	
-	State go_back_home {
+	State go_wait_home {
 		[# T = Position.home.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -247,7 +246,7 @@ QActor op_robot context ctx_wis  {
 	State get_ash {
 		delay 1500
 		forward incinerator -m get_ash:get_ash(1)
-		[# ASH = true #]
+		[# ASH = true #] 
 	}
 	
 	Goto to_ash_storage
@@ -264,7 +263,6 @@ QActor op_robot context ctx_wis  {
 		forward basicrobot -m setdirection:dir($D)
 	}
 	
-	
 	Transition t6 whenReply moverobotdone -> ask_as
 				  whenReply moverobotfailed -> to_ash_storage
 	
@@ -272,9 +270,26 @@ QActor op_robot context ctx_wis  {
 		delay 1500
 		forward ash_storage -m deposit_ash:deposit_ash(1)
 		[# ASH = false #] 
+		
+	}
+	Goto go_back_home
+	
+	State go_back_home {
+		
+		[# T = Position.home.name; #]
+		solve( getPoint($T,TX,TY,TDIR) )
+		[# X = getCurSol("TX").toString(); #]
+		[# Y = getCurSol("TY").toString(); #]
+		[# D = getCurSol("TDIR").toString(); #]
+		
+		
+		forward basicrobot -m setdirection:dir(up)
+		delay 500
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
-	Goto go_back_home
+	Transition t6 whenReply moverobotdone -> waiting
+				  whenReply moverobotfailed -> go_back_home
 }
 
 
@@ -323,7 +338,7 @@ QActor ash_storage context ctx_wis{
 			val MAX: Int = 4;
 	#]
 	
-	State idle initial {
+	State s0 initial {
 		delay 500
 		println("$name INIZIATO") color green
 	}
