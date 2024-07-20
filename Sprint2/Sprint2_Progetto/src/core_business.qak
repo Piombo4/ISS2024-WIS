@@ -35,9 +35,19 @@ Reply   engagedone    : engagedone(ARG) for engage
 Reply   engagerefused : engagerefused(ARG) for engage 
 
 Dispatch disengage    : disengage(ARG)
+//LED
+Dispatch led_status : led_status(X)
+
+//SONAR
+Dispatch ash_level : ash_level(LEVEL)
+Event sonardata    : distance(D)   //emitted  by sonardevice  
+
+Dispatch sonarwork : sonarwork(X)
+Dispatch doread    : doread(X)
 
 Context ctx_wis  ip  [host="localhost" port=8014]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
+Context ctx_monitoring_device  ip  [host="127.0.0.2" port=8021]
 
 ExternalQActor basicrobot context ctx_basic_robot
 
@@ -61,12 +71,17 @@ QActor wis context ctx_wis {
 	[#
 			var ash_qty = 0
 			var waste_qty = 0
+			var ash_level = 0
 			var isBurning: Boolean = false;
 			var robot_waiting: Boolean = false;
+			val DLIMT: Int = 5;
+			val DMIN: Int = 25;
 	#]
 	State s0 initial{ 
+		[#ash_level= DMIN#]
 		delay 500
 		observeResource waste_storage msgid waste_qty
+		observeResource sonar msgid ash_level
 		forward incinerator -m turn_on:turn_on(1)
         println("$name INIZIATO") color green
 	}
@@ -76,6 +91,18 @@ QActor wis context ctx_wis {
 		whenMsg waste_qty -> updateWasteQty
 		whenMsg burn_start -> startBurningPhase
 		whenMsg burn_end -> endBurningPhase
+		whenMsg ash_level -> updateAshLevel
+	
+	State updateAshLevel{
+		onMsg(ash_level:ash_level(N)){
+			[# ash_level = payloadArg(0).toInt();#]
+			if [# ash_level < DLIMT || ash_level >= DMIN #]
+			{
+				forward led -m led_status:led_status(BLINK)
+			}			
+		}
+	}
+	Goto verifyConditions
 	
 	State robotWaiting{
 		[# robot_waiting = true #]
@@ -93,6 +120,7 @@ QActor wis context ctx_wis {
 		
 	State startBurningPhase{
 		[# isBurning = true #]
+		forward led -m led_status:led_status(ON)
 	}
 	
 	Transition t0
@@ -103,12 +131,13 @@ QActor wis context ctx_wis {
 		
 	State endBurningPhase{
 		[# isBurning = false #]
+		forward led -m led_status:led_status(OFF)
 	}
 	
 	Goto verifyConditions
 	
 	State verifyConditions{
-		if [# robot_waiting && !isBurning && waste_qty > 0 #]{
+		if [# robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT#]{
 			
 			forward op_robot -m start_robot:start_robot(1)		
 			[# robot_waiting = false #]
@@ -398,3 +427,127 @@ QActor waste_storage context ctx_wis{
 		println("$name Prelevato un RP!")
 	}
 }
+QActor led context ctx_monitoring_device{
+	[#
+	lateinit var p : Process	
+	#]
+	
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green
+	}
+	Transition t0 whenMsg led_status -> updateLed
+	
+	State updateLed{
+		onMsg(led_status:led_status(X)){
+			[#
+				 p.destroy()
+    				 if (p.isAlive()) {
+    	    			p.destroyForcibly();
+    					}
+				if(payloadArg(0) == "ON"){
+					
+    				p = Runtime.getRuntime().exec("python LedOn.py")
+				}
+				else if(payloadArg(0)== "OFF"){
+					
+    				p = Runtime.getRuntime().exec("python LedOff.py")
+				}
+				else {
+					if(payloadArg(0) == "ON"){
+    				p = Runtime.getRuntime().exec("python LedBlink.py")
+				}
+				
+			#]			
+		}
+	}
+	Transition t0 whenMsg led_status -> updateLed
+	
+}
+
+QActor sonar context ctx_monitoring_device{   
+	State s0 initial{  
+		println("sonar24 | ready") 
+		delay 1000 //give time to start sonardevice ...
+		subscribeTo sonardevice for sonardata
+ 	}
+	Goto work
+	
+	State work{
+		//println("sonar24 | waits ... ") 		
+	}
+	Transition t0 whenEvent sonardata -> handlesonardata
+ 	 
+	State handlesonardata{
+		printCurrentMessage color yellow
+		onMsg( sonardata : distance(D) ){
+			println("$name | distance=${payloadArg(0)}") color magenta
+			updateResource [# "ash_level(payloadArg(0))" #]
+		}
+		
+	}
+	Goto work 
+	 
+ }   
+ 
+QActor sonardevice context ctx_monitoring_device{
+[# 
+	lateinit var reader : java.io.BufferedReader
+	var working = false
+    lateinit var p : Process	
+    var Distance = 0
+#]	
+	State s0 initial{
+		println("$name | sonarstart") 
+	}	
+	Goto startTheSonar
+ 	
+	State startTheSonar{
+	[#
+    	working = true		
+		p       = Runtime.getRuntime().exec("python sonar.py")
+		reader  = java.io.BufferedReader(  java.io.InputStreamReader(p.getInputStream() ))	
+	#]		
+	}
+	Goto readSonarData
+	
+	State readSonarData{
+	[# 
+		var data = reader.readLine()
+		CommUtils.outyellow("$name with python: data = $data"   ) 
+		if( data != null ){
+		try{ 
+			val vd = data.toFloat()
+			val v  = vd.toInt()
+			if( v <= 100 ){	//A first filter ...
+				Distance = v				
+			}else Distance = 0
+		}catch(e: Exception){
+				CommUtils.outred("$name readSonarDataERROR: $e "   )
+		}
+		}//if
+		
+	#]	
+		if [# Distance > 0 #] { 
+		    println("$name with python: data = $data"   ) color yellow
+			emitlocalstream sonardata : distance($Distance)
+			//emit  sonardata : distance($Distance)
+		}
+		autodispatch doread : doread(1)
+	}
+	Transition t0 
+ 		whenMsg doread and [# working   #]   -> readSonarData 
+		whenMsg doread and [# ! working #] -> endOfRead
+		
+	State endOfRead{
+		[#
+			
+   	    p.destroy()
+    	if (p.isAlive()) {
+    	    p.destroyForcibly();
+    	}
+       	CommUtils.outred("$tt $name | endOfRead"  )
+			
+		#]
+	}
+}//sonardevice

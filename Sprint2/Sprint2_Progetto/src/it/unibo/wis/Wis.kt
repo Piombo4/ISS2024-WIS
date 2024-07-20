@@ -24,23 +24,46 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 		
 					var ash_qty = 0
 					var waste_qty = 0
+					var ash_level = 0
 					var isBurning: Boolean = false;
 					var robot_waiting: Boolean = false;
-					var conditions_verified: Boolean = false;
+					val DLIMT: Int = 5;
+					val DMIN: Int = 25;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
+						ash_level= DMIN 
+						delay(500) 
 						observeResource("localhost","8014","ctx_wis","waste_storage","waste_qty")
-						CommUtils.outblack("$name INIZIATO")
+						observeResource("127.0.0.2","8021","ctx_monitoring_device","sonar","ash_level")
+						forward("turn_on", "turn_on(1)" ,"incinerator" ) 
+						CommUtils.outgreen("$name INIZIATO")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t01",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t02",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t03",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t01",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t02",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t03",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t04",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					transition(edgeName="t05",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
+				}	 
+				state("updateAshLevel") { //this:State
+					action { //it:State
+						if( checkMsgContent( Term.createTerm("ash_level(LEVEL)"), Term.createTerm("ash_level(N)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								 ash_level = payloadArg(0).toInt(); 
+								if(  ash_level < DLIMT || ash_level >= DMIN  
+								 ){forward("led_status", "led_status(BLINK)" ,"led" ) 
+								}
+						}
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
 				}	 
 				state("robotWaiting") { //this:State
 					action { //it:State
@@ -68,19 +91,21 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				state("startBurningPhase") { //this:State
 					action { //it:State
 						 isBurning = true  
+						forward("led_status", "led_status(ON)" ,"led" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t04",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t05",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t06",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t07",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t06",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t07",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t08",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t09",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
 				state("endBurningPhase") { //this:State
 					action { //it:State
 						 isBurning = false  
+						forward("led_status", "led_status(OFF)" ,"led" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -90,19 +115,19 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("verifyConditions") { //this:State
 					action { //it:State
-						if(  robotWaiting && !isBurning && waste_qty > 0  
+						if(  robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT 
 						 ){forward("start_robot", "start_robot(1)" ,"op_robot" ) 
-						 robotWaiting = false  
+						 robot_waiting = false  
 						}
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t08",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t09",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t010",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t011",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t010",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t011",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t012",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t013",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
 			}
 		}
