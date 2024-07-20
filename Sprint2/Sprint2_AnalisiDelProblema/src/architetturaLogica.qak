@@ -1,0 +1,220 @@
+System sprint2_architetturalogica
+
+// WIS
+Dispatch start_robot : start_robot(X)
+
+// OPROBOT
+Dispatch waiting : waiting(X) 
+
+// WASTE STORAGE
+Dispatch waste_in : waste_in(X)
+Dispatch waste_qty : waste_qty(X)
+Dispatch get_waste : get_waste(X)
+ 
+// INCINERATOR
+Dispatch turn_on : turn_on(X)
+Dispatch burn_in : burn_in(X)
+Dispatch burn_start : burn_start(X)
+Dispatch burn_end : burn_end(X)
+Dispatch get_ash : get_ash(X)
+
+// ASH STORAGE
+Dispatch deposit_ash : deposit_ash(X)
+Request empty_ash : empty_ash(X)
+Reply ashes_taken : ashes_taken(LEVEL)
+
+// BASIC ROBOT
+Request moverobot    :  moverobot(TARGETX, TARGETY)
+Reply moverobotdone  :  moverobotok(ARG)
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO)
+
+//LED
+Dispatch led_status : led_status(X)
+
+//SONAR
+Event sonardata    : distance(D)   //emitted  by sonardevice  
+
+Dispatch sonarwork : sonarwork(X)
+Dispatch doread    : doread(X)
+
+//CONTESTI
+
+Context ctx_wis  ip  [host="localhost" port=8014] 
+Context ctx_basic_robot  ip  [host="localhost" port=8020]
+Context ctx_monitoring_device  ip  [host="localhost" port=8021]
+
+ExternalQActor basic_robot context ctx_basic_robot
+   
+QActor oprobot context ctx_wis {
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green 
+	
+		forward wis -m waiting:waiting(1)
+
+		forward wastestorage -m get_waste:get_waste(1)
+		forward incinerator -m burn_in:burn_in(1)
+		forward ashstorage -m deposit_ash:deposit_ash(1)
+		
+		request basic_robot -m moverobot : moverobot(1,2)
+	}
+	
+	Transition t1 whenReply moverobotdone -> idle
+				whenReply moverobotfailed -> idle
+		 
+	State idle{
+		println("$name IDLE...")
+	}
+}
+
+QActor wis context ctx_wis { 
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green 
+		
+		
+		forward oprobot -m start_robot:start_robot(1)
+		forward led -m led_status:led_status(1)
+		
+	} 
+	Goto idle 
+	State idle{
+		println("$name IDLE...")
+	}
+}
+
+QActor wastestorage context ctx_wis { 
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green 
+		
+		forward wis -m waste_qty : waste_qty(X)
+	}
+	
+	//Transition t1 whenEvent waste_in -> idle
+
+	State idle{
+		println("$name IDLE...")
+	}
+}
+
+QActor ashstorage context ctx_wis { 
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green 
+	} 
+	
+	//Transition t1 whenEvent get_ash -> idle
+	
+	State idle{
+		println("$name IDLE...")
+	}
+}
+
+QActor incinerator context ctx_wis { 
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green 
+		
+		forward wis -m burn_start : burn_start(X)
+		forward oprobot -m burn_end : burn_end(X)
+		forward wis -m burn_end : burn_end(X)
+	} 
+	
+	//Transition t1 whenEvent turn_on -> idle
+	 
+	State idle{
+		println("$name IDLE...")
+	}
+}
+QActor led context ctx_monitoring_device{
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green
+	}
+	
+}
+QActor sonar24 context ctx_monitoring_device{   
+	State s0 initial{  
+		println("sonar24 | ready") 
+		delay 1000 //give time to start sonardevice ...
+		subscribeTo sonardevice for sonardata
+ 	}
+	Goto work
+	
+	State work{
+		//println("sonar24 | waits ... ") 		
+	}
+	Transition t0 whenEvent sonardata -> handlesonardata
+ 	 
+	State handlesonardata{
+		printCurrentMessage color yellow
+		onMsg( sonardata : distance(D) ){
+			println("$name | distance=${payloadArg(0)}") color magenta
+		}
+	}
+	Goto work 
+	 
+ }   
+ 
+QActor sonardevice context ctx_monitoring_device{
+[# 
+	lateinit var reader : java.io.BufferedReader
+	var working = false
+    lateinit var p : Process	
+    var Distance = 0
+#]	
+	State s0 initial{
+		println("$name | sonarstart") 
+	}	
+	Goto startTheSonar
+ 	
+	State startTheSonar{
+	[#
+    	working = true		
+		p       = Runtime.getRuntime().exec("python sonar.py")
+		reader  = java.io.BufferedReader(  java.io.InputStreamReader(p.getInputStream() ))	
+	#]		
+	}
+	Goto readSonarData
+	
+	State readSonarData{
+	[# 
+		var data = reader.readLine()
+		CommUtils.outyellow("$name with python: data = $data"   ) 
+		if( data != null ){
+		try{ 
+			val vd = data.toFloat()
+			val v  = vd.toInt()
+			if( v <= 100 ){	//A first filter ...
+				Distance = v				
+			}else Distance = 0
+		}catch(e: Exception){
+				CommUtils.outred("$name readSonarDataERROR: $e "   )
+		}
+		}//if
+		
+	#]	
+		if [# Distance > 0 #] { 
+		    println("$name with python: data = $data"   ) color yellow
+			emitlocalstream sonardata : distance($Distance)
+			//emit  sonardata : distance($Distance)
+		}
+		autodispatch doread : doread(1)
+	}
+	Transition t0 
+ 		whenMsg doread and [# working   #]   -> readSonarData 
+		whenMsg doread and [# ! working #] -> endOfRead
+		
+	State endOfRead{
+		[#
+			
+   	    p.destroy()
+    	if (p.isAlive()) {
+    	    p.destroyForcibly();
+    	}
+       	CommUtils.outred("$tt $name | endOfRead"  )
+			
+		#]
+	}
+}//sonardevice
