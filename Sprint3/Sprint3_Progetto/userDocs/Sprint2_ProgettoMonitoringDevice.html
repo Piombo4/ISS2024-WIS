@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<!--
+<link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
+<script type="text/javascript" src="../css/issStyle.js"></script>
+-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css"
+		crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js"
+		crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/templateISS.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/main.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/navbar.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/table.css">
+	<link rel="stylesheet" type="text/css" href="./commons/resources/styles/code.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+		rel="stylesheet">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+		rel="stylesheet">
+
+	<!-- <script type="text/javascript" src="./commons/resources/scripts/myScripts.js"></script> -->
+	<style type="text/css">
+		body {
+			margin: auto;
+			max-width: 1300px;
+			font-family: "Open Sans", sans-serif;
+			font-optical-sizing: auto;
+		}
+
+		body {
+			font-family: "Rubik" !important;
+			font-optical-sizing: auto;
+		}
+
+		P {}
+
+		;
+
+		a,
+		a:visited,
+		a:active,
+		a:link,
+		a:hover {
+			text-decoration: underline;
+			color: #545454;
+			background-color: transparent;
+			font-size: 93%;
+		}
+
+		a:hover {
+			background-color: #cccccc;
+		}
+
+
+		hr {
+			clear: both;
+			height: 1px;
+			color: #242424;
+			background-color: transparent;
+		}
+
+		h1,
+		h2,
+		h3 {
+			color: #242424;
+			clear: left;
+			font: 100% Tahoma, Helvetica, Arial, sans-serif;
+			margin-top: 1em;
+			padding-top: 0.5em;
+			border-radius: 10px;
+			padding: 5px;
+		}
+
+		top {
+			width: 100%;
+		}
+
+
+		#i {
+			color: #ff1010;
+		}
+
+		tt {
+			font-family: "Arial";
+			font-size: 90%;
+			color: #006600;
+		}
+
+		em {
+			font-family: "Arial";
+			font-size: 80%;
+			font-weight: bold;
+			border-style: solid;
+			border-color: #abe876;
+			color: #1632cc;
+		}
+
+		bc {
+			font-family: "Arial";
+			font-size: 90%;
+			font-weight: bold;
+			color: #990000;
+			background-color: #fcf8c7;
+		}
+
+		ks {
+			font-family: "Arial";
+			font-weight: bold;
+			color: #0000CD;
+			font-size: 90%;
+		}
+
+		kc {
+			font-family: "Arial";
+			font-weight: bold;
+			color: #008000;
+			font-size: 90%;
+		}
+
+		todo {
+			background-color: #FFFF00 !important
+		}
+
+		todo:before {
+			content: "TODO:";
+			font-weight: bold;
+		}
+
+		red {
+			color: #fa2929;
+			font-weight: bold;
+		}
+
+		pre {
+			font-family: "Consolas";
+			font-size: 85%;
+			background-color: #f5f5f5;
+			border: 1.5px solid silver;
+			padding: 5px;
+		}
+
+		m {
+			font-family: "Helvetica";
+			line-height: 100%;
+			font-size: 75%;
+		}
+
+		div.body {
+
+			font-size: 18px;
+		}
+
+		k {
+			color: #990000;
+			font-weight: bold;
+			font-size: 90%;
+		}
+
+		h1 {
+			font-size: 150%;
+			background-color: #b2c0ff;
+			padding: 10px;
+		}
+
+		h2 {
+			background-color: #9ed8ff;
+			font-size: 130%;
+		}
+
+		h3 {
+			background-color: #e6ccff;
+			font-size: 100%;
+		}
+
+		h4 {
+			background-color: #ccffcc;
+			font-size: 100%;
+			width: 95%;
+			border-radius: 5px;
+			padding: 2px;
+		}
+
+		h5 {
+			background-color: #d5ffb0;
+			font-size: 100%;
+
+		}
+
+		div.req {
+			background-color: #d9ffb3;
+			font-size: 18px;
+			width: 700px;
+			border: 3px solid green;
+			padding: 15px;
+			margin: 10px;
+		}
+
+		div.remark {
+			background-color: #E3F2FD;
+			border: 1.5px solid #d5f2ed;
+			padding: 15px;
+			margin: 10px;
+			border-radius: 15px;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			text-align: center;
+		}
+
+		td.disp {
+			background-color: #7b7bff;
+			color: white;
+		}
+
+		td.update {
+			background-color: rgb(151, 113, 254);
+			color: white;
+		}
+
+		td.event {
+			background-color: rgb(47, 255, 106);
+			color: #242424;
+		}
+
+		ol,
+		ul,
+		li {
+			margin: 0;
+			margin-left: 25px;
+			padding: 0;
+			padding-bottom: 5px;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		table {
+			table-layout: auto !important;
+		}
+
+		img {
+			border: 1.5px solid #d5f2ed
+		}
+
+		a,
+		a:visited,
+		a:active,
+		a:link,
+		a:hover {
+			text-decoration: underline;
+			color: #545454;
+			background-color: transparent;
+		}
+
+		div.wrapdesc {
+			width: 90%;
+			margin: auto;
+		}
+
+		msg {
+			color: #ff1010;
+		}
+
+		div.imagedesc {
+			width: 85%;
+			margin: auto;
+		}
+
+		pre {
+			background: #f4f4f4;
+			border: 1px solid #ddd;
+			color: rgb(0, 0, 0);
+			page-break-inside: avoid;
+			font-family: monospace;
+			font-size: 15px;
+			line-height: 1.3;
+			margin-bottom: 1em;
+			max-width: 100%;
+			overflow: auto;
+			display: block;
+			word-wrap: break-word;
+		}
+	</style>
+
+
+
+</head>
+
+
+
+
+
+
+<title>Sprint 2</title>
+</head>
+
+<!--
+	<body onload="loadNav();">
+		<div id="openButton" class="openButton" onclick="openNav(true)">&#9776; Menu</div>
+		<div id="sidenav" class="sidenav">
+			<a class="closeButton" href="javascript:void(0)" onclick="closeNav(true)">&times;</a>
+			<a href=".README.html">ReadMe</a>
+			<a class="sprint" href="../../../Sprint0/Codice/userDocs/Cold%20Storage%20Service%20-%20Natali%20V3.html">Sprint0</a>
+			<a class="sprint" href="../../../Sprint1.0/Codice/userDocs/Sprint%201.0%20-%20V3.html">Sprint1.0</a>
+			<a class="sprint" href="../../../Sprint1.1/Codice/userDocs/Sprint%201.1%20-%20V3.html">Sprint1.1</a>
+			<a id="currentSprint" class="sprint" href="#">&#8211;&#8212; Sprint2 &#8212;&#8211;</a>
+			<div class="sidenavSection">
+				<a href="#Goal Sprint 2">Goal Sprint 2</a>
+				<a href="#Requisiti">Requisiti</a>
+				<a href="#Analisi dei Requisiti">Analisi dei Requisiti</a>
+				<a href="#Analisi del Problema">Analisi del Problema</a>
+				<a href="#Test Plan">Test Plan</a>
+				<a href="#Progettazione">Progettazione</a>
+				<a href="#Deployment">Deployment</a>
+			</div>
+			<p class="separator">&mdash;&mdash;&mdash;&ndash;&ndash;&mdash;&mdash;&mdash;</p>
+			<a class="sprint" href="../../../Sprint3/Codice/userDoc/Sprint%203.html">Sprint3</a>
+			<bottom-spacer/>
+		</div>
+-->
+
+<body background="">
+	<div id="top">
+		<h1>Waste Incinerator Service - ISS 2024 <font size="5"></font>
+		</h1>
+	</div>
+
+	<div class="body">
+		<h2>Architettura Logica</h2>
+		<center><img src="../../Sprint2_AnalisiDelProblema/sprint2_architetturalogicaarch.png"></center>
+		<a href="../../Sprint2_Progetto/src/core_business.qak">core_business.qak</a>
+		<br>
+		<a href="../..//Sprint2_Progetto/src/monitoring_device.qak">monitoring_device.qak</a>
+		<h2>Progetto</h2>
+		<h3>Software per led fisico acceso/spento/lampeggiante</h3>
+		Sono stati realizzati 3 file diversi che verranno chiamati dall'attore Led per eseguire le azioni fisiche corrispondenti.<br>
+		Essendo il Led collegato ad un RaspBerry si è deciso di utilizzare il linguaggio Python con la libreria GPIO dato è la scelta più semplice e pratica per eseguire questo tipo di operazioni.<br>
+		Files:
+		<ol>
+			<li>Accensione -> <a href="../LedOn.py">LedOn.py</a></li>
+			<li>Spegnimento -> <a href="../LedOff.py">LedOff.py</a></li>
+			<li>Lampeggio -> <a href="../LedBlink.py">LedBlink.py</a></li>
+		</ol>
+		<h3>Come controllare se l'ash storage è vuoto?</h3>
+		E' stata introdotta una variabile DMIN che identifica quando l'ash storage è vuoto, visto che non abbiamo un riferimento reale di quanto sia alto il container>.<br>
+
+		<h2>Testing</h2>
+		Come in quello precedente (<a href="../../../Sprint1/Sprint1_Progetto/userDocs/Sprint1_ProgettoCoreBusiness.html#Testing">link</a>)
+		<h3>Deployment</h3>
+		Per poter eseguire i due contesti nello stesso progetto è stato modificato il build.gradle in questo modo:
+<pre>
+	application {
+		// Define the main class for the application.
+		mainClassName = 'it.unibo.ctx_wis.MainCtx_wisKt'
+		if (project.hasProperty("build_MD")) {
+			mainClassName = 'it.unibo.ctx_monitoring_device.MainCtx_monitoring_deviceKt'
+		}
+	}
+		
+	jar {
+		println("building jar")
+		duplicatesStrategy(DuplicatesStrategy.EXCLUDE)  //per via di locgback.xml quando si usa spring
+		from sourceSets.main.allSource
+		from('./') {
+			include '*.pl'
+			include '*.json'
+		}
+		manifest {
+			attributes 'Main-Class': "$mainClassName"
+		}
+	}
+	distributions {
+		main {
+			distributionBaseName = 'wis'
+			if (project.hasProperty("build_MD")) {
+				distributionBaseName = 'monitoringdevice'
+			}	  
+			contents { 
+					from './wis.pl'
+					from './monitoringdevice.pl'
+					from './sysRules.pl'
+					from './facadeConfig.json'
+					from './positions.pl'
+					from './pointPicker.pl'
+			}
+		}
+	} 
+</pre>
+		Quando si vuole creare il Deployment per il WIS bisogna eseguire:
+		<pre>gradlew distZip</pre>
+		Mentre per il Monitoring Device:
+		<pre>gradlew distZip -Pbuild_MD</pre>
+		Per poter eseguire la demo del Core Business sono disponibili due file batch:
+		<ul>
+			<li>
+				<a href="../../unibo.basicrobot24/basicRobot.bat">basicRobot.bat</a>: avvia l'immagine docker del WEnv,
+				imposta la stanza impostata nel file sceneConfig.js e apre una tab di chrome per la visualizzazione
+			</li>
+			<li>
+				wis.bat esegue il sistema WIS
+			</li>
+			<li>
+				monitoringdevice.bat esegue il sistema MonitoringDevice
+			</li>
+		</ul>
+		<b>NB</b>: per eseguire correttamente il sistema, è necessaria la cartella unibolibs che contiene le librerie
+		necessarie per l'esecuzione. Tale libreria va posizionata un livello sotto alla cartella dello Sprint1.
+		<br>
+		<br>
+		<b>Directory tree</b>:<br>
+
+	<pre>
+	Sprint2
+	|	
+	+ - - Sprint2_AnalisiDelProblema 
+	+ - - Sprint1_Progetto 
+			|
+			+ - - build/distributions/wis-1.0/bin 
+				|
+				+ - - wis.bat
+			+ - - build/distributions/monitoringdevice-1.0/bin
+				|
+				+ - - monitoringdevice.bat
+	+ - - unibo.basicrobot24
+			|
+			+ - - basicRobot.bat
+	</pre>
+	</div>
+
+	<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+		By Alessandro Piombini & Danilo Cavallini
+		<br>
+		Email:
+		<ul>
+			<li>
+				alessandro.piombini@studio.unibo.it
+			</li>
+			<li>
+				danilo.cavallini@studio.unibo.it
+			</li>
+		</ul>
+		GIT repo: https://github.com/Piombo4/ISS2024-WIS
+		<br>
+
+	</div>
+</body>
+
+</html>
