@@ -22,7 +22,3 @@
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"s0", "nextstate":"removeRP", "msgId":"get_waste"}
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"addRP", "msgId":"waste_in"}
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"removeRP", "msgId":"get_waste"}
-{"actor":"led", "msgType":"dispatch", "curstate":"s0", "nextstate":"updateLed", "msgId":"led_status"}
-{"actor":"led", "msgType":"dispatch", "curstate":"updateLed", "nextstate":"updateLed", "msgId":"led_status"}
-{"actor":"sonardevice", "msgType":"dispatch", "curstate":"readSonarData", "nextstate":"readSonarData", "msgId":"doread"}
-{"actor":"sonardevice", "msgType":"dispatch", "curstate":"readSonarData", "nextstate":"endOfRead", "msgId":"doread"}

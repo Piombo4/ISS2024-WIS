@@ -35,10 +35,8 @@ with Diagram('wisArch', show=False, outformat='png', graph_attr=graphattr) as di
      with Cluster('ctx_basic_robot', graph_attr=nodeattr):
           basicrobot=Custom('basicrobot(ext)','./qakicons/externalQActor.png')
      with Cluster('ctx_monitoring_device', graph_attr=nodeattr):
-          led=Custom('led','./qakicons/symActorSmall.png')
-          sonar=Custom('sonar','./qakicons/symActorSmall.png')
-          sonardevice=Custom('sonardevice','./qakicons/symActorSmall.png')
-     sonardevice >> Edge( label='sonardata', **eventedgeattr, decorate='true', fontcolor='red') >> sonar
+          sonar=Custom('sonar(ext)','./qakicons/externalQActor.png')
+          led=Custom('led(ext)','./qakicons/externalQActor.png')
      op_robot >> Edge(color='magenta', style='solid', decorate='true', label='<engage<font color="darkgreen"> engagedone engagerefused</font> &nbsp; moverobot &nbsp; >',  fontcolor='magenta') >> basicrobot
      mock >> Edge(color='magenta', style='solid', decorate='true', label='<empty_ash<font color="darkgreen"> ashes_taken</font> &nbsp; >',  fontcolor='magenta') >> ash_storage
      wis >> Edge(color='blue', style='solid',  decorate='true', label='<led_status &nbsp; >',  fontcolor='blue') >> led

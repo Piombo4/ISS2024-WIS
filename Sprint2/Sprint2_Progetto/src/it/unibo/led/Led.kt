@@ -33,7 +33,7 @@ class Led ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t040",targetState="updateLed",cond=whenDispatch("led_status"))
+					 transition(edgeName="t00",targetState="updateLed",cond=whenDispatch("led_status"))
 				}	 
 				state("updateLed") { //this:State
 					action { //it:State
@@ -56,6 +56,7 @@ class Led ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 													if(payloadArg(0) == "ON"){
 								    				p = Runtime.getRuntime().exec("python LedBlink.py")
 												}
+												} 
 												
 						}
 						//genTimer( actor, state )
@@ -63,7 +64,7 @@ class Led ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t041",targetState="updateLed",cond=whenDispatch("led_status"))
+					 transition(edgeName="t01",targetState="updateLed",cond=whenDispatch("led_status"))
 				}	 
 			}
 		}

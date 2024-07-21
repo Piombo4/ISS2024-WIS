@@ -31,6 +31,8 @@ context(ctx_wis, "localhost",  "TCP", "8014").
 context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").
 context(ctx_monitoring_device, "127.0.0.2",  "TCP", "8021").
  qactor( basicrobot, ctx_basic_robot, "external").
+  qactor( sonar, ctx_monitoring_device, "external").
+  qactor( led, ctx_monitoring_device, "external").
   qactor( mock, ctx_wis, "it.unibo.mock.Mock").
  static(mock).
   qactor( wis, ctx_wis, "it.unibo.wis.Wis").
@@ -43,10 +45,4 @@ context(ctx_monitoring_device, "127.0.0.2",  "TCP", "8021").
  static(ash_storage).
   qactor( waste_storage, ctx_wis, "it.unibo.waste_storage.Waste_storage").
  static(waste_storage).
-  qactor( led, ctx_monitoring_device, "it.unibo.led.Led").
- static(led).
-  qactor( sonar, ctx_monitoring_device, "it.unibo.sonar.Sonar").
- static(sonar).
-  qactor( sonardevice, ctx_monitoring_device, "it.unibo.sonardevice.Sonardevice").
- static(sonardevice).
 tracing.

@@ -77,9 +77,9 @@ class Sonardevice ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t043",targetState="readSonarData",cond=whenDispatchGuarded("doread",{ working    
+					 transition(edgeName="t03",targetState="readSonarData",cond=whenDispatchGuarded("doread",{ working    
 					}))
-					transition(edgeName="t044",targetState="endOfRead",cond=whenDispatchGuarded("doread",{ ! working  
+					transition(edgeName="t04",targetState="endOfRead",cond=whenDispatchGuarded("doread",{ ! working  
 					}))
 				}	 
 				state("endOfRead") { //this:State

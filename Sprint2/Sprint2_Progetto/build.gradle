@@ -146,8 +146,11 @@ eclipse {
 
 
 application {
-    //Define the main class for the application.
-    mainClassName    = 'it.unibo.ctx_wis.MainCtx_wisKt'
+    // Define the main class for the application.
+	mainClassName = 'it.unibo.ctx_wis.MainCtx_wisKt'
+	if (project.hasProperty("build_MD")) {
+		mainClassName = 'it.unibo.ctx_monitoring_device.MainCtx_monitoring_deviceKt'
+	}
 }
  
  jar {
@@ -161,6 +164,7 @@ application {
     manifest {
         attributes 'Main-Class': "$mainClassName"
     }
+
 }
 
 task dovesiamo {
@@ -170,9 +174,13 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'wis'
+     distributionBaseName = 'wis'
+    	if (project.hasProperty("build_MD")) {
+		 distributionBaseName = 'monitoringdevice'
+	}	  
         contents { 
              from './wis.pl'
+             from './monitoringdevice.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
              from './positions.pl'
