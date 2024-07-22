@@ -1,0 +1,20 @@
+services:
+  wis:
+    build: 
+      context: wis
+      image: wis
+      dockerfile: Dockerfile
+    ports:
+      - 8014:8014/tcp
+      - 8014:8014/udp
+  md:
+    build: 
+      context: md
+      image: md
+      dockerfile: Dockerfile
+    ports:
+      - 8020:8020/tcp
+      - 8020:8020/udp
+    depends_on: 
+      - wis
+    
