@@ -77,8 +77,6 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 						if( checkMsgContent( Term.createTerm("ash_level(LEVEL)"), Term.createTerm("ash_level(N)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 ash_level = payloadArg(0).toInt(); 
-								updateResourceRep( "guidata($waste_qty,$ash_level,$isBurning,)"  
-								)
 								if(  ash_level < DLIMT || ash_level >= DMIN  
 								 ){forward("led_status", "led_status(BLINK)" ,"led" ) 
 								}

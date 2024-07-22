@@ -23,8 +23,7 @@ wsminimal.js
         socket = new WebSocket(addr);
 
         socket.onopen = function (event) {
-            //console.log("Connected to " + addr);
-            setMessageToWindow(infoDisplay,"socket | Connected to " + addr);
+            console.log("Connected to " + addr);
         };
 
         socket.onmessage = function (event) {

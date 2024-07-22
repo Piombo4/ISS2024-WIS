@@ -27,7 +27,7 @@ public class SSGUIController {
     protected ApplguiCore guiCore ;
 
     public SSGUIController(){
-        CommUtils.outgreen (" --- Robotfacade24Controller | STARTS " );
+        CommUtils.outgreen (" --- SSGUIController | STARTS " );
         new FacadeBuilder( ) ;
         guiCore = FacadeBuilder.guiCore;
     }
