@@ -1,9 +1,9 @@
-
+bin
+bin/default
 .metadata
 .classpath
 .project
 .idea
-build
 logs 
 
 log4jInfo.log
