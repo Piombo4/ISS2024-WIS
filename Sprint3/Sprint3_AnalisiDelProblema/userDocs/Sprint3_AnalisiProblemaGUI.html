@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <!--
+<link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
+<script type="text/javascript" src="../css/issStyle.js"></script>
+-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js"
+        crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./commons/resources/styles/templateISS.css">
+    <link rel="stylesheet" type="text/css" href="./commons/resources/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="./commons/resources/styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="./commons/resources/styles/table.css">
+    <link rel="stylesheet" type="text/css" href="./commons/resources/styles/code.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <!-- <script type="text/javascript" src="./commons/resources/scripts/myScripts.js"></script> -->
+    <style type="text/css">
+        body {
+            margin: auto;
+            max-width: 1300px;
+            font-optical-sizing: auto;
+        }
+
+        body {
+            font-family: "Rubik" !important;
+            font-optical-sizing: auto;
+        }
+
+        P {}
+
+        ;
+
+        a,
+        a:visited,
+        a:active,
+        a:link,
+        a:hover {
+            text-decoration: underline;
+            color: #545454;
+            background-color: transparent;
+            font-size: 93%;
+        }
+
+        a:hover {
+            background-color: #cccccc;
+        }
+
+
+        hr {
+            clear: both;
+            height: 1px;
+            color: #242424;
+            background-color: transparent;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #242424;
+            clear: left;
+            font: 100% Tahoma, Helvetica, Arial, sans-serif;
+            margin-top: 1em;
+            padding-top: 0.5em;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        top {
+            width: 100%;
+        }
+
+
+        #i {
+            color: #ff1010;
+        }
+
+        tt {
+            font-family: "Arial";
+            font-size: 90%;
+            color: #006600;
+        }
+
+        em {
+            font-family: "Arial";
+            font-size: 80%;
+            font-weight: bold;
+            border-style: solid;
+            border-color: #abe876;
+            color: #1632cc;
+        }
+
+        bc {
+            font-family: "Arial";
+            font-size: 90%;
+            font-weight: bold;
+            color: #990000;
+            background-color: #fcf8c7;
+        }
+
+        ks {
+            font-family: "Arial";
+            font-weight: bold;
+            color: #0000CD;
+            font-size: 90%;
+        }
+
+        kc {
+            font-family: "Arial";
+            font-weight: bold;
+            color: #008000;
+            font-size: 90%;
+        }
+
+        todo {
+            background-color: #FFFF00 !important
+        }
+
+        todo:before {
+            content: "TODO:";
+            font-weight: bold;
+        }
+
+        red {
+            color: #fa2929;
+            font-weight: bold;
+        }
+
+        pre {
+            font-family: "Consolas";
+            font-size: 85%;
+            background-color: #f5f5f5;
+            border: 1.5px solid silver;
+            padding: 5px;
+        }
+
+        m {
+            font-family: "Helvetica";
+            line-height: 100%;
+            font-size: 75%;
+        }
+
+        div.body {
+
+            font-size: 18px;
+        }
+
+        k {
+            color: #990000;
+            font-weight: bold;
+            font-size: 90%;
+        }
+
+        h1 {
+            font-size: 150%;
+            background-color: #b2c0ff;
+            padding: 10px;
+        }
+
+        h2 {
+            background-color: #9ed8ff;
+            font-size: 130%;
+        }
+
+        h3 {
+            background-color: #e6ccff;
+            font-size: 100%;
+        }
+
+        h4 {
+            background-color: #ccffcc;
+            font-size: 100%;
+            width: 95%;
+            border-radius: 5px;
+            padding: 2px;
+        }
+
+        h5 {
+            background-color: #d5ffb0;
+            font-size: 100%;
+
+        }
+
+        div.req {
+            background-color: #d9ffb3;
+            font-size: 18px;
+            width: 700px;
+            border: 3px solid green;
+            padding: 15px;
+            margin: 10px;
+        }
+
+        div.remark {
+            background-color: #E3F2FD;
+            border: 1.5px solid #d5f2ed;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 15px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        td.disp {
+            background-color: #7b7bff;
+            color: white;
+        }
+
+        td.update {
+            background-color: rgb(151, 113, 254);
+            color: white;
+        }
+
+        td.event {
+            background-color: rgb(47, 255, 106);
+            color: #242424;
+        }
+
+        ol,
+        ul,
+        li {
+            margin: 0;
+            margin-left: 25px;
+            padding: 0;
+            padding-bottom: 5px;
+        }
+
+        td>ol,
+        td>ul,
+        td>ul {
+            margin-left: 0px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        table {
+            table-layout: auto !important;
+        }
+
+        img {
+            border: 1.5px solid #d5f2ed
+        }
+
+        a,
+        a:visited,
+        a:active,
+        a:link,
+        a:hover {
+            text-decoration: underline;
+            color: #545454;
+            background-color: transparent;
+        }
+
+        div.wrapdesc {
+            width: 90%;
+            margin: auto;
+        }
+
+        msg {
+            color: #ff1010;
+        }
+
+        div.imagedesc {
+            width: 85%;
+            margin: auto;
+        }
+    </style>
+
+
+
+</head>
+
+
+
+
+
+
+<title>Sprint 3</title>
+</head>
+
+<!--
+	<body onload="loadNav();">
+		<div id="openButton" class="openButton" onclick="openNav(true)">&#9776; Menu</div>
+		<div id="sidenav" class="sidenav">
+			<a class="closeButton" href="javascript:void(0)" onclick="closeNav(true)">&times;</a>
+			<a href=".README.html">ReadMe</a>
+			<a class="sprint" href="../../../Sprint0/Codice/userDocs/Cold%20Storage%20Service%20-%20Natali%20V3.html">Sprint0</a>
+			<a class="sprint" href="../../../Sprint1.0/Codice/userDocs/Sprint%201.0%20-%20V3.html">Sprint1.0</a>
+			<a class="sprint" href="../../../Sprint1.1/Codice/userDocs/Sprint%201.1%20-%20V3.html">Sprint1.1</a>
+			<a id="currentSprint" class="sprint" href="#">&#8211;&#8212; Sprint2 &#8212;&#8211;</a>
+			<div class="sidenavSection">
+				<a href="#Goal Sprint 2">Goal Sprint 2</a>
+				<a href="#Requisiti">Requisiti</a>
+				<a href="#Analisi dei Requisiti">Analisi dei Requisiti</a>
+				<a href="#Analisi del Problema">Analisi del Problema</a>
+				<a href="#Test Plan">Test Plan</a>
+				<a href="#Progettazione">Progettazione</a>
+				<a href="#Deployment">Deployment</a>
+			</div>
+			<p class="separator">&mdash;&mdash;&mdash;&ndash;&ndash;&mdash;&mdash;&mdash;</p>
+			<a class="sprint" href="../../../Sprint3/Codice/userDoc/Sprint%203.html">Sprint3</a>
+			<bottom-spacer/>
+		</div>
+-->
+
+<body background="">
+    <div id="top">
+        <h1>Waste Incinerator Service - ISS 2024 <font size="5"></font>
+        </h1>
+    </div>
+
+    <div class="body">
+        <h2>Sprint 2</h2>
+        Nello Sprint precedente sono state analizzate le problematiche e progettato il sistema relativo al Monitoring
+        Device, integrandolo con il Core Business dello Sprint 1. <br>
+        <center><img src="../../../Sprint2/Sprint2_AnalisiDelProblema/sprint2_architetturalogicaarch.png">
+        </center>
+        <h2>Sprint Goal</h2>
+        Gli obiettivi di questa fase sono due:
+        <ul>
+            <li>
+                Analizzare le problematiche relative alla GUI.
+            </li>
+            <li>
+                Progettare e realizzare la GUI integrandola con gli ciò che era stato prodotto alla fine dello sprint
+                precedente.
+            </li>
+        </ul>
+        <h2>Analisi del problema</h2>
+        <h3>Come modellare la GUI e perchè?</h3>
+        Da requisiti è noto che il sistema debba fornire una GUI per mostrare alcune informazioni.
+        Le opzioni possibili possono essere le seguenti:
+        <ul>
+            <li>
+                Utilizzare un sito web come GUI
+            </li>
+            <li>
+                Utilizzare un'applicazione come GUI
+            </li>
+        </ul>
+        L'opzione scelta è la seconda, poichè in questo sarebbe accessibile da qualunque dispositivo senza bisogno di
+        particolari applicazioni e non la vincolerebbe ad una particolare architettura.<br>
+        Inoltre utilizzando il linguaggio HTML si ha una semplice implementazione delle interaccie grafiche, grazie al
+        suo vasto repertorio di tag, compatibile con quasi ogni dispositivo.
+        <h3>Contesto della GUI</h3>
+        Per rispettare i principi della <a href="../../../resources/Architetture.html#la-clean-architecture">Clean
+            Architecture</a> si è deciso di separe il sistema vero e proprio da eventuali interfacce esterne.
+        <br>
+        Inoltre, per potervi accedere via web, è necessario che la GUI sia posizionata su una porta diversa da quelle
+        già utilizzate all'interno del sistema, rendendola quindi un'entità dislocata rispetto alle altre.
+        <h3>Come interagire con la GUI?</h3>
+        Da requisiti, il sistema deve interagire con la GUI per mostrare alcune informazioni rilevanti.
+        <br>
+        Tra le varie opzioni, quella più adatta è quella di assegnare il compito al gestore del sistema, il WIS, che
+        dovrà inviare alla GUI le informazioni di cui necessita.
+        <h4>Come inviare queste informazioni?</h4>
+        Seguendo i principi della Clean Architecture, le interfacce grafiche non dovrebbero sapere nulla del sistema con
+        cui sta interagendo e le informazioni necessarie al suo funzionamento
+        dovrebbe essere comunicate tramite un opportuno Adapter che fa da mediatore con l'applicazione.<br><br>
+        Scegliendo di usare come GUI una WEB-GUI e QAK come linguaggio per il core business nasce una
+        <b>incompatibilità</b> tra i due linguaggi, poichè uno comunica con http/ws e l'altro con messaggi Prolog.<br>
+        Si ha quindi la necessità di creare un middleware (Adapter) che faccia da mediatore tra i due linguaggi e che
+        converta opportunamente i messaggi di un linguaggio in un altro con la stessa semantica<br>
+        <h3>Perchè utilizzare una facade?</h3>
+        Date le precedenti motivazioni si è ritenuto opportuno utilizzare un sistema già studiato in precedenza, ovvero
+        quello della <a href="../../../resources/Facade24Start.html">Facade</a>
+        <h3>Interazione tra WIS e GUI</h3>
+        Come accennato, la responsabilità di aggiornare l'interfaccia ricade sul <b>WIS</b>. Le opzioni possibili sono le
+        seguenti:
+        <ul>
+            <li>
+                Creare diversi messaggi uno per ogni informazione rilevante.
+            </li>
+            <li>
+                Creare un unico messaggio che contiene tutte le informazioni ed inviarlo ogni volta che una di essere
+                varia.
+            </li>
+        </ul>
+        Per comodità si è scelta la seconda opzione, che nel complesso va a semplificare l'interfaccia.
+        <br>
+        Tra le varie tipologie di messaggio, l'updateResource sembra la più adatta, in quanto, oltre rispettare la
+        semantica dell'interazione è lo standard di comunicazione con la facade.
+
+
+        <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+            By Alessandro Piombini & Danilo Cavallini
+            <br>
+            Email:
+            <ul>
+                <li>
+                    alessandro.piombini@studio.unibo.it
+                </li>
+                <li>
+                    danilo.cavallini@studio.unibo.it
+                </li>
+            </ul>
+            GIT repo: https://github.com/Piombo4/ISS2024-WIS
+            <br>
+
+        </div>
+</body>
+
+</html>
