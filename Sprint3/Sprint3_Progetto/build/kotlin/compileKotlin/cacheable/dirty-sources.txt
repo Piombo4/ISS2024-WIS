@@ -1,0 +1,12 @@
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\incinerator\Incinerator.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\waste_storage\Waste_storage.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\sonardevice\Sonardevice.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\led\Led.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\sonar\Sonar.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\ash_storage\Ash_storage.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\op_robot\Op_robot.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\wis\Wis.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\main\kotlin\enums.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\ctx_monitoring_device\MainCtx_monitoring_device.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\ctx_wis\MainCtx_wis.kt
+C:\Users\aless\OneDrive\Documenti\GitHub\ISS2024-WIS\Sprint3\Sprint3_Progetto\src\it\unibo\mock\Mock.kt

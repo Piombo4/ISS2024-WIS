@@ -1,4 +1,4 @@
-package main.java.robotfacade24;
+package unibo.sprint3_progetto_ssgui;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class SSGUIController {
     protected ApplguiCore guiCore ;
 
     public SSGUIController(){
-        CommUtils.outgreen (" --- Robotfacade24Controller | STARTS "  + steptime);
+        CommUtils.outgreen (" --- Robotfacade24Controller | STARTS " );
         new FacadeBuilder( ) ;
         guiCore = FacadeBuilder.guiCore;
     }

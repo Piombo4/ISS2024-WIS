@@ -1,4 +1,4 @@
-package main.java.robotfacade24;
+package unibo.sprint3_progetto_ssgui;
 
 import com.google.common.base.Charsets;
 import org.json.JSONException;

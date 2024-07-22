@@ -1,4 +1,4 @@
-package main.java.robotfacade24;
+package unibo.sprint3_progetto_ssgui;
 
 import unibo.basicomm23.interfaces.IApplMessage;
 import unibo.basicomm23.interfaces.Interaction;

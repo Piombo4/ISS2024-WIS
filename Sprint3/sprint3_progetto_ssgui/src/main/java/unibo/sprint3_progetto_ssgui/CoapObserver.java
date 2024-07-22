@@ -1,4 +1,4 @@
-package main.java.robotfacade24;
+package unibo.sprint3_progetto_ssgui;
 import org.eclipse.californium.core.CoapHandler;
 import org.eclipse.californium.core.CoapResponse;
 import unibo.basicomm23.utils.CommUtils;

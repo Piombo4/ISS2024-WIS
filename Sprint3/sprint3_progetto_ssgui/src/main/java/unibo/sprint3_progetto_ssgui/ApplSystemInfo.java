@@ -1,4 +1,4 @@
-package main.java.robotfacade24;
+package unibo.sprint3_progetto_ssgui;
 
 import alice.tuprolog.Prolog;
 import alice.tuprolog.SolveInfo;

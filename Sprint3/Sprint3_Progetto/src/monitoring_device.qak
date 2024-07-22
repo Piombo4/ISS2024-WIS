@@ -2,7 +2,7 @@ System monitoringdevice
 
 //LED
 Dispatch led_status : led_status(X) 
-
+ 
 //SONAR
 Dispatch ash_level : ash_level(LEVEL)
 Event sonardata    : distance(D)   //emitted  by sonardevice  

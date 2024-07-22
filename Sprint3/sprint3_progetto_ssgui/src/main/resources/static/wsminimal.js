@@ -32,9 +32,6 @@ wsminimal.js
             msg = event.data;
             //alert(`Got Message: ${msg}`);
             console.log("ws-status:" + msg);
-            if( msg.includes("plan") ) setMessageToWindow(planexecDisplay,msg);
-            else if( msg.includes("sonar") ) setMessageToWindow(sonarDisplay,msg);
-            else setMessageToWindow(robotDisplay,msg); //""+`${event.data}`*/
          };
     }//connect
 

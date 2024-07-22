@@ -3,6 +3,7 @@
 %====================================================================================
 dispatch( start_robot, start_robot(X) ).
 dispatch( waiting, waiting(X) ).
+dispatch( robot_info, robot_info(X,Y,POSITION,JOB) ).
 dispatch( waste_in, waste_in(X) ).
 dispatch( waste_qty, waste_qty(X) ).
 dispatch( get_waste, get_waste(X) ).
@@ -26,7 +27,7 @@ dispatch( ash_level, ash_level(LEVEL) ).
 event( sonardata, distance(D) ).
 dispatch( sonarwork, sonarwork(X) ).
 dispatch( doread, doread(X) ).
-dispatch( guidata, guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,JOB) ).
+dispatch( guidata, guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").
 context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").

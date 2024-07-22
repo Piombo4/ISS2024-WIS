@@ -3,14 +3,13 @@
 {"actor":"wis", "msgType":"dispatch", "curstate":"s0", "nextstate":"startBurningPhase", "msgId":"burn_start"}
 {"actor":"wis", "msgType":"dispatch", "curstate":"s0", "nextstate":"endBurningPhase", "msgId":"burn_end"}
 {"actor":"wis", "msgType":"dispatch", "curstate":"s0", "nextstate":"updateAshLevel", "msgId":"ash_level"}
-{"actor":"wis", "msgType":"dispatch", "curstate":"startBurningPhase", "nextstate":"robotWaiting", "msgId":"waiting"}
-{"actor":"wis", "msgType":"dispatch", "curstate":"startBurningPhase", "nextstate":"updateWasteQty", "msgId":"waste_qty"}
-{"actor":"wis", "msgType":"dispatch", "curstate":"startBurningPhase", "nextstate":"startBurningPhase", "msgId":"burn_start"}
-{"actor":"wis", "msgType":"dispatch", "curstate":"startBurningPhase", "nextstate":"endBurningPhase", "msgId":"burn_end"}
+{"actor":"wis", "msgType":"dispatch", "curstate":"s0", "nextstate":"updateGUI", "msgId":"robot_info"}
 {"actor":"wis", "msgType":"dispatch", "curstate":"verifyConditions", "nextstate":"robotWaiting", "msgId":"waiting"}
 {"actor":"wis", "msgType":"dispatch", "curstate":"verifyConditions", "nextstate":"updateWasteQty", "msgId":"waste_qty"}
 {"actor":"wis", "msgType":"dispatch", "curstate":"verifyConditions", "nextstate":"startBurningPhase", "msgId":"burn_start"}
 {"actor":"wis", "msgType":"dispatch", "curstate":"verifyConditions", "nextstate":"endBurningPhase", "msgId":"burn_end"}
+{"actor":"wis", "msgType":"dispatch", "curstate":"verifyConditions", "nextstate":"updateAshLevel", "msgId":"ash_level"}
+{"actor":"wis", "msgType":"dispatch", "curstate":"verifyConditions", "nextstate":"updateGUI", "msgId":"robot_info"}
 {"actor":"op_robot", "msgType":"dispatch", "curstate":"waiting", "nextstate":"to_ws", "msgId":"start_robot"}
 {"actor":"op_robot", "msgType":"dispatch", "curstate":"wait_for_burn", "nextstate":"to_incinerator_burned", "msgId":"burn_end"}
 {"actor":"incinerator", "msgType":"dispatch", "curstate":"s0", "nextstate":"ready", "msgId":"turn_on"}

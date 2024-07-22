@@ -5,6 +5,7 @@ Dispatch start_robot : start_robot(X)
 
 // op_robot   
 Dispatch waiting : waiting(X)
+Dispatch robot_info: robot_info(X,Y,POSITION,JOB)
  
 // WASTE STORAGE
 Dispatch waste_in : waste_in(X)
@@ -46,7 +47,7 @@ Dispatch sonarwork : sonarwork(X)
 Dispatch doread    : doread(X)
 
 //SSGUI
-Dispatch guidata: guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,JOB)
+Dispatch guidata: guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB)
 
 Context ctx_wis  ip  [host="localhost" port=8014]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
@@ -81,12 +82,17 @@ QActor wis context ctx_wis {
 			var robot_waiting: Boolean = false;
 			val DLIMT: Int = 5;
 			val DMIN: Int = 25;
+			var x: Int = 0;
+			var y: Int = 0;
+			var position: String = "";
+			var job: String = "";
 	#]
 	State s0 initial{ 
 		[#ash_level= DMIN#]
 		delay 500
 		observeResource waste_storage msgid waste_qty
 		observeResource sonar msgid ash_level
+		observeResource op_robot msgid robot_info
 		forward incinerator -m turn_on:turn_on(1)
         println("$name INIZIATO") color green
 	}
@@ -97,6 +103,21 @@ QActor wis context ctx_wis {
 		whenMsg burn_start -> startBurningPhase
 		whenMsg burn_end -> endBurningPhase
 		whenMsg ash_level -> updateAshLevel
+		whenMsg robot_info -> updateGUI
+	
+	
+	State updateGUI{
+		onMsg(robot_info:robot_info(X,Y,POSITION,JOB)){
+			[#
+				x = payloadArg(0).toInt();
+				y = payloadArg(1).toInt();
+				position = payloadArg(2).toString();
+				job = payloadArg(3).toString();
+			#]
+			
+		}
+	}
+	Goto verifyConditions
 	
 	State updateAshLevel{
 		onMsg(ash_level:ash_level(N)){
@@ -114,7 +135,7 @@ QActor wis context ctx_wis {
 		[# robot_waiting = true #]
 	}
 	
-	Goto verifyConditions
+	Goto verifyConditions 
 	
 	State updateWasteQty{
 		onMsg(waste_qty:waste_qty(N)){
@@ -129,11 +150,7 @@ QActor wis context ctx_wis {
 		forward led -m led_status:led_status(ON)
 	}
 	
-	Transition t0
-		whenMsg waiting -> robotWaiting
-		whenMsg waste_qty -> updateWasteQty
-		whenMsg burn_start -> startBurningPhase
-		whenMsg burn_end -> endBurningPhase
+	Goto verifyConditions
 		
 	State endBurningPhase{
 		[# isBurning = false #]
@@ -143,6 +160,7 @@ QActor wis context ctx_wis {
 	Goto verifyConditions
 	
 	State verifyConditions{
+		updateResource[#"guidata($waste_qty,$ash_level,$isBurning,$x,$y,$position,$job)"#] 
 		if [# robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT#]{
 			
 			forward op_robot -m start_robot:start_robot(1)		
@@ -155,24 +173,25 @@ QActor wis context ctx_wis {
 		whenMsg waste_qty -> updateWasteQty
 		whenMsg burn_start -> startBurningPhase
 		whenMsg burn_end -> endBurningPhase
+		whenMsg ash_level -> updateAshLevel
+		whenMsg robot_info -> updateGUI
 	
 }
 
  
 
-//Facade robotfacade port 8060 usingactor wis inctx ctx_wis  
-//                   appl "main.java.unibo.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication" 
-//					 UserLibs -f "Facade24Start-1.0-plain"  -f "Facade24Start-1.0"
-//  
+
+  
 QActor op_robot context ctx_wis  { 
 	import "wis.util.*"
 	[#  
 		var RP: Boolean = false;
 		var ASH: Boolean = false;
-		var T: String = ""; 
-		var X = "";
-		var Y = "";
+		var T: String = "home"; 
+		var X = "0";
+		var Y = "0";
 		var D = "";
+	
 	#]
 	 
 	State s0 initial { 
@@ -196,11 +215,13 @@ QActor op_robot context ctx_wis  {
 	 
 	State waiting {
 		forward wis -m waiting:waiting(1)
+		updateResource [# "robot_info($X,$Y,$T,waiting for wis permission)"#]
 	}
 	
 	Transition t0 whenMsg start_robot -> to_ws
 	
 	State to_ws {
+		updateResource [# "robot_info($X,$Y,$T,moving to waste storage)"#]
 		[# T = Position.wastein.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -216,15 +237,16 @@ QActor op_robot context ctx_wis  {
 				  
 				  
     State withdraw_ws {
+    	updateResource [# "robot_info($X,$Y,$T,withdrawing rp from waste storage)"#]
     	delay 1500
-    	forward waste_storage -m get_waste:get_waste(1)
+    	forward waste_storage -m get_waste:get_waste(1)	
     	[# RP = true; #]
     }
     
     Goto to_incinerator
     
     State to_incinerator {
-    	
+    	updateResource [# "robot_info($X,$Y,$T,moving to burnin)"#]
     	[# T = Position.burnin.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -240,6 +262,7 @@ QActor op_robot context ctx_wis  {
 				  whenReply moverobotfailed -> to_incinerator
 
 	State ask_to_burn {
+		updateResource [# "robot_info($X,$Y,$T,depositing rp in incinerator)"#]
 		delay 1500
 		forward incinerator -m burn_in:burn_in(1)
 		[# RP = false #]
@@ -248,6 +271,7 @@ QActor op_robot context ctx_wis  {
 	Goto go_wait_home
 	
 	State go_wait_home {
+		updateResource [# "robot_info($X,$Y,$T,moving to home)"#]
 		[# T = Position.home.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -263,12 +287,14 @@ QActor op_robot context ctx_wis  {
 				  whenReply moverobotfailed -> go_back_home
 				  
 	State wait_for_burn {
+		updateResource [# "robot_info($X,$Y,$T,waiting at home)"#]
 		delay 1500
 	}
 	
 	Transition t4 whenMsg burn_end -> to_incinerator_burned
 	
 	State to_incinerator_burned {
+		updateResource [# "robot_info($X,$Y,$T,moving to burnout port)"#]
 		[# T = Position.burnout.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -284,6 +310,7 @@ QActor op_robot context ctx_wis  {
 				  whenReply moverobotfailed -> to_incinerator_burned
 	
 	State get_ash {
+		updateResource [# "robot_info($X,$Y,$T,withdrawing ash from incinerator)"#]
 		delay 1500
 		forward incinerator -m get_ash:get_ash(1)
 		[# ASH = true #] 
@@ -292,6 +319,7 @@ QActor op_robot context ctx_wis  {
 	Goto to_ash_storage
 	
 	State to_ash_storage {
+		updateResource [# "robot_info($X,$Y,$T,moving to ash storage)"#]
 		[# T = Position.ashout.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -307,6 +335,7 @@ QActor op_robot context ctx_wis  {
 				  whenReply moverobotfailed -> to_ash_storage
 	
 	State ask_as {
+		updateResource [# "robot_info($X,$Y,$T,depositing ash in ash storage)"#]
 		delay 1500
 		forward ash_storage -m deposit_ash:deposit_ash(1)
 		[# ASH = false #] 
@@ -315,7 +344,7 @@ QActor op_robot context ctx_wis  {
 	Goto go_back_home
 	
 	State go_back_home {
-		
+		updateResource [# "robot_info($X,$Y,$T,going back home)"#]
 		[# T = Position.home.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
@@ -438,3 +467,6 @@ QActor waste_storage context ctx_wis{
 		println("$name Prelevato un RP!")
 	}
 }
+Facade robotfacade port 8060 usingactor wis inctx ctx_wis  
+                   appl "main.java.unibo.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication" 
+				   UserLibs -f "sprint3_progetto_ssgui-1.0-plain"  -f "sprint3_progetto_ssgui-1.0"

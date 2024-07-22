@@ -29,6 +29,10 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					var robot_waiting: Boolean = false;
 					val DLIMT: Int = 5;
 					val DMIN: Int = 25;
+					var x: Int = 0;
+					var y: Int = 0;
+					var position: String = "";
+					var job: String = "";
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -36,6 +40,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 						delay(500) 
 						observeResource("localhost","8014","ctx_wis","waste_storage","waste_qty")
 						observeResource("127.0.0.2","8021","ctx_monitoring_device","sonar","ash_level")
+						observeResource("localhost","8014","ctx_wis","op_robot","robot_info")
 						forward("turn_on", "turn_on(1)" ,"incinerator" ) 
 						CommUtils.outgreen("$name INIZIATO")
 						//genTimer( actor, state )
@@ -48,6 +53,24 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					transition(edgeName="t03",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
 					transition(edgeName="t04",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 					transition(edgeName="t05",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
+					transition(edgeName="t06",targetState="updateGUI",cond=whenDispatch("robot_info"))
+				}	 
+				state("updateGUI") { //this:State
+					action { //it:State
+						if( checkMsgContent( Term.createTerm("robot_info(X,Y,POSITION,JOB)"), Term.createTerm("robot_info(X,Y,POSITION,JOB)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												x = payloadArg(0).toInt();
+												y = payloadArg(1).toInt();
+												position = payloadArg(2).toString();
+												job = payloadArg(3).toString();
+						}
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
 				}	 
 				state("updateAshLevel") { //this:State
 					action { //it:State
@@ -99,10 +122,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t06",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t07",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t08",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t09",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
 				}	 
 				state("endBurningPhase") { //this:State
 					action { //it:State
@@ -117,6 +137,8 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("verifyConditions") { //this:State
 					action { //it:State
+						updateResourceRep("guidata($waste_qty,$ash_level,$isBurning,$x,$y,$position,$job)" 
+						)
 						if(  robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT 
 						 ){forward("start_robot", "start_robot(1)" ,"op_robot" ) 
 						 robot_waiting = false  
@@ -126,10 +148,12 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t010",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t011",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t012",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t013",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t07",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t08",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t09",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t010",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					transition(edgeName="t011",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
+					transition(edgeName="t012",targetState="updateGUI",cond=whenDispatch("robot_info"))
 				}	 
 			}
 		}

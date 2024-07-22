@@ -195,7 +195,12 @@ task run0(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'it.unibo.ctx_wis.MainCtx_wisKt'
 }
-
+task runMD(type: JavaExec) {
+    group = "Execution"
+    description = "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'it.unibo.ctx_monitoring_device.MainCtx_monitoring_deviceKt'
+}
 task runTest(type: JavaExec) {
     group = "Execution"
     description = "Run the main class with JavaExecTask"
