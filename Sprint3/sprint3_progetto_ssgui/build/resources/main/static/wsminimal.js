@@ -23,8 +23,7 @@ wsminimal.js
         socket = new WebSocket(addr);
 
         socket.onopen = function (event) {
-            //console.log("Connected to " + addr);
-            setMessageToWindow(infoDisplay,"socket | Connected to " + addr);
+            console.log("Connected to " + addr);
         };
 
         socket.onmessage = function (event) {
@@ -32,9 +31,6 @@ wsminimal.js
             msg = event.data;
             //alert(`Got Message: ${msg}`);
             console.log("ws-status:" + msg);
-            if( msg.includes("plan") ) setMessageToWindow(planexecDisplay,msg);
-            else if( msg.includes("sonar") ) setMessageToWindow(sonarDisplay,msg);
-            else setMessageToWindow(robotDisplay,msg); //""+`${event.data}`*/
          };
     }//connect
 

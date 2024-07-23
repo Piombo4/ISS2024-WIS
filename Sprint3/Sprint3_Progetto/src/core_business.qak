@@ -122,7 +122,6 @@ QActor wis context ctx_wis {
 	State updateAshLevel{
 		onMsg(ash_level:ash_level(N)){
 			[# ash_level = payloadArg(0).toInt();#]
-			updateResource[# "guidata($waste_qty,$ash_level,$isBurning,)" #]
 			if [# ash_level < DLIMT || ash_level >= DMIN #]
 			{
 				forward led -m led_status:led_status(BLINK)
