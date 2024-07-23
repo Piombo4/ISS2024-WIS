@@ -1,16 +1,21 @@
 services:
   wis:
     build: 
-      context: wis
+      context: ../Sprint3/Sprint3_Progetto
+      dockerfile: wis.Dockerfile
     ports:
       - 8014:8014/tcp
       - 8014:8014/udp
+    command: bash wis
+    
   md:
-    build: 
-      context: md
+    build:
+      context: ../Sprint3/Sprint3_Progetto
+      dockerfile: md.Dockerfile
     ports:
       - 8020:8020/tcp
       - 8020:8020/udp
-    depends_on: 
+    command: bash monitoring_device
+    depends_on:
       - wis
-    
+
