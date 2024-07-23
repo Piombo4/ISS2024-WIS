@@ -6,8 +6,6 @@ services:
     ports:
       - 8014:8014/tcp
       - 8014:8014/udp
-    command: bash wis
-    
   md:
     build:
       context: ../Sprint3/Sprint3_Progetto
@@ -15,7 +13,6 @@ services:
     ports:
       - 8020:8020/tcp
       - 8020:8020/udp
-    command: bash monitoring_device
     depends_on:
       - wis
 
