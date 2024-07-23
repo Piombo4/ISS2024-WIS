@@ -23,7 +23,7 @@ QActor led context ctx_monitoring_device{
 	}
 	Transition t0 whenMsg led_status -> updateLed
 	 
-	State updateLed{
+	State updateLed{ 
 		onMsg(led_status:led_status(X)){
 			[#
 				 p.destroy()

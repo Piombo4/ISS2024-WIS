@@ -135,6 +135,8 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("verifyConditions") { //this:State
 					action { //it:State
+						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
 						updateResourceRep("guidata($waste_qty,$ash_level,$isBurning,$x,$y,$position,$job)" 
 						)
 						if(  robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT 

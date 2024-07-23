@@ -75,5 +75,5 @@ distributions {
     }
 } 
 application {
-	mainClass = 'unibo.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication'
+	mainClass = 'main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication'
 }

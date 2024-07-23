@@ -31,6 +31,6 @@ wsminimal.js
             msg = event.data;
             //alert(`Got Message: ${msg}`);
             console.log("ws-status:" + msg);
-         };
+        };
     }//connect
 

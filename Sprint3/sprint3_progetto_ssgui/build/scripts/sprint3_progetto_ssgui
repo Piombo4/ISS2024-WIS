@@ -210,7 +210,7 @@ DEFAULT_JVM_OPTS=""
 
 set -- \
         -classpath "$CLASSPATH" \
-        unibo.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication \
+        main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication \
         "$@"
 
 # Stop when "xargs" is not available.

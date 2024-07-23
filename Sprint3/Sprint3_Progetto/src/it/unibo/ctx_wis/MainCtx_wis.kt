@@ -10,7 +10,7 @@ fun main() = runBlocking {
 	        "localhost", this, "wis.pl", "sysRules.pl", "ctx_wis"
 	)
 	//JAN Facade
-	main.java.unibo.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication.main( arrayOf<String>() );
+	main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication.main( arrayOf<String>() );
 	//JAN24 Display
 }
 

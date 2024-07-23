@@ -1,0 +1,139 @@
+System monitoringdevice
+
+//LED
+Dispatch led_status : led_status(X)
+
+//SONAR
+Dispatch ash_level : ash_level(LEVEL)
+Event sonardata    : distance(D)   //emitted  by sonardevice  
+
+Dispatch sonarwork : sonarwork(X)
+Dispatch doread    : doread(X)
+
+Context ctx_monitoring_device  ip  [host="localhost" port=8021]
+
+QActor led context ctx_monitoring_device{
+	[#
+	lateinit var p : Process	
+	#]
+	
+	State s0 initial{
+		delay 500   
+		println("$name STARTS") color green
+	}
+	Transition t0 whenMsg led_status -> updateLed
+	 
+	State updateLed{
+		onMsg(led_status:led_status(X)){
+			[#
+				 p.destroy()
+    				 if (p.isAlive()) {
+    	    			p.destroyForcibly();
+    					}
+				if(payloadArg(0) == "ON"){
+					
+    				p = Runtime.getRuntime().exec("python LedOn.py")
+				}
+				else if(payloadArg(0)== "OFF"){
+					
+    				p = Runtime.getRuntime().exec("python LedOff.py")
+				}
+				else {
+					if(payloadArg(0) == "ON"){
+    				p = Runtime.getRuntime().exec("python LedBlink.py")
+				}
+				} 
+				
+			#]			
+		}
+	}
+	Transition t0 whenMsg led_status -> updateLed
+	
+}
+
+QActor sonar context ctx_monitoring_device{   
+	State s0 initial{  
+		println("sonar24 | ready") 
+		delay 1000 //give time to start sonardevice ...
+		subscribeTo sonardevice for sonardata
+ 	}
+	Goto work
+	
+	State work{
+		//println("sonar24 | waits ... ") 		
+	}
+	Transition t0 whenEvent sonardata -> handlesonardata
+ 	 
+	State handlesonardata{
+		printCurrentMessage color yellow
+		onMsg( sonardata : distance(D) ){
+			println("$name | distance=${payloadArg(0)}") color magenta
+			updateResource [# "ash_level(payloadArg(0))" #]
+		}
+		
+	}
+	Goto work 
+	 
+ }   
+ 
+QActor sonardevice context ctx_monitoring_device{
+[# 
+	lateinit var reader : java.io.BufferedReader
+	var working = false
+    lateinit var p : Process	
+    var Distance = 0
+#]	
+	State s0 initial{
+		println("$name | sonarstart") 
+	}	
+	Goto startTheSonar
+ 	
+	State startTheSonar{
+	[#
+    	working = true		
+		p       = Runtime.getRuntime().exec("python sonar.py")
+		reader  = java.io.BufferedReader(  java.io.InputStreamReader(p.getInputStream() ))	
+	#]		
+	}
+	Goto readSonarData
+	
+	State readSonarData{
+	[# 
+		var data = reader.readLine()
+		CommUtils.outyellow("$name with python: data = $data"   ) 
+		if( data != null ){
+		try{ 
+			val vd = data.toFloat()
+			val v  = vd.toInt()
+			if( v <= 100 ){	//A first filter ...
+				Distance = v				
+			}else Distance = 0
+		}catch(e: Exception){
+				CommUtils.outred("$name readSonarDataERROR: $e "   )
+		}
+		}//if
+		
+	#]	
+		if [# Distance > 0 #] { 
+		    println("$name with python: data = $data"   ) color yellow
+			emitlocalstream sonardata : distance($Distance)
+			//emit  sonardata : distance($Distance)
+		}
+		autodispatch doread : doread(1)
+	}
+	Transition t0 
+ 		whenMsg doread and [# working   #]   -> readSonarData 
+		whenMsg doread and [# ! working #] -> endOfRead
+		
+	State endOfRead{
+		[#
+			
+   	    p.destroy()
+    	if (p.isAlive()) {
+    	    p.destroyForcibly();
+    	}
+       	CommUtils.outred("$tt $name | endOfRead"  )
+			
+		#]
+	}
+}//sonardevice

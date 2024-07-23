@@ -72,7 +72,7 @@ set CLASSPATH=%APP_HOME%\lib\sprint3_progetto_ssgui-1.0-plain.jar;%APP_HOME%\lib
 
 
 @rem Execute sprint3_progetto_ssgui
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %SPRINT3_PROGETTO_SSGUI_OPTS%  -classpath "%CLASSPATH%" unibo.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %SPRINT3_PROGETTO_SSGUI_OPTS%  -classpath "%CLASSPATH%" main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication %*
 
 :end
 @rem End local scope for the variables with windows NT shell
