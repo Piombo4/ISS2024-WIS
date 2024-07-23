@@ -59,7 +59,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				state("waiting") { //this:State
 					action { //it:State
 						forward("waiting", "waiting(1)" ,"wis" ) 
-						updateResourceRep( "robot_info($X,$Y,$T,waiting for wis permission)" 
+						updateResourceRep( "robot_info($X,$Y,$T,waiting_for_wis_permission)" 
 						)
 						//genTimer( actor, state )
 					}
@@ -70,7 +70,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("to_ws") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,moving to waste storage)" 
+						updateResourceRep( "robot_info($X,$Y,$T,moving_to_waste_storage)" 
 						)
 						 T = Position.wastein.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -89,7 +89,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("withdraw_ws") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,withdrawing rp from waste storage)" 
+						updateResourceRep( "robot_info($X,$Y,$T,withdrawing_rp_from_waste_storage)" 
 						)
 						delay(1500) 
 						forward("get_waste", "get_waste(1)" ,"waste_storage" ) 
@@ -103,7 +103,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("to_incinerator") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,moving to burnin)" 
+						updateResourceRep( "robot_info($X,$Y,$T,moving_to_burnin)" 
 						)
 						 T = Position.burnin.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -123,7 +123,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("ask_to_burn") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,depositing rp in incinerator)" 
+						updateResourceRep( "robot_info($X,$Y,$T,depositing_rp_in_incinerator)" 
 						)
 						delay(1500) 
 						forward("burn_in", "burn_in(1)" ,"incinerator" ) 
@@ -137,7 +137,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("go_wait_home") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,moving to home)" 
+						updateResourceRep( "robot_info($X,$Y,$T,moving_to_home)" 
 						)
 						 T = Position.home.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -157,7 +157,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("wait_for_burn") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,waiting at home)" 
+						updateResourceRep( "robot_info($X,$Y,$T,waiting_at_home)" 
 						)
 						delay(1500) 
 						//genTimer( actor, state )
@@ -169,7 +169,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("to_incinerator_burned") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,moving to burnout port)" 
+						updateResourceRep( "robot_info($X,$Y,$T,moving_to_burnout_port)" 
 						)
 						 T = Position.burnout.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -189,7 +189,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("get_ash") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,withdrawing ash from incinerator)" 
+						updateResourceRep( "robot_info($X,$Y,$T,withdrawing_ash_from_incinerator)" 
 						)
 						delay(1500) 
 						forward("get_ash", "get_ash(1)" ,"incinerator" ) 
@@ -203,7 +203,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("to_ash_storage") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,moving to ash storage)" 
+						updateResourceRep( "robot_info($X,$Y,$T,moving_to_ash_storage)" 
 						)
 						 T = Position.ashout.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
@@ -223,7 +223,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("ask_as") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,depositing ash in ash storage)" 
+						updateResourceRep( "robot_info($X,$Y,$T,depositing_ash_in_ash_storage)" 
 						)
 						delay(1500) 
 						forward("deposit_ash", "deposit_ash(1)" ,"ash_storage" ) 
@@ -237,7 +237,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("go_back_home") { //this:State
 					action { //it:State
-						updateResourceRep( "robot_info($X,$Y,$T,going back home)" 
+						updateResourceRep( "robot_info($X,$Y,$T,going_back_home)" 
 						)
 						 T = Position.home.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
