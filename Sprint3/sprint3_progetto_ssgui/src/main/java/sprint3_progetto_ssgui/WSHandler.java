@@ -56,7 +56,7 @@ public class WSHandler extends AbstractWebSocketHandler {
         String msg = message.getPayload();
         CommUtils.outgreen("WSH | Received: " + msg + " " + session.getId()) ;
         String sendermockname  = "gui" + namecounter++;
-        CommUtils.outgreen("WSH | sendermockname: " + sendermockname) ;
+        CommUtils.outgreen("WSH | sendermockname: " + sendermockname);
         //Memorizzo la sessione del sendermockname
         curSessions.put(sendermockname,session);
         guiCore.handleWsMsg( sendermockname,  msg ); //gestisce dorequest e docmd e reply ad ask

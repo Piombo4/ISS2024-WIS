@@ -36,7 +36,7 @@ public class RobotUtils {
     }
 
     public static void connectWithRobotUsingTcp(String addr){
-         try {
+        try {
              CommSystemConfig.tracing = true;
              tcpconn = TcpClientSupport.connect(addr, robotPort, 10);
              CommUtils.outyellow("RobotUtils | connect Tcp conn:" + tcpconn);

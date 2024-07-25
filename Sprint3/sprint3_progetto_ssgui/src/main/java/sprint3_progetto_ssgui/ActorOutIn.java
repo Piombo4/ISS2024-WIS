@@ -83,6 +83,7 @@ public class ActorOutIn {
     }
     public void docmd( IApplMessage message ) {
         CommUtils.outmagenta("OUTIN | docmd message=" + message );
+        
         sendToActor( message );
     }
 

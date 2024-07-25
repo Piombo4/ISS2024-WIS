@@ -21,7 +21,6 @@ public class ApplguiCore {
 //        ApplSystemInfo.setup();  //MAY2024  al momento, non si vede PARCHE' 
         destActor         = ApplSystemInfo.applActorName;
     }
-
     //Chiamato da CoapObserver
     public void handleMsgFromActor(String msg, String requestId) {
         CommUtils.outcyan("AGC | hanldeMsgFromActor " + msg + " requestId=" + requestId) ;
@@ -55,8 +54,19 @@ public class ApplguiCore {
             outinadapter.docmd( message );
             return;
         }
- 
+        else if(jsonMsg.has("mock_deposit")){
+            IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", "mock_deposit", "mock_deposit(1)" , "wis");
+            outinadapter.docmd( message );
+            return;
+        }
+        else if(jsonMsg.has("mock_remove")){
+            IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", "mock_remove", "mock_remove(1)" , "wis");
+            outinadapter.docmd( message );
+            return;
+        }
     }
+
+
 
     private void docmd(String id,String payload ) {
         outinadapter.docmd(id,payload );
