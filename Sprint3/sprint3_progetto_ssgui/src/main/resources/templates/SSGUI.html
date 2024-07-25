@@ -28,7 +28,7 @@
 
     <!-- CONTAINER del contenuto di pagina -->
     <div class="container pt-5">
-      <div class="row mx-5">
+      <div class="row">
         <!-- Page main row -->
         <div class="col-1 px-1">
           <div class="btn border btn-dark rounded-top"><i>STORAGES</i></div>
@@ -44,11 +44,16 @@
         <div class="col-4 offset-md-1 px-1 position-relative">
           <div class="btn btn-primary"><i>Ash storage</i></div>
           <div class="p-3 shadow p-3 mb-5 bg-body rounded text-center" >
-            LIVELLO CENERI: <b id="ash">10</b>cm, CAPACITA': <b>0</b>%
+            LIVELLO CENERI: <b id="ash">10<b><br>
+            CAPACITA'<br>
+            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+              <div id="ashCapacity" class="progress-bar" style="width: 25%"></div>
+            </div>
           </div>
+
         </div>
       </div>
-      <div class="row mx-5">
+      <div class="row">
         <!-- Page main row -->
         <div class="col-1 px-1">
           <div class="btn border btn-dark rounded-top"><i>INCENERITORE</i></div>
@@ -61,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="row mx-5">
+      <div class="row">
         <!-- Page main row -->
         <div class="col-1 px-1">
           <div class="btn border btn-dark rounded-top"><i>ROBOT</i></div>

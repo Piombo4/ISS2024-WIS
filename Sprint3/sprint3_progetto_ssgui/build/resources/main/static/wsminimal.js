@@ -8,9 +8,12 @@ wsminimal.js
     var divIncinerator;
     var divPosition;
     var divJob
+    var divAshCap;
+
     window.onload = ()=>{
         divRP = document.querySelector("#rp");
         divAsh = document.querySelector("#ash");
+        divAshCap = document.querySelector("ashCapacity")
         divIncinerator = document.querySelector("#incinerator");
         divPosition = document.querySelector("#position");
         divJob = document.querySelector("#job");
@@ -48,11 +51,12 @@ wsminimal.js
     }//connect
     function updateValues(msg){
         //guidata(1,25,true,3,1,burnin,moving_to_home)
-        msg = msg.replace("guidata(","")
+        msg = msg.replace("WSH> guidata(","")
         msg = msg.replace(")","")
         const values = msg.split(",");
         divRP.innerHTML =  values[0]
-        divAsh.innerHTML =  values[1];
+        divAsh.innerHTML =  values[1] + "cm";
+        divAshCap.style.width = (100-((values[1] - 5)*5)) + "%"
         if(values[2] == "true"){
             divIncinerator.innerHTML = "🔥🔥🔥🔥🔥🔥🔥";
         }else{
