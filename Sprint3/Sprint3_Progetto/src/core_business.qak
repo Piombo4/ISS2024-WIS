@@ -352,7 +352,6 @@ QActor op_robot context ctx_wis  {
 		delay 500
 		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
-	
 	Transition t6 whenReply moverobotdone -> waiting
 				  whenReply moverobotfailed -> go_back_home
 }

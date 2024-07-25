@@ -1,6 +1,6 @@
 const config = {
     floor: {
-        size: { x: 31, y: 24                   }
+        size: { x: 31, y: 30                   }
     },
     player: {
         //position: { x: 0.5, y: 0.5 },		//CENTER

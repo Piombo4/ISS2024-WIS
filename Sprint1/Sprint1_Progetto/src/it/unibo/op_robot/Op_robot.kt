@@ -57,6 +57,8 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("waiting") { //this:State
 					action { //it:State
+						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
 						forward("waiting", "waiting(1)" ,"wis" ) 
 						//genTimer( actor, state )
 					}
@@ -189,7 +191,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 X = getCurSol("TX").toString();  
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
-						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
+						request("moverobot", "moverobot(4,4)" ,"basicrobot" )  
 						delay(500) 
 						forward("setdirection", "dir($D)" ,"basicrobot" ) 
 						//genTimer( actor, state )
@@ -202,6 +204,8 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("ask_as") { //this:State
 					action { //it:State
+						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
 						delay(1500) 
 						forward("deposit_ash", "deposit_ash(1)" ,"ash_storage" ) 
 						 ASH = false  
@@ -214,6 +218,8 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 				}	 
 				state("go_back_home") { //this:State
 					action { //it:State
+						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
 						 T = Position.home.name;  
 						solve("getPoint($T,TX,TY,TDIR)","") //set resVar	
 						 X = getCurSol("TX").toString();  

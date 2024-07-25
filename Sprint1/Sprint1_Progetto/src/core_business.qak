@@ -155,6 +155,7 @@ QActor op_robot context ctx_wis  {
 		whenReply engagerefused -> engage
 	 
 	State waiting {
+		printCurrentMessage color green
 		forward wis -m waiting:waiting(1)
 	}
 	
@@ -258,7 +259,7 @@ QActor op_robot context ctx_wis  {
 		[# Y = getCurSol("TY").toString(); #]
 		[# D = getCurSol("TDIR").toString(); #]
 		
-		request basicrobot -m moverobot:moverobot($X,$Y)
+		request basicrobot -m moverobot:moverobot(4,4)
 		delay 500
 		forward basicrobot -m setdirection:dir($D)
 	}
@@ -267,15 +268,16 @@ QActor op_robot context ctx_wis  {
 				  whenReply moverobotfailed -> to_ash_storage
 	
 	State ask_as {
+		printCurrentMessage color green
 		delay 1500
 		forward ash_storage -m deposit_ash:deposit_ash(1)
 		[# ASH = false #] 
 		
-	}
+	} 
 	Goto go_back_home
 	
 	State go_back_home {
-		
+		printCurrentMessage color green
 		[# T = Position.home.name; #]
 		solve( getPoint($T,TX,TY,TDIR) )
 		[# X = getCurSol("TX").toString(); #]
