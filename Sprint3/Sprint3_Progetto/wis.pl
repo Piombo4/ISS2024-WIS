@@ -1,6 +1,8 @@
 %====================================================================================
 % wis description   
 %====================================================================================
+dispatch( mock_deposit, mock_deposit(X) ).
+dispatch( mock_remove, mock_remove(X) ).
 dispatch( start_robot, start_robot(X) ).
 dispatch( waiting, waiting(X) ).
 dispatch( robot_info, robot_info(X,Y,POSITION,JOB) ).
@@ -37,8 +39,6 @@ context(ctx_monitoring_device, "127.0.0.2",  "TCP", "8021").
  qactor( basicrobot, ctx_basic_robot, "external").
   qactor( sonar, ctx_monitoring_device, "external").
   qactor( led, ctx_monitoring_device, "external").
-  qactor( mock, ctx_wis, "it.unibo.mock.Mock").
- static(mock).
   qactor( wis, ctx_wis, "it.unibo.wis.Wis").
  static(wis).
   qactor( op_robot, ctx_wis, "it.unibo.op_robot.Op_robot").

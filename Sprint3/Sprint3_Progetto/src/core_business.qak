@@ -1,9 +1,13 @@
 System -trace wis
  
+// MOCK
+Dispatch mock_deposit : mock_deposit(X)
+Dispatch mock_remove : mock_remove(X) 
+
 // WIS
 Dispatch start_robot : start_robot(X)
  
-// op_robot   
+// OP ROBOT  
 Dispatch waiting : waiting(X)
 Dispatch robot_info: robot_info(X,Y,POSITION,JOB)
  
@@ -59,22 +63,6 @@ Context ctx_monitoring_device  ip  [host="127.0.0.2" port=8021]
 ExternalQActor basicrobot context ctx_basic_robot
 ExternalQActor sonar context ctx_monitoring_device
 ExternalQActor led context ctx_monitoring_device
-
-QActor mock context ctx_wis {
-	State s0 initial {
-		delay 500
-		forward waste_storage -m waste_in:waste_in(1)	
-		delay 15000
-		request ash_storage -m empty_ash:empty_ash(1)
-	}
-	
-	Transition t0 whenReply ashes_taken -> reply
-	
-	State reply  {
-		delay 15000
-	}
-	Goto s0
-}
  
 QActor wis context ctx_wis {
 	[#
@@ -107,6 +95,8 @@ QActor wis context ctx_wis {
 		whenMsg burn_end -> endBurningPhase
 		whenMsg ash_level -> updateAshLevel
 		whenMsg robot_info -> updateGUI
+		whenMsg mock_deposit -> mockDeposit
+		whenMsg mock_remove -> mockRemove
 	
 	
 	State updateGUI{
@@ -197,6 +187,21 @@ QActor wis context ctx_wis {
 		whenMsg burn_end -> endBurningPhase
 		whenMsg ash_level -> updateAshLevel
 		whenMsg robot_info -> updateGUI
+		whenMsg mock_deposit -> mockDeposit
+		whenMsg mock_remove -> mockRemove
+	
+	
+	State mockDeposit {
+		forward waste_storage -m waste_in : waste_in(1)
+	}
+	
+	Goto verifyConditions
+	
+	State mockRemove {
+		request ash_storage -m empty_ash : empty_ash(1) 
+	}
+	
+	Transition tx whenReply ashes_taken -> verifyConditions
 }
   
 QActor op_robot context ctx_wis  { 
@@ -477,4 +482,4 @@ QActor waste_storage context ctx_wis{
 }
 Facade robotfacade port 8060 usingactor wis inctx ctx_wis  
                    appl "main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication" 
-				   UserLibs -f "sprint3_progetto_ssgui-1.0-plain" 
+				   UserLibs -f "sprint3_progetto_ssgui-1.0-plain" -f "sprint3_progetto_ssgui-1.0"

@@ -48,12 +48,14 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t01",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t02",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t03",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t04",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
-					transition(edgeName="t05",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
-					transition(edgeName="t06",targetState="updateGUI",cond=whenDispatch("robot_info"))
+					 transition(edgeName="t00",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t01",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t02",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t03",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					transition(edgeName="t04",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
+					transition(edgeName="t05",targetState="updateGUI",cond=whenDispatch("robot_info"))
+					transition(edgeName="t06",targetState="mockDeposit",cond=whenDispatch("mock_deposit"))
+					transition(edgeName="t07",targetState="mockRemove",cond=whenDispatch("mock_remove"))
 				}	 
 				state("updateGUI") { //this:State
 					action { //it:State
@@ -167,12 +169,34 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t07",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t08",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t09",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t010",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
-					transition(edgeName="t011",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
-					transition(edgeName="t012",targetState="updateGUI",cond=whenDispatch("robot_info"))
+					 transition(edgeName="t08",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t09",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t010",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t011",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					transition(edgeName="t012",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
+					transition(edgeName="t013",targetState="updateGUI",cond=whenDispatch("robot_info"))
+					transition(edgeName="t014",targetState="mockDeposit",cond=whenDispatch("mock_deposit"))
+					transition(edgeName="t015",targetState="mockRemove",cond=whenDispatch("mock_remove"))
+				}	 
+				state("mockDeposit") { //this:State
+					action { //it:State
+						forward("waste_in", "waste_in(1)" ,"waste_storage" ) 
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition( edgeName="goto",targetState="verifyConditions", cond=doswitch() )
+				}	 
+				state("mockRemove") { //this:State
+					action { //it:State
+						request("empty_ash", "empty_ash(1)" ,"ash_storage" )  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="tx16",targetState="verifyConditions",cond=whenReply("ashes_taken"))
 				}	 
 			}
 		}

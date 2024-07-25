@@ -48,13 +48,7 @@ public class ApplguiCore {
         CommUtils.outcyan("AGC | handleWsMsg msg " + msg  );
         JSONObject jsonMsg = new JSONObject(msg);
         boolean isCmd = jsonMsg.has("cmd");
-        if( isCmd ){
-            String cmdStr = jsonMsg.get("cmd").toString();
-            IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", "cmd", cmdStr , "basicrobot");
-            outinadapter.docmd( message );
-            return;
-        }
-        else if(jsonMsg.has("mock_deposit")){
+        if(jsonMsg.has("mock_deposit")){
             IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", "mock_deposit", "mock_deposit(1)" , "wis");
             outinadapter.docmd( message );
             return;
