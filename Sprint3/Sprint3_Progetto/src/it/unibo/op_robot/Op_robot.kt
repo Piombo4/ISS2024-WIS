@@ -211,8 +211,6 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
 						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
-						delay(500) 
-						forward("setdirection", "dir($D)" ,"basicrobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

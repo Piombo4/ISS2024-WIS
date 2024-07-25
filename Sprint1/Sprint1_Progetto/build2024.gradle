@@ -170,9 +170,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'wastestorage'
+        distributionBaseName = 'wis'
         contents { 
-             from './wastestorage.pl'
+             from './wis.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }

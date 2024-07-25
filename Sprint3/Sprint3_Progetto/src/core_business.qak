@@ -2,14 +2,14 @@ System -trace wis
  
 // WIS
 Dispatch start_robot : start_robot(X)
-
+ 
 // op_robot   
 Dispatch waiting : waiting(X)
 Dispatch robot_info: robot_info(X,Y,POSITION,JOB)
  
 // WASTE STORAGE
 Dispatch waste_in : waste_in(X)
-Dispatch waste_qty : waste_qty(X)
+Dispatch banana : banana(BRUH)
 Dispatch get_waste : get_waste(X)
 
 // INCINERATOR
@@ -76,7 +76,7 @@ QActor mock context ctx_wis {
 QActor wis context ctx_wis {
 	[#
 			var ash_qty = 0
-			var waste_qty = 0
+			var banana = 0
 			var ash_level = 0
 			var isBurning: Boolean = false;
 			var robot_waiting: Boolean = false;
@@ -90,7 +90,7 @@ QActor wis context ctx_wis {
 	State s0 initial{ 
 		[#ash_level= DMIN#]
 		delay 500
-		observeResource waste_storage msgid waste_qty
+		observeResource waste_storage msgid banana
 		observeResource sonar msgid ash_level
 		observeResource op_robot msgid robot_info
 		forward incinerator -m turn_on:turn_on(1)
@@ -99,7 +99,7 @@ QActor wis context ctx_wis {
 	
 	Transition t0
 		whenMsg waiting -> robotWaiting
-		whenMsg waste_qty -> updateWasteQty
+		whenMsg banana -> updateWasteQty
 		whenMsg burn_start -> startBurningPhase
 		whenMsg burn_end -> endBurningPhase
 		whenMsg ash_level -> updateAshLevel
@@ -107,6 +107,7 @@ QActor wis context ctx_wis {
 	
 	
 	State updateGUI{
+		printCurrentMessage color blue
 		onMsg(robot_info:robot_info(X,Y,POSITION,JOB)){
 			[#
 				x = payloadArg(0).toInt();
@@ -120,7 +121,7 @@ QActor wis context ctx_wis {
 	Goto verifyConditions
 	
 	State updateAshLevel{
-		onMsg(ash_level:ash_level(N)){
+		onMsg(ash_level:ash_level(LEVEL)){
 			[# ash_level = payloadArg(0).toInt();#]
 			if [# ash_level < DLIMT || ash_level >= DMIN #]
 			{
@@ -137,8 +138,9 @@ QActor wis context ctx_wis {
 	Goto verifyConditions 
 	
 	State updateWasteQty{
-		onMsg(waste_qty:waste_qty(N)){
-			[# waste_qty = payloadArg(0).toInt()/50 #]
+		onMsg(banana:banana(BRUH)){
+			[# banana = payloadArg(0).toInt()/50 #]
+			println("$banana") color magenta
 		}
 	}
 	
@@ -160,8 +162,9 @@ QActor wis context ctx_wis {
 	
 	State verifyConditions{
 		printCurrentMessage color green
-		updateResource[#"guidata($waste_qty,$ash_level,$isBurning,$x,$y,$position,$job)"#] 
-		if [# robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT#]{
+		println("$robot_waiting,$isBurning,$banana,$ash_level") color magenta
+		updateResource[#"guidata($banana,$ash_level,$isBurning,$x,$y,$position,$job)"#] 
+		if [# robot_waiting && !isBurning && banana > 0 && ash_level >= DLIMT#]{
 			
 			forward op_robot -m start_robot:start_robot(1)		
 			[# robot_waiting = false #]
@@ -170,7 +173,7 @@ QActor wis context ctx_wis {
 	
 	Transition t0
 		whenMsg waiting -> robotWaiting
-		whenMsg waste_qty -> updateWasteQty
+		whenMsg banana -> updateWasteQty
 		whenMsg burn_start -> startBurningPhase
 		whenMsg burn_end -> endBurningPhase
 		whenMsg ash_level -> updateAshLevel
@@ -322,8 +325,6 @@ QActor op_robot context ctx_wis  {
 		[# D = getCurSol("TDIR").toString(); #]
 		
 		request basicrobot -m moverobot:moverobot($X,$Y)
-		delay 500
-		forward basicrobot -m setdirection:dir($D)
 	}
 	
 	Transition t6 whenReply moverobotdone -> ask_as
@@ -399,7 +400,6 @@ QActor ash_storage context ctx_wis{
 	[#
 			var ash_qty: Int = 0;
 			var R: Int = 0;
-			val MAX: Int = 4;
 	#]
 	
 	State s0 initial {
@@ -412,12 +412,8 @@ QActor ash_storage context ctx_wis{
 		whenMsg deposit_ash -> addAsh
 	
 	State addAsh{
-		if[#ash_qty<MAX#]{
-			[#	ash_qty++  #]
-			println("$name Depositata la cenere di un RP!")
-		}else{
-			println("$name Deposito pieno! ")
-		}
+		[#	ash_qty++  #]
+		println("$name Depositata la cenere di un RP!")
 	}
 	Transition t0 
 		whenRequest empty_ash -> removeAsh
@@ -449,7 +445,7 @@ QActor waste_storage context ctx_wis{
 	
 	State addRP{
 		[#	scale += 50;  #]
-		updateResource [# "waste_qty($scale)" #]
+		updateResource [# "banana($scale)" #]
 		println("$name Depositato un RP!")
 	}
 	Transition t0 
@@ -458,7 +454,7 @@ QActor waste_storage context ctx_wis{
 	
 	State removeRP{
 		[#	scale -= 50  #]
-		updateResource [# "scaleinfo($scale)" #]
+		updateResource [# "banana($scale)" #]
 		println("$name Prelevato un RP!")
 	}
 }

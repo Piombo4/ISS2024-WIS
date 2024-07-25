@@ -124,7 +124,11 @@ dependencies {
     implementation name: 'unibo.basicomm23-1.0'
     implementation name: 'sprint3_progetto_ssgui-1.0-plain'
 
-
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //depends on spring-boot-starter-logging, which already pulls in spring-jcl for us.
+    //When using starters, Logback is used for logging by default.
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     
     //USER libs for facades
     
@@ -226,6 +230,13 @@ if (project.hasProperty("build_MD")) {
     dname = 'monitoringdevice'
 }
 
+task clear(type: Delete) {
+	println("delete")
+	delete "$buildDir/distributions/$dname-1.0"
+	delete "$buildDir/distributions/$dname-1.0.zip"
+	delete "$buildDir/distributions/$dname-1.0-deployment.tar.gz"
+}
+
 task unpack(type: Copy) {
     println("unzipping distZip")
     from layout.buildDirectory.dir("distributions/$dname-1.0.zip")
@@ -261,11 +272,13 @@ task tarz(type: Tar) {
 
 
 task deploy {
+	dependsOn 'clear'
 	dependsOn 'distZip'
 	dependsOn 'unpack'
 	dependsOn 'copyFiles'
 	dependsOn 'tarz'
 
+	tasks.findByName('distZip').mustRunAfter 'clear'
 	tasks.findByName('unpack').mustRunAfter 'distZip'
 	tasks.findByName('copyFiles').mustRunAfter 'unpack'
 	tasks.findByName('tarz').mustRunAfter 'copyFiles'

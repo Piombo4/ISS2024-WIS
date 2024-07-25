@@ -75,23 +75,23 @@ const config = {
 */		 		 
         {
             name: "wallUp",
-            centerPosition: { x: 0.44, y: 0.97},
-            size: { x: 0.88, y: 0.02}
+            centerPosition: { x: 0.5, y: 1},
+            size: { x: 1, y: 0}
         },
         {
             name: "wallDown",
-            centerPosition: { x: 0.44, y: 0.01},
-            size: { x: 0.85, y: 0.01}
+            centerPosition: { x: 0.5, y: 0},
+            size: { x: 1, y: 0}
         },
         {
             name: "wallLeft",
             centerPosition: { x: 0.00, y: 0.5},
-            size: { x: 0.001, y: 0.94}
+            size: { x: 0, y: 1}
         },
         {
             name: "wallRight",
-            centerPosition: { x: 0.98, y: 0.5},
-            size: { x: 0.01, y: 0.99}
+            centerPosition: { x: 1, y: 0.5},
+            size: { x: 0, y: 1}
         }
     ]
 }

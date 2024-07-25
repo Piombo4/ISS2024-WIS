@@ -39,7 +39,7 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 				state("addRP") { //this:State
 					action { //it:State
 							scale += 50;   
-						updateResourceRep( "waste_qty($scale)"  
+						updateResourceRep( "banana($scale)"  
 						)
 						CommUtils.outblack("$name Depositato un RP!")
 						//genTimer( actor, state )
@@ -53,7 +53,7 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 				state("removeRP") { //this:State
 					action { //it:State
 							scale -= 50   
-						updateResourceRep( "scaleinfo($scale)"  
+						updateResourceRep( "banana($scale)"  
 						)
 						CommUtils.outblack("$name Prelevato un RP!")
 						//genTimer( actor, state )

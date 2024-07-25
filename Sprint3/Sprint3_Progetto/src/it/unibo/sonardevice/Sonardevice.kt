@@ -54,7 +54,6 @@ class Sonardevice ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 					action { //it:State
 						 
 								var data = reader.readLine()
-								CommUtils.outyellow("$name with python: data = $data"   ) 
 								if( data != null ){
 								try{ 
 									val vd = data.toFloat()
@@ -67,9 +66,8 @@ class Sonardevice ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 								}
 								}//if
 								
-						if(  Distance > 0  
-						 ){CommUtils.outyellow("$name with python: data = $data")
-						emitLocalStreamEvent("sonardata", "distance($Distance)" ) 
+						if(  Distance > 0 && Distance != null  
+						 ){emitLocalStreamEvent("sonardata", "distance($Distance)" ) 
 						}
 						forward("doread", "doread(1)" ,name ) 
 						//genTimer( actor, state )

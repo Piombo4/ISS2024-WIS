@@ -24,7 +24,6 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 		
 					var ash_qty: Int = 0;
 					var R: Int = 0;
-					val MAX: Int = 4;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -40,13 +39,8 @@ class Ash_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=fal
 				}	 
 				state("addAsh") { //this:State
 					action { //it:State
-						if( ash_qty<MAX 
-						 ){	ash_qty++   
+							ash_qty++   
 						CommUtils.outblack("$name Depositata la cenere di un RP!")
-						}
-						else
-						 {CommUtils.outblack("$name Deposito pieno! ")
-						 }
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

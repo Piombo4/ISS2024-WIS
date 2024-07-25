@@ -6,13 +6,14 @@ services:
     ports:
       - 8014:8014/tcp
       - 8014:8014/udp
+      - "127.0.0.1:8020:8020/tcp"
   md:
     build:
       context: ../Sprint3/Sprint3_Progetto
       dockerfile: md.Dockerfile
     ports:
-      - 8020:8020/tcp
-      - 8020:8020/udp
+      - 8021:8021/tcp
+      - 8021:8021/udp
     depends_on:
       - wis
 

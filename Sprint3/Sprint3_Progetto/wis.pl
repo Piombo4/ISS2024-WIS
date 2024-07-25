@@ -5,7 +5,7 @@ dispatch( start_robot, start_robot(X) ).
 dispatch( waiting, waiting(X) ).
 dispatch( robot_info, robot_info(X,Y,POSITION,JOB) ).
 dispatch( waste_in, waste_in(X) ).
-dispatch( waste_qty, waste_qty(X) ).
+dispatch( banana, banana(BRUH) ).
 dispatch( get_waste, get_waste(X) ).
 dispatch( turn_on, turn_on(X) ).
 dispatch( burn_in, burn_in(X) ).

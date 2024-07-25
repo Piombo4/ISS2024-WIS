@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Sprint3ProgettoSsguiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Sprint3ProgettoSsguiApplication.class, args);
+		SpringApplication.run(main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication.class, args);
 	}
 
 }

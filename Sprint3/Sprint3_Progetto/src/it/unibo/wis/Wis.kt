@@ -23,7 +23,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		
 					var ash_qty = 0
-					var waste_qty = 0
+					var banana = 0
 					var ash_level = 0
 					var isBurning: Boolean = false;
 					var robot_waiting: Boolean = false;
@@ -38,7 +38,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						ash_level= DMIN 
 						delay(500) 
-						observeResource("localhost","8014","ctx_wis","waste_storage","waste_qty")
+						observeResource("localhost","8014","ctx_wis","waste_storage","banana")
 						observeResource("127.0.0.2","8021","ctx_monitoring_device","sonar","ash_level")
 						observeResource("localhost","8014","ctx_wis","op_robot","robot_info")
 						forward("turn_on", "turn_on(1)" ,"incinerator" ) 
@@ -49,7 +49,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					sysaction { //it:State
 					}	 	 
 					 transition(edgeName="t01",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t02",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t02",targetState="updateWasteQty",cond=whenDispatch("banana"))
 					transition(edgeName="t03",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
 					transition(edgeName="t04",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 					transition(edgeName="t05",targetState="updateAshLevel",cond=whenDispatch("ash_level"))
@@ -57,6 +57,8 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("updateGUI") { //this:State
 					action { //it:State
+						CommUtils.outblue("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
 						if( checkMsgContent( Term.createTerm("robot_info(X,Y,POSITION,JOB)"), Term.createTerm("robot_info(X,Y,POSITION,JOB)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								
@@ -74,7 +76,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("updateAshLevel") { //this:State
 					action { //it:State
-						if( checkMsgContent( Term.createTerm("ash_level(LEVEL)"), Term.createTerm("ash_level(N)"), 
+						if( checkMsgContent( Term.createTerm("ash_level(LEVEL)"), Term.createTerm("ash_level(LEVEL)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 ash_level = payloadArg(0).toInt(); 
 								if(  ash_level < DLIMT || ash_level >= DMIN  
@@ -100,9 +102,10 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("updateWasteQty") { //this:State
 					action { //it:State
-						if( checkMsgContent( Term.createTerm("waste_qty(X)"), Term.createTerm("waste_qty(N)"), 
+						if( checkMsgContent( Term.createTerm("banana(BRUH)"), Term.createTerm("banana(BRUH)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 waste_qty = payloadArg(0).toInt()/50  
+								 banana = payloadArg(0).toInt()/50  
+								CommUtils.outmagenta("$banana")
 						}
 						//genTimer( actor, state )
 					}
@@ -137,9 +140,10 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
 						 	   
-						updateResourceRep("guidata($waste_qty,$ash_level,$isBurning,$x,$y,$position,$job)" 
+						CommUtils.outmagenta("$robot_waiting,$isBurning,$banana,$ash_level")
+						updateResourceRep("guidata($banana,$ash_level,$isBurning,$x,$y,$position,$job)" 
 						)
-						if(  robot_waiting && !isBurning && waste_qty > 0 && ash_level >= DLIMT 
+						if(  robot_waiting && !isBurning && banana > 0 && ash_level >= DLIMT 
 						 ){forward("start_robot", "start_robot(1)" ,"op_robot" ) 
 						 robot_waiting = false  
 						}
@@ -149,7 +153,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					sysaction { //it:State
 					}	 	 
 					 transition(edgeName="t07",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t08",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t08",targetState="updateWasteQty",cond=whenDispatch("banana"))
 					transition(edgeName="t09",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
 					transition(edgeName="t010",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 					transition(edgeName="t011",targetState="updateAshLevel",cond=whenDispatch("ash_level"))

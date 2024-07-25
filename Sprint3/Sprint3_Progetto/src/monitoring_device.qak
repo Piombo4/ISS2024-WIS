@@ -1,5 +1,5 @@
 System monitoringdevice
- 
+
 //LED
 Dispatch led_status : led_status(X) 
  
@@ -100,7 +100,6 @@ QActor sonardevice context ctx_monitoring_device{
 	State readSonarData{
 	[# 
 		var data = reader.readLine()
-		CommUtils.outyellow("$name with python: data = $data"   ) 
 		if( data != null ){
 		try{ 
 			val vd = data.toFloat()
@@ -114,8 +113,7 @@ QActor sonardevice context ctx_monitoring_device{
 		}//if
 		
 	#]	
-		if [# Distance > 0 #] { 
-		    println("$name with python: data = $data"   ) color yellow
+		if [# Distance > 0 && Distance != null #] { 
 			emitlocalstream sonardata : distance($Distance)
 			//emit  sonardata : distance($Distance)
 		}

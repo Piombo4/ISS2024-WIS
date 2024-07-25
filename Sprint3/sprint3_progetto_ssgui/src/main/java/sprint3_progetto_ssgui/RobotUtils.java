@@ -1,4 +1,4 @@
-package main.java.sprint3_progetto_ssgui;
+package sprint3_progetto_ssgui;
 
 import unibo.basicomm23.coap.CoapConnection;
 import unibo.basicomm23.interfaces.IApplMessage;
