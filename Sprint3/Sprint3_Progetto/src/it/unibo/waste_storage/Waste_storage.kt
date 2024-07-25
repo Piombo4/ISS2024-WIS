@@ -33,13 +33,13 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t035",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t036",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t038",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t039",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 				state("addRP") { //this:State
 					action { //it:State
 							scale += 50;   
-						updateResourceRep( "banana($scale)"  
+						updateResourceRep( "waste_qty($scale)"  
 						)
 						CommUtils.outblack("$name Depositato un RP!")
 						//genTimer( actor, state )
@@ -47,13 +47,13 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t037",targetState="addRP",cond=whenDispatch("waste_in"))
-					transition(edgeName="t038",targetState="removeRP",cond=whenDispatch("get_waste"))
+					 transition(edgeName="t040",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t041",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 				state("removeRP") { //this:State
 					action { //it:State
 							scale -= 50   
-						updateResourceRep( "banana($scale)"  
+						updateResourceRep( "waste_qty($scale)"  
 						)
 						CommUtils.outblack("$name Prelevato un RP!")
 						//genTimer( actor, state )
@@ -61,6 +61,8 @@ class Waste_storage ( name: String, scope: CoroutineScope, isconfined: Boolean=f
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
+					 transition(edgeName="t042",targetState="addRP",cond=whenDispatch("waste_in"))
+					transition(edgeName="t043",targetState="removeRP",cond=whenDispatch("get_waste"))
 				}	 
 			}
 		}

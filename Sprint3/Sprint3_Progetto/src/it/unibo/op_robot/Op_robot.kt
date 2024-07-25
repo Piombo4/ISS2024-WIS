@@ -78,14 +78,13 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
 						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
-						delay(500) 
-						forward("setdirection", "dir($D)" ,"basicrobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
 					 transition(edgeName="t116",targetState="withdraw_ws",cond=whenReply("moverobotdone"))
+					transition(edgeName="t117",targetState="to_incinerator",cond=whenReply("moverobotfailed"))
 				}	 
 				state("withdraw_ws") { //this:State
 					action { //it:State
@@ -111,15 +110,13 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
 						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
-						delay(500) 
-						forward("setdirection", "dir($D)" ,"basicrobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t217",targetState="ask_to_burn",cond=whenReply("moverobotdone"))
-					transition(edgeName="t218",targetState="to_incinerator",cond=whenReply("moverobotfailed"))
+					 transition(edgeName="t218",targetState="ask_to_burn",cond=whenReply("moverobotdone"))
+					transition(edgeName="t219",targetState="to_incinerator",cond=whenReply("moverobotfailed"))
 				}	 
 				state("ask_to_burn") { //this:State
 					action { //it:State
@@ -145,15 +142,13 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
 						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
-						delay(500) 
-						forward("setdirection", "dir($D)" ,"basicrobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t319",targetState="wait_for_burn",cond=whenReply("moverobotdone"))
-					transition(edgeName="t320",targetState="go_back_home",cond=whenReply("moverobotfailed"))
+					 transition(edgeName="t320",targetState="wait_for_burn",cond=whenReply("moverobotdone"))
+					transition(edgeName="t321",targetState="go_back_home",cond=whenReply("moverobotfailed"))
 				}	 
 				state("wait_for_burn") { //this:State
 					action { //it:State
@@ -165,7 +160,7 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t421",targetState="to_incinerator_burned",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t422",targetState="to_incinerator_burned",cond=whenDispatch("burn_end"))
 				}	 
 				state("to_incinerator_burned") { //this:State
 					action { //it:State
@@ -177,15 +172,13 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
 						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
-						delay(500) 
-						forward("setdirection", "dir($D)" ,"basicrobot" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t522",targetState="get_ash",cond=whenReply("moverobotdone"))
-					transition(edgeName="t523",targetState="to_incinerator_burned",cond=whenReply("moverobotfailed"))
+					 transition(edgeName="t523",targetState="get_ash",cond=whenReply("moverobotdone"))
+					transition(edgeName="t524",targetState="to_incinerator_burned",cond=whenReply("moverobotfailed"))
 				}	 
 				state("get_ash") { //this:State
 					action { //it:State
@@ -216,8 +209,8 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t624",targetState="ask_as",cond=whenReply("moverobotdone"))
-					transition(edgeName="t625",targetState="to_ash_storage",cond=whenReply("moverobotfailed"))
+					 transition(edgeName="t625",targetState="ask_as",cond=whenReply("moverobotdone"))
+					transition(edgeName="t626",targetState="to_ash_storage",cond=whenReply("moverobotfailed"))
 				}	 
 				state("ask_as") { //this:State
 					action { //it:State
@@ -242,16 +235,14 @@ class Op_robot ( name: String, scope: CoroutineScope, isconfined: Boolean=false 
 						 X = getCurSol("TX").toString();  
 						 Y = getCurSol("TY").toString();  
 						 D = getCurSol("TDIR").toString();  
-						forward("setdirection", "dir(up)" ,"basicrobot" ) 
-						delay(500) 
 						request("moverobot", "moverobot($X,$Y)" ,"basicrobot" )  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t626",targetState="waiting",cond=whenReply("moverobotdone"))
-					transition(edgeName="t627",targetState="go_back_home",cond=whenReply("moverobotfailed"))
+					 transition(edgeName="t627",targetState="waiting",cond=whenReply("moverobotdone"))
+					transition(edgeName="t628",targetState="go_back_home",cond=whenReply("moverobotfailed"))
 				}	 
 			}
 		}

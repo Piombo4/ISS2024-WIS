@@ -5,7 +5,7 @@ dispatch( start_robot, start_robot(X) ).
 dispatch( waiting, waiting(X) ).
 dispatch( robot_info, robot_info(X,Y,POSITION,JOB) ).
 dispatch( waste_in, waste_in(X) ).
-dispatch( banana, banana(BRUH) ).
+dispatch( waste_qty, waste_qty(QTY) ).
 dispatch( get_waste, get_waste(X) ).
 dispatch( turn_on, turn_on(X) ).
 dispatch( burn_in, burn_in(X) ).
@@ -18,6 +18,8 @@ reply( ashes_taken, ashes_taken(LEVEL) ).  %%for empty_ash
 request( moverobot, moverobot(TARGETX,TARGETY) ).
 dispatch( setdirection, dir(D) ).
 dispatch( setrobotstate, setpos(X,Y,D) ).
+request( getrobotstate, getrobotstate(ARG) ).
+reply( robotstate, robotstate(POS,DIR) ).  %%for getrobotstate
 request( engage, engage(OWNER,STEPTIME) ).
 reply( engagedone, engagedone(ARG) ).  %%for engage
 reply( engagerefused, engagerefused(ARG) ).  %%for engage
