@@ -13,10 +13,16 @@ var divAshCap;
 window.onload = () => {
     divRP = document.querySelector("#rp");
     divAsh = document.querySelector("#ash");
-    divAshCap = document.querySelector("ashCapacity")
+    divAshCap = document.querySelector("#ashCapacity")
     divIncinerator = document.querySelector("#incinerator");
     divPosition = document.querySelector("#position");
     divJob = document.querySelector("#job");
+    document.querySelector("#mockGet").onclick = () => {
+        mock_remove()
+    }
+    document.querySelector("#mockPut").onclick = () => {
+        mock_deposit()
+    }
 }
 
 function sendMessage(message) {
@@ -67,7 +73,6 @@ function updateValues(msg) {
 }
 
 function mock_deposit() {
-
     const depositJson = '{"mock_deposit" : "deposit"}'
     if (socket && socket.bufferedAmount == 0) { socket.send(depositJson) }
 }

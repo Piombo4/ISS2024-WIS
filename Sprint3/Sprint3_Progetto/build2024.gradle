@@ -124,7 +124,15 @@ dependencies {
 
     
     //USER libs for facades
+    implementation name: 'sprint3_progetto_ssgui-1.0-plain'
+    implementation name: 'sprint3_progetto_ssgui-1.0'
     
+	/* Librerie spring per il supporto a facade ***************************** */
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//depends on spring-boot-starter-logging, which already pulls in spring-jcl for us.
+	//When using starters, Logback is used for logging by default.
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 	
 sourceSets {
@@ -147,7 +155,7 @@ eclipse {
 
 application {
     //Define the main class for the application.
-    mainClassName    = 'it.unibo.ctx_test.MainCtx_testKt'
+    mainClassName    = 'it.unibo.ctx_wis.MainCtx_wisKt'
 }
  
  jar {
@@ -170,9 +178,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'test_architettura'
+        distributionBaseName = 'wis'
         contents { 
-             from './test_architettura.pl'
+             from './wis.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }
@@ -183,7 +191,7 @@ task run0(type: JavaExec) {
     group = "Execution"
     description = "Run the main class with JavaExecTask"
     classpath = sourceSets.main.runtimeClasspath
-    main = 'it.unibo.ctx_test.MainCtx_testKt'
+    main = 'it.unibo.ctx_wis.MainCtx_wisKt'
 }
 
 /*

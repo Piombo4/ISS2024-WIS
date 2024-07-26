@@ -122,7 +122,8 @@ dependencies {
     implementation name: '2p301'
 	implementation name: 'unibo.qakactor23-5.0'
     implementation name: 'unibo.basicomm23-1.0'
-    implementation name: 'sprint3_progetto_ssgui-1.0-plain'
+ implementation name: 'sprint3_progetto_ssgui-1.0-plain'
+    implementation name: 'sprint3_progetto_ssgui-1.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
