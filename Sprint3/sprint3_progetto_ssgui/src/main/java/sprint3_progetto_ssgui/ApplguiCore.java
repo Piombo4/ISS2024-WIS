@@ -32,7 +32,7 @@ public class ApplguiCore {
         //updateMsg( msg  );
         outinadapter.sendToOne(msg);
     }
-    public void handleReplyMsg( IApplMessage msg) {
+    public void handleReplyMsg(IApplMessage msg) {
         CommUtils.outcyan("AGC | handleReplyMsg " + msg  ) ;
         //Mando la risppsta alla ws-conn del browser che ha fatto la richiesta
         outinadapter.sendToOne(msg);
