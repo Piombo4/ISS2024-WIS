@@ -9,7 +9,6 @@ import unibo.basicomm23.coap.CoapConnection;
 import unibo.basicomm23.tcp.TcpClientSupport;
 import unibo.basicomm23.utils.CommSystemConfig;
 
-
 /*
 Adapter verso il QActor che fa da facade
 Usa il file facadeConfig.json
@@ -17,112 +16,117 @@ Usa il file facadeConfig.json
 public class ActorOutIn {
     private ApplguiCore guiCore;
     private WSHandler wsHandler;
-    private  Interaction tcpConn;
+    private Interaction tcpConn;
 
-
-    public ActorOutIn( WSHandler wsHandler ) {
+    public ActorOutIn(WSHandler wsHandler) {
         try {
-            this.wsHandler        = wsHandler;
-            this.tcpConn          = TcpClientSupport.connect("localhost", 8014, 10);
+            this.wsHandler = wsHandler;
+            this.tcpConn = TcpClientSupport.connect("localhost", 8014, 10);
         } catch (Exception e) {
             tcpConn = null;
             CommUtils.outred("OUTIN | creation WARNING: " + e.getMessage());
         }
-     }
+    }
 
-     //Injection
-     public void setGuiCore(ApplguiCore guiCore){
-         this.guiCore = guiCore;
-     }
+    // Injection
+    public void setGuiCore(ApplguiCore guiCore) {
+        this.guiCore = guiCore;
+    }
 
-     
-     private void sendToActor(IApplMessage message ) {
-    	 String response = this.sendApplMsg(message);
-     }
-     
-     private void sendMsgToActor(IApplMessage message ) {
-    	 RobotUtils.sendApplMsg(message);
-     }
-     
-     public String sendApplMsg(IApplMessage msg){
-         try {
-             CommUtils.outblue("SSGUI | sendApplMsg msg:" + msg + " conn=" + tcpConn);
+    private void sendToActor(IApplMessage message) {
+        String response = this.sendApplMsg(message);
+    }
 
-             if( msg.isRequest() ){
-                 String answer = tcpConn.request( msg.toString() );
-                 CommUtils.outblue("SSGUI | sendApplMsg req answer:" + answer  );
-                 return answer;
-             }
-             else
-            	 tcpConn.forward( msg.toString() );
-                 return "DONE sendApplMsg "+ msg  ;
-         } catch (Exception e) {
-             CommUtils.outred("SSGUI | sendApplMsg on:" + tcpConn + " ERROR:"+e.getMessage());
-             return " ERROR:"+e.getMessage();
-         }
+    private void sendMsgToActor(IApplMessage message) {
+        RobotUtils.sendApplMsg(message);
+    }
 
-     }
-     
-     
-/*
-    private void sendToActorOld(IApplMessage message ) {
-        IApplMessage response = null;
+    public String sendApplMsg(IApplMessage msg) {
         try {
-            CommUtils.outmagenta("OUTIN | Sending " + message);
-            if( message.isRequest() ) {
-                response = tcpConn.request(message);
-                CommUtils.outmagenta("OUTIN | Got response " + response);
-                if (response != null) {
-                    if(response.isRequest()){
-                        //String s =  "Sorry, I'm not able to answer to request " + response.msgId() + ":"+ response.msgContent();
-                        //CommUtils.outmagenta("OUTIN |  " + s);
-                        //IApplMessage sorry = MsgUtil.buildReply("gui", response.msgId(), s, response.msgSender());
-                        //wsHandler.sendToAll( s );
-                        guiCore.handleReplyMsg( response   );
-                        //Mi attendo una risposta che deve essere gestita da
-                    }else {
-                        //wsHandler.sendToAll( response );
-                        guiCore.handleReplyMsg( response.toString()   );
-                    }
-                }
-            }else tcpConn.forward(message);
+            CommUtils.outblue("SSGUI | sendApplMsg msg:" + msg + " conn=" + tcpConn);
+
+            if (msg.isRequest()) {
+                String answer = tcpConn.request(msg.toString());
+                CommUtils.outblue("SSGUI | sendApplMsg req answer:" + answer);
+                return answer;
+            } else
+                tcpConn.forward(msg.toString());
+            return "DONE sendApplMsg " + msg;
         } catch (Exception e) {
-            CommUtils.outred("OUTIN | ERROR " + e.getMessage() +" while sending the request");
+            CommUtils.outred("SSGUI | sendApplMsg on:" + tcpConn + " ERROR:" + e.getMessage());
+            return " ERROR:" + e.getMessage();
         }
+
     }
-*/
+
+    /*
+     * private void sendToActorOld(IApplMessage message ) {
+     * IApplMessage response = null;
+     * try {
+     * CommUtils.outmagenta("OUTIN | Sending " + message);
+     * if( message.isRequest() ) {
+     * response = tcpConn.request(message);
+     * CommUtils.outmagenta("OUTIN | Got response " + response);
+     * if (response != null) {
+     * if(response.isRequest()){
+     * //String s = "Sorry, I'm not able to answer to request " + response.msgId() +
+     * ":"+ response.msgContent();
+     * //CommUtils.outmagenta("OUTIN |  " + s);
+     * //IApplMessage sorry = MsgUtil.buildReply("gui", response.msgId(), s,
+     * response.msgSender());
+     * //wsHandler.sendToAll( s );
+     * guiCore.handleReplyMsg( response );
+     * //Mi attendo una risposta che deve essere gestita da
+     * }else {
+     * //wsHandler.sendToAll( response );
+     * guiCore.handleReplyMsg( response.toString() );
+     * }
+     * }
+     * }else tcpConn.forward(message);
+     * } catch (Exception e) {
+     * CommUtils.outred("OUTIN | ERROR " + e.getMessage()
+     * +" while sending the request");
+     * }
+     * }
+     */
     //
-    public void dorequest(  String senderId, String destActor, String reqid, String reqarg ) {
-        IApplMessage message = CommUtils.buildRequest(senderId, reqid, reqarg  , destActor);
-        CommUtils.outmagenta("OUTIN | dorequest " + message );
-        sendToActor( message );
+    public void dorequest(String senderId, String destActor, String reqid, String reqarg) {
+        IApplMessage message = CommUtils.buildRequest(senderId, reqid, reqarg, destActor);
+        CommUtils.outmagenta("OUTIN | dorequest " + message);
+        sendToActor(message);
     }
 
-    public void docmd( String cmdid, String cmdarg ) {
-        CommUtils.outmagenta("OUTIN | docmd  " + cmdid );
+    public void docmd(String cmdid, String cmdarg) {
+        CommUtils.outmagenta("OUTIN | docmd  " + cmdid);
         IApplMessage m1 = RobotUtils.moveAril("basicrobot", cmdarg);
-        CommUtils.outmagenta("OUTIN | docmd m1=" + m1 );
+        CommUtils.outmagenta("OUTIN | docmd m1=" + m1);
 
-         IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", cmdid, cmdarg , "basicrobot");
-        CommUtils.outmagenta("OUTIN | docmd message=" + message );
-        sendToActor( message );
-    }
-    public void docmd( IApplMessage message ) {
-        CommUtils.outmagenta("OUTIN | docmd message=" + message );
-        
-        sendToActor( message );
+        IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", cmdid, cmdarg, "basicrobot");
+        CommUtils.outmagenta("OUTIN | docmd message=" + message);
+        sendToActor(message);
     }
 
-    public void doreply(String senderId, String destActor, String replyId, String replyArg ) {
-        CommUtils.outmagenta("OUTIN | doreply  " + replyId );
-        IApplMessage message = CommUtils.buildReply(senderId, replyId, replyArg , destActor);
-        sendToActor(message );
+    public void docmd(IApplMessage message) {
+        CommUtils.outmagenta("OUTIN | docmd message=" + message);
+
+        sendToActor(message);
     }
 
-    public void sendToOne(IApplMessage msg){
-        wsHandler.sendToOne( msg  );
+    public void doreply(String senderId, String destActor, String replyId, String replyArg) {
+        CommUtils.outmagenta("OUTIN | doreply  " + replyId);
+        IApplMessage message = CommUtils.buildReply(senderId, replyId, replyArg, destActor);
+        sendToActor(message);
     }
-    public void sendToOne(String msg){ wsHandler.sendToOne( msg  ); }
 
-    public void sendToAll(String msg){ wsHandler.sendToAll( msg  ); }
+    public void sendToOne(IApplMessage msg) {
+        wsHandler.sendToOne(msg);
+    }
+
+    public void sendToOne(String msg) {
+        wsHandler.sendToOne(msg);
+    }
+
+    public void sendToAll(String msg) {
+        wsHandler.sendToAll(msg);
+    }
 }
