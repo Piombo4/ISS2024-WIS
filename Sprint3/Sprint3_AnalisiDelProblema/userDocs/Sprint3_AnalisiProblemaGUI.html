@@ -1,4 +1,4 @@
-    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <head>
@@ -26,7 +26,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
         rel="stylesheet">
-
 
     <!-- <script type="text/javascript" src="./commons/resources/scripts/myScripts.js"></script> -->
     <style type="text/css">
@@ -289,38 +288,7 @@
         }
     </style>
 
-    <script> 
-        window.onload = () => {
-            console.log(words)
-            for ( let i = 0; i < words.length; i++ ) {
-                const word = words[i]
-                addLinks(word.text,word.link)
-            }
-        }
 
-        function addLinks(word,link)
-        {
-            if(window.find)
-            {
-                while(window.find(word, false))
-                {
-                    var range=window.getSelection().getRangeAt(0);
-
-                    const node = document.createElement('a')
-                    node.setAttribute("href",link)
-                    node.innerText = word
-
-                    range.deleteContents();
-                    range.insertNode(node);
-                }
-            }
-        } 
-            
-        var words = [
-            {  text: 'CleanArchitecture', link: '../../../resources/Architetture.html#la-clean-architecture' }
-        ]
-       
-    </script>
 
 </head>
 
@@ -331,6 +299,31 @@
 
 <title>Sprint 3</title>
 </head>
+
+<!--
+	<body onload="loadNav();">
+		<div id="openButton" class="openButton" onclick="openNav(true)">&#9776; Menu</div>
+		<div id="sidenav" class="sidenav">
+			<a class="closeButton" href="javascript:void(0)" onclick="closeNav(true)">&times;</a>
+			<a href=".README.html">ReadMe</a>
+			<a class="sprint" href="../../../Sprint0/Codice/userDocs/Cold%20Storage%20Service%20-%20Natali%20V3.html">Sprint0</a>
+			<a class="sprint" href="../../../Sprint1.0/Codice/userDocs/Sprint%201.0%20-%20V3.html">Sprint1.0</a>
+			<a class="sprint" href="../../../Sprint1.1/Codice/userDocs/Sprint%201.1%20-%20V3.html">Sprint1.1</a>
+			<a id="currentSprint" class="sprint" href="#">&#8211;&#8212; Sprint2 &#8212;&#8211;</a>
+			<div class="sidenavSection">
+				<a href="#Goal Sprint 2">Goal Sprint 2</a>
+				<a href="#Requisiti">Requisiti</a>
+				<a href="#Analisi dei Requisiti">Analisi dei Requisiti</a>
+				<a href="#Analisi del Problema">Analisi del Problema</a>
+				<a href="#Test Plan">Test Plan</a>
+				<a href="#Progettazione">Progettazione</a>
+				<a href="#Deployment">Deployment</a>
+			</div>
+			<p class="separator">&mdash;&mdash;&mdash;&ndash;&ndash;&mdash;&mdash;&mdash;</p>
+			<a class="sprint" href="../../../Sprint3/Codice/userDoc/Sprint%203.html">Sprint3</a>
+			<bottom-spacer/>
+		</div>
+-->
 
 <body background="">
     <div id="top">
@@ -367,12 +360,13 @@
                 Utilizzare un'applicazione come GUI
             </li>
         </ul>
-        L'opzione scelta è la prima, poichè in questo sarebbe accessibile da qualunque dispositivo senza bisogno di
+        L'opzione scelta è la seconda, poichè in questo sarebbe accessibile da qualunque dispositivo senza bisogno di
         particolari applicazioni e non la vincolerebbe ad una particolare architettura.<br>
         Inoltre utilizzando il linguaggio HTML si ha una semplice implementazione delle interaccie grafiche, grazie al
         suo vasto repertorio di tag, compatibile con quasi ogni dispositivo.
         <h3>Contesto della GUI</h3>
-        Per rispettare i principi della CleanArchitecture si è deciso di separe il sistema vero e proprio da eventuali interfacce esterne.
+        Per rispettare i principi della <a href="../../../resources/Architetture.html#la-clean-architecture">Clean
+            Architecture</a> si è deciso di separe il sistema vero e proprio da eventuali interfacce esterne.
         <br>
         Inoltre, per potervi accedere via web, è necessario che la GUI sia posizionata su una porta diversa da quelle
         già utilizzate all'interno del sistema, rendendola quindi un'entità dislocata rispetto alle altre.
@@ -382,7 +376,7 @@
         Tra le varie opzioni, quella più adatta è quella di assegnare il compito al gestore del sistema, il WIS, che
         dovrà inviare alla GUI le informazioni di cui necessita.
         <h4>Come inviare queste informazioni?</h4>
-        Seguendo i principi della CleanArchitecture, le interfacce grafiche non dovrebbero sapere nulla del sistema con
+        Seguendo i principi della Clean Architecture, le interfacce grafiche non dovrebbero sapere nulla del sistema con
         cui sta interagendo e le informazioni necessarie al suo funzionamento
         dovrebbe essere comunicate tramite un opportuno Adapter che fa da mediatore con l'applicazione.<br><br>
         Scegliendo di usare come GUI una WEB-GUI e QAK come linguaggio per il core business nasce una
@@ -413,9 +407,9 @@
         Da requisiti, la GUI deve mostrare lo stato di OpRobot, in particolare la sua posizione nell'area di servizio e il lavoro che sta svolgendo. <br>
         Visto che queste informazioni non sono attualmente disponibili al <b>WIS</b> sarà necessario aggiungere un ulteriore interazione al fine comunicarle.
         <h4>Come modellare questa nuova interazione?</h4>
-        Per lo stesso motivo analizzato sopra, l'interazione viene modellata come una updateResource da OpRobot verso WIS 
-        <br>
-        <todo>Archiettura logica immagine</todo>
+        Per lo stesso motivo analizzato sopra, l'interazione viene modellata come una updateResource da OpRobot verso WIS.
+
+
         <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
             By Alessandro Piombini & Danilo Cavallini
             <br>

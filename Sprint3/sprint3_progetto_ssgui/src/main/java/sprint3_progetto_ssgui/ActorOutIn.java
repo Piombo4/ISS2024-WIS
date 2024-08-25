@@ -2,12 +2,10 @@ package main.java.sprint3_progetto_ssgui;
 
 import unibo.basicomm23.interfaces.IApplMessage;
 import unibo.basicomm23.interfaces.Interaction;
+import unibo.basicomm23.interfaces.Interaction2023;
 import unibo.basicomm23.msg.ApplMessage;
+import unibo.basicomm23.tcp.TcpConnection;
 import unibo.basicomm23.utils.CommUtils;
-
-import unibo.basicomm23.coap.CoapConnection;
-import unibo.basicomm23.tcp.TcpClientSupport;
-import unibo.basicomm23.utils.CommSystemConfig;
 
 /*
 Adapter verso il QActor che fa da facade
@@ -21,7 +19,6 @@ public class ActorOutIn {
     public ActorOutIn(WSHandler wsHandler) {
         try {
             this.wsHandler = wsHandler;
-            this.tcpConn = TcpClientSupport.connect("localhost", 8014, 10);
         } catch (Exception e) {
             tcpConn = null;
             CommUtils.outred("OUTIN | creation WARNING: " + e.getMessage());
@@ -34,29 +31,8 @@ public class ActorOutIn {
     }
 
     private void sendToActor(IApplMessage message) {
-        String response = this.sendApplMsg(message);
-    }
-
-    private void sendMsgToActor(IApplMessage message) {
-        RobotUtils.sendApplMsg(message);
-    }
-
-    public String sendApplMsg(IApplMessage msg) {
-        try {
-            CommUtils.outblue("SSGUI | sendApplMsg msg:" + msg + " conn=" + tcpConn);
-
-            if (msg.isRequest()) {
-                String answer = tcpConn.request(msg.toString());
-                CommUtils.outblue("SSGUI | sendApplMsg req answer:" + answer);
-                return answer;
-            } else
-                tcpConn.forward(msg.toString());
-            return "DONE sendApplMsg " + msg;
-        } catch (Exception e) {
-            CommUtils.outred("SSGUI | sendApplMsg on:" + tcpConn + " ERROR:" + e.getMessage());
-            return " ERROR:" + e.getMessage();
-        }
-
+        String response = RobotUtils.sendApplMsg(message);
+        guiCore.handleReplyMsg(response.toString());
     }
 
     /*
