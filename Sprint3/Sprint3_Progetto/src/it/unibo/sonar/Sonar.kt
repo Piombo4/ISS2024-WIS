@@ -50,7 +50,7 @@ class Sonar ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) 
 						if( checkMsgContent( Term.createTerm("distance(D)"), Term.createTerm("distance(D)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								CommUtils.outmagenta("$name | distance=${payloadArg(0)}")
-								updateResourceRep( "ash_level(payloadArg(0))"  
+								updateResourceRep( "ash_level(" + payloadArg(0) + ")"  
 								)
 						}
 						//genTimer( actor, state )

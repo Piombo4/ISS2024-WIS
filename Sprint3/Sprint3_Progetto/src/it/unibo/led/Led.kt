@@ -28,6 +28,7 @@ class Led ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						delay(500) 
 						CommUtils.outgreen("$name STARTS")
+						 p = Runtime.getRuntime().exec("python LedOff.py");  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -40,10 +41,10 @@ class Led ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 						if( checkMsgContent( Term.createTerm("led_status(X)"), Term.createTerm("led_status(X)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								
-												 p.destroy()
-								    				 if (p.isAlive()) {
-								    	    			p.destroyForcibly();
-								    					}
+											 	p.destroy()
+												 if (p.isAlive()) {
+									    			p.destroyForcibly();
+													}
 												if(payloadArg(0) == "ON"){
 													
 								    				p = Runtime.getRuntime().exec("python LedOn.py")
@@ -53,7 +54,7 @@ class Led ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 								    				p = Runtime.getRuntime().exec("python LedOff.py")
 												}
 												else {
-													if(payloadArg(0) == "ON"){
+													if(payloadArg(0) == "BLINK"){
 								    				p = Runtime.getRuntime().exec("python LedBlink.py")
 												}
 												} 

@@ -27,7 +27,7 @@ reply( engagedone, engagedone(ARG) ).  %%for engage
 reply( engagerefused, engagerefused(ARG) ).  %%for engage
 dispatch( disengage, disengage(ARG) ).
 dispatch( led_status, led_status(X) ).
-dispatch( ash_level, ash_level(LEVEL) ).
+dispatch( ash_level, ash_level(M,LEVEL) ).
 event( sonardata, distance(D) ).
 dispatch( sonarwork, sonarwork(X) ).
 dispatch( doread, doread(X) ).
@@ -35,7 +35,7 @@ dispatch( guidata, guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").
 context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").
-context(ctx_monitoring_device, "127.0.0.2",  "TCP", "8021").
+context(ctx_monitoring_device, "192.168.209.121",  "TCP", "8021").
  qactor( basicrobot, ctx_basic_robot, "external").
   qactor( sonar, ctx_monitoring_device, "external").
   qactor( led, ctx_monitoring_device, "external").

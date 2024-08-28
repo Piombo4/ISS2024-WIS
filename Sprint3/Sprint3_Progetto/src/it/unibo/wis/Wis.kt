@@ -38,7 +38,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						ash_level= DMIN 
 						delay(500) 
-						observeResource("127.0.0.2","8021","ctx_monitoring_device","sonar","ash_level")
+						observeResource("192.168.209.121","8021","ctx_monitoring_device","sonar","ash_level")
 						observeResource("localhost","8014","ctx_wis","op_robot","robot_info")
 						observeResource("localhost","8014","ctx_wis","waste_storage","waste_qty")
 						forward("turn_on", "turn_on(1)" ,"incinerator" ) 
@@ -78,9 +78,12 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 				}	 
 				state("updateAshLevel") { //this:State
 					action { //it:State
-						if( checkMsgContent( Term.createTerm("ash_level(LEVEL)"), Term.createTerm("ash_level(LEVEL)"), 
+						CommUtils.outmagenta("$ash_level")
+						if( checkMsgContent( Term.createTerm("ash_level(M,LEVEL)"), Term.createTerm("ash_level(N,LEVEL)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 ash_level = payloadArg(0).toInt(); 
+								 ash_level = payloadArg(1).replace("ash_level(","").replace(")","").toInt(); 
+								CommUtils.outmagenta("$ash_level")
+								CommUtils.outmagenta("${payloadArg(1)}")
 								if(  ash_level < DLIMT || ash_level >= DMIN  
 								 ){forward("led_status", "led_status(BLINK)" ,"led" ) 
 								}
@@ -112,9 +115,9 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 												position = payloadArg(2).toString();
 												job = payloadArg(3).toString();
 						}
-						if( checkMsgContent( Term.createTerm("ash_level(LEVEL)"), Term.createTerm("ash_level(LEVEL)"), 
+						if( checkMsgContent( Term.createTerm("ash_level(M,LEVEL)"), Term.createTerm("ash_level(N,LEVEL)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 ash_level = payloadArg(0).toInt(); 
+								 ash_level = payloadArg(1).toInt(); 
 								if(  ash_level < DLIMT || ash_level >= DMIN  
 								 ){forward("led_status", "led_status(BLINK)" ,"led" ) 
 								}

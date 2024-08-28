@@ -16,20 +16,21 @@ QActor led context ctx_monitoring_device{
 	[#
 	lateinit var p : Process	
 	#]
-	
+	 
 	State s0 initial{
 		delay 500   
 		println("$name STARTS") color green
+		[# p = Runtime.getRuntime().exec("python LedOff.py"); #]
 	}
 	Transition t0 whenMsg led_status -> updateLed
 	 
 	State updateLed{ 
 		onMsg(led_status:led_status(X)){
 			[#
-				 p.destroy()
-    				 if (p.isAlive()) {
-    	    			p.destroyForcibly();
-    					}
+			 	p.destroy()
+				 if (p.isAlive()) {
+	    			p.destroyForcibly();
+					}
 				if(payloadArg(0) == "ON"){
 					
     				p = Runtime.getRuntime().exec("python LedOn.py")
@@ -39,7 +40,7 @@ QActor led context ctx_monitoring_device{
     				p = Runtime.getRuntime().exec("python LedOff.py")
 				}
 				else {
-					if(payloadArg(0) == "ON"){
+					if(payloadArg(0) == "BLINK"){
     				p = Runtime.getRuntime().exec("python LedBlink.py")
 				}
 				} 
@@ -68,7 +69,7 @@ QActor sonar context ctx_monitoring_device{
 		printCurrentMessage color yellow
 		onMsg( sonardata : distance(D) ){
 			println("$name | distance=${payloadArg(0)}") color magenta
-			updateResource [# "ash_level(payloadArg(0))" #]
+			updateResource [# "ash_level(" + payloadArg(0) + ")" #]
 		}
 		
 	}
