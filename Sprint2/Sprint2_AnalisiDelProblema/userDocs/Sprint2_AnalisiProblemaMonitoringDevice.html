@@ -332,10 +332,6 @@
     </div>
 
     <div class="body">
-        <h2>Da Fare Domani</h2>
-        <todo>Fase di progetto</todo>
-        <todo>3 file python dei led</todo>
-        <todo>DMIN nel WIS</todo>
         <h2>Sprint 1</h2>
         Nello Sprint precedente sono state analizzate le problematiche e progettato il sistema relativo al Core Business
         (WIS-OpRobot-WasteStorage-Incinerator-AshStorage). <br>
@@ -410,13 +406,11 @@
             <li>
                 il <b>Sonar</b> notifica ogni variazione della misura al <b>WIS</b> tramite updateResource
             </li>
+            <li>
+                Si utilizza un protocolla MQTT utilizzando l'interazione pub/sub.
+            </li>
         </ol>
-        L'opzione scelta è la seconda. Con l'opzione 1 il <b>WIS</b> dovrebbe periodicamente inviare una richiesta di
-        aggiornamento al <b>Sonar</b> per
-        ottenere il valore, costituendo così una interazione a Polling. <br> Per questo motivo si preferisce che sia il
-        <b>Sonar</b>
-        ad aggiornare il <b>WIS</b> direttamente ad ogni
-        cambiamento del suo stato interno.
+        L'opzione scelta è la terza, in quanto permette di slegare completamente i componenti, aumentando la modularità del sistema. 
 
         <h4>Come interagire con il sonar fisico?</h4>
         Per interagire con il sonar fisico (HC-SR04) abbiamo bisogno di un software che permetta di avviare/fermare il
@@ -431,7 +425,7 @@
         l'interazione con il sonar fisico.
         <h2>Architettura Logica</h2>
         <img src="../sprint2_architetturalogicaarch.png">
-
+        
     <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
         By Alessandro Piombini & Danilo Cavallini
         <br>

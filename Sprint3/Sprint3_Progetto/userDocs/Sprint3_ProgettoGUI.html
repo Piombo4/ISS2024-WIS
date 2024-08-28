@@ -299,6 +299,38 @@
 	</style>
 
 
+	<script>
+		window.onload = () => {
+			console.log(words)
+			for (let i = 0; i < words.length; i++) {
+				const word = words[i]
+				addLinks(word.text, word.link)
+			}
+		}
+
+		function addLinks(word, link) {
+			if (window.find) {
+				while (window.find(word, false)) {
+					var range = window.getSelection().getRangeAt(0);
+
+					const node = document.createElement('a')
+					node.setAttribute("href", link)
+					node.innerText = word
+
+					range.deleteContents();
+					range.insertNode(node);
+				}
+			}
+		}
+
+		var words = [
+			{ text: 'CleanArchitecture', link: '../../../resources/Architetture.html#la-clean-architecture' },
+			{ text: 'Spring Boot', link: 'https://spring.io/projects/spring-boot' },
+			{ text: 'Facade24Start', link: '../resources/Facade24Start.html' },
+			{ text: 'ActorOutIn', link: '../resources/Facade24Start.html#actoroutin' }
+		]
+
+	</script>
 
 </head>
 
@@ -343,122 +375,154 @@
 
 	<div class="body">
 		<h2>Architettura Logica</h2>
-		<center><img src="../../Sprint2_AnalisiDelProblema/sprint2_architetturalogicaarch.png"></center>
-		<a href="../../Sprint2_Progetto/src/core_business.qak">core_business.qak</a>
-		<br>
-		<a href="../..//Sprint2_Progetto/src/monitoring_device.qak">monitoring_device.qak</a>
+		<img src="../wisarch.png" alt="">
 		<h2>Progetto</h2>
-		<h3>Software per led fisico acceso/spento/lampeggiante</h3>
-		Sono stati realizzati 3 file diversi che verranno chiamati dall'attore Led per eseguire le azioni fisiche corrispondenti.<br>
-		Essendo il Led collegato ad un RaspBerry si è deciso di utilizzare il linguaggio Python con la libreria GPIO dato è la scelta più semplice e pratica per eseguire questo tipo di operazioni.<br>
-		Files:
+		Come accennato nell'analisi del problema, si è realizzata una WEB-GUI. Per progettarla è stato utilizzato Spring
+		Boot. <br>
+		Il progetto della GUI si divide in due parti:
+		<ul>
+			<li>
+				<b>Parte statica</b>: l'impostazione della pagina HTML.
+			</li>
+			<li>
+				<b>Parte dinamica</b>: permette all’applicazione Web di interagire da un lato con utente umano e da un
+				altro lato con una applicazione qak.
+			</li>
+		</ul>
+		<h3>Parte Statica</h3>
+		<img src="../../../resources/gui.PNG" alt="">
+		<a href=".././../sprint3_progetto_ssgui/src/main/resources/templates/SSGUI.html">SSGUI.html</a>
+		<br>
+		<br>
+		Inoltre, nel file <a
+			href=".././../sprint3_progetto_ssgui/src/main/resources/static/wsminimal.js">wsminimal.js</a> sono state
+		inserite le funzioni che permettono di aggiornare i valori sull'interfaccia, così come le funzioni per
+		aggiungere un RP e prelevare la cenere.
+
+		<h3>Parte dinamica</h3>
+		Per la parte dinamica sono stati riutilizzati alcuni componenti del progetto Facade24Start poichè ritenuti
+		adeguati. Quelli che è stato necessario adattare al <b>WIS</b> sono:
+		<br>
+		<br>
+		<h4>ActorOutIn</h4>
+		Crea la connessione TCP all’attore del sistema applicativo<br>
+		Esso viene utilizzato per 2 tipi di interazioni:
 		<ol>
-			<li>Accensione -> <a href="../LedOn.py">LedOn.py</a></li>
-			<li>Spegnimento -> <a href="../LedOff.py">LedOff.py</a></li>
-			<li>Lampeggio -> <a href="../LedBlink.py">LedBlink.py</a></li>
+			<li>Aggiornare la WEB-GUI con i valori corretti del sistema attuale, inviando a tutte le GUI le informazioni
+				aggiornate tramite il WSHandler </li>
+			<pre>
+	public void sendToOne(IApplMessage msg) {
+		wsHandler.sendToOne(msg);
+	}
+
+	public void sendToOne(String msg) {
+		wsHandler.sendToOne(msg);
+	}
+
+	public void sendToAll(String msg) {
+		wsHandler.sendToAll(msg);
+	}
+			</pre>
+			<li>Realizzare i comandi per il Mock, le funzioni di inserimento e prelievo di un RP su decisione
+				dell'utente ( funzioni non da requisiti, solo per testing )</li>
+			<pre>
+	public void docmd( IApplMessage message ) {
+		CommUtils.outmagenta("OUTIN | docmd message=" + message );
+		sendToActor( message );
+	}
+	
+	private void sendToActor(IApplMessage message ) {
+		String response = this.sendApplMsg(message);
+	}
+			</pre>
 		</ol>
-		<h3>Come controllare se l'ash storage è vuoto?</h3>
-		E' stata introdotta una variabile DMIN che identifica quando l'ash storage è vuoto, visto che non abbiamo un riferimento reale di quanto sia alto il container>.<br>
-
-		<h2>Testing</h2>
-		Come in quello precedente (<a href="../../../Sprint1/Sprint1_Progetto/userDocs/Sprint1_ProgettoCoreBusiness.html#Testing">link</a>)
-		<h3>Deployment</h3>
-		Per poter eseguire i due contesti nello stesso progetto è stato modificato il build.gradle in questo modo:
-<pre>
-	application {
-		// Define the main class for the application.
-		mainClassName = 'it.unibo.ctx_wis.MainCtx_wisKt'
-		if (project.hasProperty("build_MD")) {
-			mainClassName = 'it.unibo.ctx_monitoring_device.MainCtx_monitoring_deviceKt'
+		<h4>ApplGuiCore</h4>
+		Rappresenta il core business della GUI. Ha la responsabilità di decidere cosa fare per ogni messaggio di input e
+		come inviare informazioni in uscita attraverso l’adapter ActorOutIn.<br>
+		Utilizzato per gestire le richieste provenienti dal Mock<br>
+		<pre>
+	public void handleWsMsg(String id, String msg) {
+		CommUtils.outcyan("AGC | handleWsMsg msg " + msg  );
+		JSONObject jsonMsg = new JSONObject(msg);
+		boolean isCmd = jsonMsg.has("cmd");
+		if(jsonMsg.has("mock_deposit")){
+			IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", "mock_deposit", "mock_deposit(1)" , "wis");
+			outinadapter.docmd( message );
+			return;
+		}
+		else if(jsonMsg.has("mock_remove")){
+			IApplMessage message = CommUtils.buildDispatch("gui23xyz9526", "mock_remove", "mock_remove(1)" , "wis");
+			outinadapter.docmd( message );
+			return;
 		}
 	}
-		
-	jar {
-		println("building jar")
-		duplicatesStrategy(DuplicatesStrategy.EXCLUDE)  //per via di locgback.xml quando si usa spring
-		from sourceSets.main.allSource
-		from('./') {
-			include '*.pl'
-			include '*.json'
-		}
-		manifest {
-			attributes 'Main-Class': "$mainClassName"
-		}
-	}
-	distributions {
-		main {
-			distributionBaseName = 'wis'
-			if (project.hasProperty("build_MD")) {
-				distributionBaseName = 'monitoringdevice'
-			}	  
-			contents { 
-					from './wis.pl'
-					from './monitoringdevice.pl'
-					from './sysRules.pl'
-					from './facadeConfig.json'
-					from './positions.pl'
-					from './pointPicker.pl'
-			}
-		}
-	} 
-</pre>
-		Quando si vuole creare il Deployment per il WIS bisogna eseguire:
-		<pre>gradlew distZip</pre>
-		Mentre per il Monitoring Device:
-		<pre>gradlew distZip -Pbuild_MD</pre>
-		Per poter eseguire la demo del Core Business sono disponibili due file batch:
-		<ul>
-			<li>
-				<a href="../../unibo.basicrobot24/basicRobot.bat">basicRobot.bat</a>: avvia l'immagine docker del WEnv,
-				imposta la stanza impostata nel file sceneConfig.js e apre una tab di chrome per la visualizzazione
-			</li>
-			<li>
-				wis.bat esegue il sistema WIS
-			</li>
-			<li>
-				monitoringdevice.bat esegue il sistema MonitoringDevice
-			</li>
-		</ul>
-		<b>NB</b>: per eseguire correttamente il sistema, è necessaria la cartella unibolibs che contiene le librerie
-		necessarie per l'esecuzione. Tale libreria va posizionata un livello sotto alla cartella dello Sprint1.
-		<br>
-		<br>
-		<b>Directory tree</b>:<br>
+		</pre>
 
-	<pre>
-	Sprint2
-	|	
-	+ - - Sprint2_AnalisiDelProblema 
-	+ - - Sprint1_Progetto 
-			|
-			+ - - build/distributions/wis-1.0/bin 
-				|
-				+ - - wis.bat
-			+ - - build/distributions/monitoringdevice-1.0/bin
-				|
-				+ - - monitoringdevice.bat
-	+ - - unibo.basicrobot24
-			|
-			+ - - basicRobot.bat
-	</pre>
-	</div>
+		<h3>Interazioni</h3>
+		<h4>OpRobot &rarr; Wis </h4>
+		Dato che la GUI deve mostrare la posizione ed il lavoro corrente di <b>OpRobot</b>, è necessario che queste
+		informazioni vengano inviate al <b>Wis</b>. Per questo motivo è stato aggiunto il messaggio: <br>
+		<center><i>robot_info: robot_info(X,Y,POSITION,JOB)</i></center>
 
-	<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
-		By Alessandro Piombini & Danilo Cavallini
+		<h4>Wis &rarr; GUI </h4>
+		Per aggiornare la GUI affinchè rispecchi i cambiamenti dl sistema, è stato necessario introdurre un nuovo
+		messaggio: <br>
+		<center><i>guidata: guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB)</i></center>
 		<br>
-		Email:
-		<ul>
-			<li>
-				alessandro.piombini@studio.unibo.it
-			</li>
-			<li>
-				danilo.cavallini@studio.unibo.it
-			</li>
-		</ul>
-		GIT repo: https://github.com/Piombo4/ISS2024-WIS
+		Ogni volta che uno dei dati all'interno del messaggio cambia, il <a
+			href="../../../Sprint3/sprint3_progetto_ssgui/src/main/java/sprint3_progetto_ssgui/CoapObserver.java">CoapObserver</a>
+		cattura l'updateResource inviato dal <b>Wis</b>.
 		<br>
 
-	</div>
+		<h3>Mock</h3>
+		L'attore Mock che a cicli di tempo predefiniti andava ad inserire/prelevare RP dai due storage è stato
+		rimosso.<br>
+		Per semplicità, l'entità esterna che si occupa del deposito di RP e del prelievo di cenere viene simulata
+		tramite la pressione di due bottoni sulla GUI. A questo punto, ActorOutIn confeziona un IApplMessage msg e
+		chiama sendToActor(IApplMessage message)
+
+		<h2>Deployment</h2>
+		Per il deployment del progetto, sono state inserite le seguenti linee di codice nel file <a
+			href="../../Sprint3_Progetto/src/core_business.qak">corebusiness.qak</a>
+		<pre>
+	Facade robotfacade port 8060 usingactor wis inctx ctx_wis  
+        appl "main.java.sprint3_progetto_ssgui.Sprint3ProgettoSsguiApplication" 
+		UserLibs -f "sprint3_progetto_ssgui-1.0-plain" -f "sprint3_progetto_ssgui-1.0"
+		</pre>
+		Che permette di avviare la GUI assieme al Core Business.  <br>
+		Inoltre, i due jar "sprint3_progetto_ssgui-1.0-plain" e "sprint3_progetto_ssgui-1.0", sono stati creati dopo aver
+		eseguito il comando:
+			<pre>	gradlew distZip</pre>
+		nella directory della gui ed aggiungerli ad <a href="../../unibolibs/">unibolibs</a>.
+		<br>
+		<br>
+		A questo punto, come nello sprint precedente, si vanno a creare i file <b>wis.bat</b> e
+		<b>monitoringdevice.bat</b> tramite i comandi:
+		<pre>	gradlew distZip 
+	gradlew distZip -Pbuild_MD</pre>
+		Quest'ultimo verrà eseguito dal RaspberryPI.
+		<br>
+		Infine è necessario avviare il file <a href="../../../unibo.basicrobot24/basicRobot.bat">basicRobot.bat</a> che
+		avvia l'immagine docker del WEnv ed
+		imposta la stanza impostata nel file sceneConfig.js.
+			<br>
+			<br>
+		<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+			By Alessandro Piombini & Danilo Cavallini
+			<br>
+			Email:
+			<ul>
+				<li>
+					alessandro.piombini@studio.unibo.it
+				</li>
+				<li>
+					danilo.cavallini@studio.unibo.it
+				</li>
+			</ul>
+			GIT repo: https://github.com/Piombo4/ISS2024-WIS
+			<br>
+
+		</div>
 </body>
 
 </html>

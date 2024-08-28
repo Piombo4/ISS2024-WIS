@@ -58,7 +58,7 @@ Dispatch guidata: guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB)
 
 Context ctx_wis  ip  [host="localhost" port=8014]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
-Context ctx_monitoring_device  ip  [host="192.168.209.121" port=8021]
+Context ctx_monitoring_device  ip  [host="192.168.1.2" port=8021]
 
 ExternalQActor basicrobot context ctx_basic_robot
 ExternalQActor sonar context ctx_monitoring_device
