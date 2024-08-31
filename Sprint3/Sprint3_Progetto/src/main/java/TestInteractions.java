@@ -31,7 +31,7 @@ public static void activateSystemUsingDocker() {
 				CommUtils.outmagenta("test_manager activateSystemUsingDocker ");
 				Process p = Runtime.getRuntime().exec("./gradlew.bat run");
 				
-				showOutput(p,ColorsOut.BLACK);
+				showOutput(p,ColorsOut.ANSI_YELLOW);
 				
 			} catch ( Exception e) {
 				CommUtils.outred("test_manager activate ERROR " + e.getMessage());

@@ -38,7 +38,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					action { //it:State
 						ash_level= DMIN 
 						delay(500) 
-						observeResource("192.168.209.121","8021","ctx_monitoring_device","sonar","ash_level")
+						observeResource("192.168.1.2","8021","ctx_monitoring_device","sonar","ash_level")
 						observeResource("localhost","8014","ctx_wis","op_robot","robot_info")
 						observeResource("localhost","8014","ctx_wis","waste_storage","waste_qty")
 						forward("turn_on", "turn_on(1)" ,"incinerator" ) 

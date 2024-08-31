@@ -38,10 +38,10 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t01",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t02",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t03",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t04",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t00",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t01",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t02",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t03",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
 				state("robotWaiting") { //this:State
 					action { //it:State
@@ -74,10 +74,10 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t05",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t06",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t07",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t08",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t04",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t05",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t06",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t07",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
 				state("endBurningPhase") { //this:State
 					action { //it:State
@@ -100,10 +100,10 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t09",targetState="robotWaiting",cond=whenDispatch("waiting"))
-					transition(edgeName="t010",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
-					transition(edgeName="t011",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
-					transition(edgeName="t012",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
+					 transition(edgeName="t08",targetState="robotWaiting",cond=whenDispatch("waiting"))
+					transition(edgeName="t09",targetState="updateWasteQty",cond=whenDispatch("waste_qty"))
+					transition(edgeName="t010",targetState="startBurningPhase",cond=whenDispatch("burn_start"))
+					transition(edgeName="t011",targetState="endBurningPhase",cond=whenDispatch("burn_end"))
 				}	 
 			}
 		}

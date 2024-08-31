@@ -21,3 +21,6 @@
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"s0", "nextstate":"removeRP", "msgId":"get_waste"}
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"addRP", "msgId":"waste_in"}
 {"actor":"waste_storage", "msgType":"dispatch", "curstate":"addRP", "nextstate":"removeRP", "msgId":"get_waste"}
+{"actor":"tester", "msgType":"dispatch", "curstate":"idle", "nextstate":"idle", "msgId":"test"}
+{"actor":"tester", "msgType":"dispatch", "curstate":"idle", "nextstate":"startTest", "msgId":"start_test"}
+{"actor":"tester", "msgType":"dispatch", "curstate":"startTest", "nextstate":"testOK", "msgId":"test"}

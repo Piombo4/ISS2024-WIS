@@ -6,6 +6,4 @@ services:
     ports:
       - 8021:8021/tcp
       - 8021:8021/udp
-    depends_on:
-      - wis
 

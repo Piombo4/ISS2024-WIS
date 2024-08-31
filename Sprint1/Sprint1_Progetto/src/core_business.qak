@@ -36,27 +36,16 @@ Reply   engagerefused : engagerefused(ARG) for engage
 
 Dispatch disengage    : disengage(ARG)
 
+Dispatch start_test : start_test(X)
+Request ask_test : ask_test(X)
+Reply test_done : test_done(SUCCESS) for ask_test
+Dispatch test : test(X)
+
 Context ctx_wis  ip  [host="localhost" port=8014]
 Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
-
+ 
 ExternalQActor basicrobot context ctx_basic_robot
 
-QActor mock context ctx_wis {
-	State s0 initial {
-		delay 500
-		forward waste_storage -m waste_in:waste_in(1)	
-		delay 15000
-		request ash_storage -m empty_ash:empty_ash(1)
-	}
-	
-	Transition t0 whenReply ashes_taken -> reply
-	
-	State reply  {
-		delay 15000
-	}
-	Goto s0
-}
- 
 QActor wis context ctx_wis {
 	[#
 			var ash_qty = 0
@@ -169,8 +158,6 @@ QActor op_robot context ctx_wis  {
 		[# D = getCurSol("TDIR").toString(); #]
 		
 		request basicrobot -m moverobot:moverobot($X,$Y)
-		delay 500
-		forward basicrobot -m setdirection:dir($D)
 	}
 	
 	Transition t1 whenReply moverobotdone -> withdraw_ws
@@ -193,8 +180,6 @@ QActor op_robot context ctx_wis  {
 		[# D = getCurSol("TDIR").toString(); #]
 		
 		request basicrobot -m moverobot:moverobot($X,$Y)
-		delay 500
-		forward basicrobot -m setdirection:dir($D)
     }
     
     Transition t2 whenReply moverobotdone -> ask_to_burn
@@ -237,8 +222,6 @@ QActor op_robot context ctx_wis  {
 		[# D = getCurSol("TDIR").toString(); #]
 		
 		request basicrobot -m moverobot:moverobot($X,$Y)
-		delay 500
-		forward basicrobot -m setdirection:dir($D)
 	}
 	
 	Transition t5 whenReply moverobotdone -> get_ash
@@ -259,9 +242,7 @@ QActor op_robot context ctx_wis  {
 		[# Y = getCurSol("TY").toString(); #]
 		[# D = getCurSol("TDIR").toString(); #]
 		
-		request basicrobot -m moverobot:moverobot(4,4)
-		delay 500
-		forward basicrobot -m setdirection:dir($D)
+		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
 	Transition t6 whenReply moverobotdone -> ask_as
@@ -285,8 +266,6 @@ QActor op_robot context ctx_wis  {
 		[# D = getCurSol("TDIR").toString(); #]
 		
 		
-		forward basicrobot -m setdirection:dir(up)
-		delay 500
 		request basicrobot -m moverobot:moverobot($X,$Y)
 	}
 	
@@ -352,6 +331,7 @@ QActor ash_storage context ctx_wis{
 	State addAsh{
 		if[#ash_qty<MAX#]{
 			[#	ash_qty++  #]
+			updateResource [# "test(X)" #]
 			println("$name Depositata la cenere di un RP!")
 		}else{
 			println("$name Deposito pieno! ")
@@ -396,7 +376,57 @@ QActor waste_storage context ctx_wis{
 	
 	State removeRP{
 		[#	scale -= 50  #]
-		updateResource [# "scaleinfo($scale)" #]
+		updateResource [# "waste_qty($scale)" #]
 		println("$name Prelevato un RP!")
 	}
+}
+
+QActor tester context ctx_wis {
+	State s0 initial {
+		delay 500
+		observeResource ash_storage msgid test
+	}
+	
+	Goto idle 
+	
+	State idle {	
+	}
+	
+	Transition t0
+		whenMsg test -> idle
+		whenMsg start_test -> startTest
+		
+		
+	State startTest {
+		forward waste_storage -m waste_in : waste_in(1)
+	}
+	
+	Transition t1
+		whenTime 40000 -> testNOK
+		whenMsg test -> testOK
+			
+	State testOK {	
+	}
+	
+	Transition t1
+		whenRequest ask_test -> replyTestOk
+		
+	State replyTestOk {
+		replyTo ask_test with test_done:test_done(1)
+	}
+	
+	Goto idle
+	
+	State testNOK {
+	}
+	
+	Transition t1
+		whenRequest ask_test -> replyTestNOK
+		
+	State replyTestNOK {
+		replyTo ask_test with test_done:test_done(0)
+	}
+		
+	Goto idle
+		
 }

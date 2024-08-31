@@ -4,6 +4,8 @@ build2024.gradle
 GENERATED ONLY ONCE
 ================================================================================
 */
+
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
@@ -120,10 +122,7 @@ dependencies {
     implementation name: '2p301'
 	implementation name: 'unibo.qakactor23-5.0'
     implementation name: 'unibo.basicomm23-1.0'
-
-
-    
-    //USER libs for facades
+ 
     
 }
 	
@@ -146,8 +145,11 @@ eclipse {
 
 
 application {
-    //Define the main class for the application.
-    mainClassName    = 'it.unibo.ctx_wis.MainCtx_wisKt'
+    // Define the main class for the application.
+	mainClassName = 'it.unibo.ctx_wis.MainCtx_wisKt'
+	if (project.hasProperty("build_MD")) {
+		mainClassName = 'it.unibo.ctx_monitoring_device.MainCtx_monitoring_deviceKt'
+	}
 }
  
  jar {
@@ -161,6 +163,7 @@ application {
     manifest {
         attributes 'Main-Class': "$mainClassName"
     }
+
 }
 
 task dovesiamo {
@@ -171,8 +174,12 @@ task dovesiamo {
 distributions {
     main {
         distributionBaseName = 'wis'
+    	if (project.hasProperty("build_MD")) {
+            distributionBaseName = 'monitoringdevice'
+        }
         contents { 
              from './wis.pl'
+             from './monitoringdevice.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
              from './positions.pl'
@@ -187,7 +194,12 @@ task run0(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'it.unibo.ctx_wis.MainCtx_wisKt'
 }
-
+task runMD(type: JavaExec) {
+    group = "Execution"
+    description = "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'it.unibo.ctx_monitoring_device.MainCtx_monitoring_deviceKt'
+}
 task runTest(type: JavaExec) {
     group = "Execution"
     description = "Run the main class with JavaExecTask"
@@ -204,3 +216,63 @@ tasks.register('copyReport', Copy) {
 }
 */
 //gradlew run --warning-mode all
+
+def dname = 'wis'
+if (project.hasProperty("build_MD")) {
+    dname = 'monitoringdevice'
+}
+
+task clear(type: Delete) {
+	println("delete")
+	delete "$buildDir/distributions/$dname-1.0"
+	delete "$buildDir/distributions/$dname-1.0.zip"
+	delete "$buildDir/distributions/$dname-1.0-deployment.tar.gz"
+}
+
+task unpack(type: Copy) {
+    println("unzipping distZip")
+    from layout.buildDirectory.dir("distributions/$dname-1.0.zip")
+    into "$buildDir/distributions/"
+    filesMatching '*.zip', { zipDetails ->
+        copy {
+            from zipTree(zipDetails.file)
+            into destinationDir
+        }
+        zipDetails.exclude()
+    }
+}
+
+task copyFiles(type: Copy) {
+    println("copying files")
+    from (layout.buildDirectory.dir("distributions/$dname-1.0/")) {
+        include '**/*.pl'
+        exclude 'lib/'
+        exclude 'bin/'
+    }
+    includeEmptyDirs = false
+    into "$buildDir/distributions/$dname-1.0/bin"
+}
+
+task tarz(type: Tar) {
+    println("tar")
+    archiveFileName = "$dname-1.0-deployment.tar.gz"
+    from "$buildDir/distributions/$dname-1.0"
+    compression = Compression.GZIP
+
+    destinationDirectory  = file("$buildDir/distributions/")
+}
+
+
+task deploy {
+	dependsOn 'clear'
+	dependsOn 'distZip'
+	dependsOn 'unpack'
+	dependsOn 'copyFiles'
+	dependsOn 'tarz'
+
+	tasks.findByName('distZip').mustRunAfter 'clear'
+	tasks.findByName('unpack').mustRunAfter 'distZip'
+	tasks.findByName('copyFiles').mustRunAfter 'unpack'
+	tasks.findByName('tarz').mustRunAfter 'copyFiles'
+}
+

@@ -21,12 +21,14 @@ request( engage, engage(OWNER,STEPTIME) ).
 reply( engagedone, engagedone(ARG) ).  %%for engage
 reply( engagerefused, engagerefused(ARG) ).  %%for engage
 dispatch( disengage, disengage(ARG) ).
+dispatch( start_test, start_test(X) ).
+request( ask_test, ask_test(X) ).
+reply( test_done, test_done(SUCCESS) ).  %%for ask_test
+dispatch( test, test(X) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").
 context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").
  qactor( basicrobot, ctx_basic_robot, "external").
-  qactor( mock, ctx_wis, "it.unibo.mock.Mock").
- static(mock).
   qactor( wis, ctx_wis, "it.unibo.wis.Wis").
  static(wis).
   qactor( op_robot, ctx_wis, "it.unibo.op_robot.Op_robot").
@@ -37,4 +39,6 @@ context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").
  static(ash_storage).
   qactor( waste_storage, ctx_wis, "it.unibo.waste_storage.Waste_storage").
  static(waste_storage).
+  qactor( tester, ctx_wis, "it.unibo.tester.Tester").
+ static(tester).
 tracing.
