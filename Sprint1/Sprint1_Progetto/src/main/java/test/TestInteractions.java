@@ -76,7 +76,7 @@ public class TestInteractions {
 
 	@Test
 	public void testImmissionePacchetto() {
-		IApplMessage req = CommUtils.buildDispatch("JUNITTEST", "start_test", "start_test(X)", actorName1);
+		IApplMessage req = CommUtils.buildDispatch("test", "start_test", "start_test(X)", actorName1);
 		try {
 			CommUtils.outmagenta("testSystem ======================================= ");
 			Thread.sleep(10000);
@@ -89,7 +89,7 @@ public class TestInteractions {
 			connSupport.forward(req);
 			
 			Thread.sleep(20000);
-			IApplMessage reply = connSupport.request(CommUtils.buildRequest("JUNITTEST", "ask_test", "ask_test(X)", actorName1));
+			IApplMessage reply = connSupport.request(CommUtils.buildRequest("test", "ask_test", "ask_test(X)", actorName1));
 			CommUtils.outcyan("Asking if test ok");
 			System.out.println(reply.msgContent());
 			assertEquals("test_done(1)", "test_done(1)");
