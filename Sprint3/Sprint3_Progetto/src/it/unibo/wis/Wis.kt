@@ -33,6 +33,7 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 					var y: Int = 0;
 					var position: String = "";
 					var job: String = "";
+					val regex = Regex.fromLiteral("[0-9]*(.[0-9]+)?");
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -81,12 +82,17 @@ class Wis ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) : 
 						CommUtils.outmagenta("$ash_level")
 						if( checkMsgContent( Term.createTerm("ash_level(M,LEVEL)"), Term.createTerm("ash_level(N,LEVEL)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 ash_level = payloadArg(1).replace("ash_level(","").replace(")","").toInt(); 
+								if(  regex.matches(payloadArg(1))  
+								 ){ ash_level = payloadArg(1).replace("ash_level(","").replace(")","").toInt(); 
 								CommUtils.outmagenta("$ash_level")
 								CommUtils.outmagenta("${payloadArg(1)}")
 								if(  ash_level < DLIMT || ash_level >= DMIN  
 								 ){forward("led_status", "led_status(BLINK)" ,"led" ) 
 								}
+								}
+								else
+								 {CommUtils.outmagenta("ash_level invalid")
+								 }
 						}
 						//genTimer( actor, state )
 					}

@@ -34,7 +34,7 @@ dispatch( doread, doread(X) ).
 dispatch( guidata, guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB) ).
 %====================================================================================
 context(ctx_wis, "localhost",  "TCP", "8014").
-context(ctx_basic_robot, "127.0.0.1",  "TCP", "8020").
+context(ctx_basic_robot, "basicrobot24",  "TCP", "8020").
 context(ctx_monitoring_device, "192.168.1.2",  "TCP", "8021").
  qactor( basicrobot, ctx_basic_robot, "external").
   qactor( sonar, ctx_monitoring_device, "external").

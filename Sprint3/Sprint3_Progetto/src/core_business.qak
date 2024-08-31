@@ -57,7 +57,7 @@ Dispatch doread    : doread(X)
 Dispatch guidata: guidata(WASTE_QTY,ASH_LEVEL,ISBURNING,X,Y,POSITION,JOB)
 
 Context ctx_wis  ip  [host="localhost" port=8014]
-Context ctx_basic_robot ip  [host="127.0.0.1" port=8020]
+Context ctx_basic_robot ip  [host="basicrobot24" port=8020]
 Context ctx_monitoring_device  ip  [host="192.168.1.2" port=8021]
 
 ExternalQActor basicrobot context ctx_basic_robot
@@ -77,6 +77,7 @@ QActor wis context ctx_wis {
 			var y: Int = 0;
 			var position: String = "";
 			var job: String = "";
+			val regex = Regex.fromLiteral("[0-9]*(.[0-9]+)?");
 	#]
 	State s0 initial{ 
 		[#ash_level= DMIN#]
@@ -116,13 +117,17 @@ QActor wis context ctx_wis {
 	State updateAshLevel{
 		println("$ash_level") color magenta
 		onMsg(ash_level:ash_level(N,LEVEL)){
-			[# ash_level = payloadArg(1).replace("ash_level(","").replace(")","").toInt();#]
-			println("$ash_level") color magenta
-			println("${payloadArg(1)}") color magenta
-			if [# ash_level < DLIMT || ash_level >= DMIN #]
-			{
-				forward led -m led_status:led_status(BLINK)
-			}			
+			if [# regex.matches(payloadArg(1)) #] {
+				[# ash_level = payloadArg(1).replace("ash_level(","").replace(")","").toInt();#]
+				println("$ash_level") color magenta
+				println("${payloadArg(1)}") color magenta
+				if [# ash_level < DLIMT || ash_level >= DMIN #]
+				{
+					forward led -m led_status:led_status(BLINK)
+				}			
+			} else {
+				println("ash_level invalid") color magenta
+			}
 		}
 	}
 	Goto verifyConditions
