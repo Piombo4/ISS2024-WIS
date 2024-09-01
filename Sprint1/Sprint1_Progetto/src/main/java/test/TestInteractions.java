@@ -29,7 +29,7 @@ public class TestInteractions {
 					CommUtils.outmagenta("test_manager activateSystemUsingDocker ");		
 					Process p = Runtime.getRuntime().exec("docker-compose -f ./deployment/basicrobot.yaml up --force-recreate");
 					Thread.sleep(5000);
-					Process p1 = Runtime.getRuntime().exec("./build/distributions/wis-1.0/bin/wis");
+					Process p1 = Runtime.getRuntime().exec("./build/distributions/wis-1.0/bin/wis.bat");
 					
 					showOutput(p, ColorsOut.YELLOW);
 					showOutput(p1, ColorsOut.YELLOW);
@@ -54,6 +54,7 @@ public class TestInteractions {
 
 	/*
 	 * After each test
+	 * netstat -aof | findstr :8014
 	 */
 	@After
 	public void down() {
@@ -92,7 +93,7 @@ public class TestInteractions {
 			IApplMessage reply = connSupport.request(CommUtils.buildRequest("test", "ask_test", "ask_test(X)", actorName1));
 			CommUtils.outcyan("Asking if test ok");
 			System.out.println(reply.msgContent());
-			assertEquals("test_done(1)", "test_done(1)");
+			assertEquals("test_done(1)", reply.msgContent());
 		} catch (Exception e) {
 			CommUtils.outred("testSystem ERROR " + e.getMessage());
 			fail("testRequest " + e.getMessage());

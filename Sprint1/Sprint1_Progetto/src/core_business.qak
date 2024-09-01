@@ -3,7 +3,7 @@ System -trace wis
 // WIS
 Dispatch start_robot : start_robot(X)
 
-// op_robot  
+// op_robot   
 Dispatch waiting : waiting(X)
  
 // WASTE STORAGE
